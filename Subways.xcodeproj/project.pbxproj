@@ -15,6 +15,30 @@
 		96C514532C375203009CAE08 /* SubwaysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514522C375203009CAE08 /* SubwaysTests.swift */; };
 		96C5145D2C375203009CAE08 /* SubwaysUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5145C2C375203009CAE08 /* SubwaysUITests.swift */; };
 		96C5145F2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5145E2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift */; };
+		96C514742C375588009CAE08 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 96C514732C375588009CAE08 /* SwiftProtobuf */; };
+		96C514762C375588009CAE08 /* SwiftProtobufPluginLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 96C514752C375588009CAE08 /* SwiftProtobufPluginLibrary */; };
+		96C5147B2C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514792C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift */; };
+		96C5147C2C375E9E009CAE08 /* gtfs-realtime.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5147A2C375E9E009CAE08 /* gtfs-realtime.pb.swift */; };
+		96C5147E2C376608009CAE08 /* ArrivalDataProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5147D2C376608009CAE08 /* ArrivalDataProcessor.swift */; };
+		96C514812C376C1A009CAE08 /* TrainArrival.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514802C376C1A009CAE08 /* TrainArrival.swift */; };
+		96C514832C376C33009CAE08 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514822C376C33009CAE08 /* Route.swift */; };
+		96C514872C379322009CAE08 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514862C379322009CAE08 /* Direction.swift */; };
+		96C514892C3796E6009CAE08 /* StationArrivals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514882C3796E6009CAE08 /* StationArrivals.swift */; };
+		96C5148C2C379A0A009CAE08 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 96C5148B2C379A0A009CAE08 /* Collections */; };
+		96C5148E2C379A0A009CAE08 /* HeapModule in Frameworks */ = {isa = PBXBuildFile; productRef = 96C5148D2C379A0A009CAE08 /* HeapModule */; };
+		96C514912C379DE1009CAE08 /* TrainArrivalListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514902C379DE1009CAE08 /* TrainArrivalListItem.swift */; };
+		96C514932C379E8A009CAE08 /* RouteSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514922C379E8A009CAE08 /* RouteSymbol.swift */; };
+		96C5149E2C37A618009CAE08 /* agency.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C514942C37A618009CAE08 /* agency.txt */; };
+		96C5149F2C37A618009CAE08 /* calendar_dates.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C514952C37A618009CAE08 /* calendar_dates.txt */; };
+		96C514A02C37A618009CAE08 /* calendar.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C514962C37A618009CAE08 /* calendar.txt */; };
+		96C514A12C37A618009CAE08 /* routes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C514972C37A618009CAE08 /* routes.txt */; };
+		96C514A22C37A618009CAE08 /* shapes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C514982C37A618009CAE08 /* shapes.txt */; };
+		96C514A32C37A618009CAE08 /* stop_times.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C514992C37A618009CAE08 /* stop_times.txt */; };
+		96C514A42C37A618009CAE08 /* stops.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C5149A2C37A618009CAE08 /* stops.txt */; };
+		96C514A52C37A618009CAE08 /* transfers.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C5149B2C37A618009CAE08 /* transfers.txt */; };
+		96C514A62C37A618009CAE08 /* trips.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C5149C2C37A618009CAE08 /* trips.txt */; };
+		96C514AA2C37B71B009CAE08 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514A92C37B71B009CAE08 /* Station.swift */; };
+		96C514AD2C3998F0009CAE08 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 96C514AC2C3998F0009CAE08 /* SwiftUIX */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +71,25 @@
 		96C514582C375203009CAE08 /* SubwaysUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SubwaysUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		96C5145C2C375203009CAE08 /* SubwaysUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwaysUITests.swift; sourceTree = "<group>"; };
 		96C5145E2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwaysUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		96C514792C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "gtfs-realtime-NYCT.pb.swift"; sourceTree = "<group>"; };
+		96C5147A2C375E9E009CAE08 /* gtfs-realtime.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "gtfs-realtime.pb.swift"; sourceTree = "<group>"; };
+		96C5147D2C376608009CAE08 /* ArrivalDataProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalDataProcessor.swift; sourceTree = "<group>"; };
+		96C514802C376C1A009CAE08 /* TrainArrival.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainArrival.swift; sourceTree = "<group>"; };
+		96C514822C376C33009CAE08 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
+		96C514862C379322009CAE08 /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
+		96C514882C3796E6009CAE08 /* StationArrivals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationArrivals.swift; sourceTree = "<group>"; };
+		96C514902C379DE1009CAE08 /* TrainArrivalListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainArrivalListItem.swift; sourceTree = "<group>"; };
+		96C514922C379E8A009CAE08 /* RouteSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSymbol.swift; sourceTree = "<group>"; };
+		96C514942C37A618009CAE08 /* agency.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = agency.txt; sourceTree = "<group>"; };
+		96C514952C37A618009CAE08 /* calendar_dates.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar_dates.txt; sourceTree = "<group>"; };
+		96C514962C37A618009CAE08 /* calendar.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar.txt; sourceTree = "<group>"; };
+		96C514972C37A618009CAE08 /* routes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = routes.txt; sourceTree = "<group>"; };
+		96C514982C37A618009CAE08 /* shapes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shapes.txt; sourceTree = "<group>"; };
+		96C514992C37A618009CAE08 /* stop_times.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stop_times.txt; sourceTree = "<group>"; };
+		96C5149A2C37A618009CAE08 /* stops.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stops.txt; sourceTree = "<group>"; };
+		96C5149B2C37A618009CAE08 /* transfers.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transfers.txt; sourceTree = "<group>"; };
+		96C5149C2C37A618009CAE08 /* trips.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = trips.txt; sourceTree = "<group>"; };
+		96C514A92C37B71B009CAE08 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +97,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96C5148C2C379A0A009CAE08 /* Collections in Frameworks */,
+				96C514762C375588009CAE08 /* SwiftProtobufPluginLibrary in Frameworks */,
+				96C5148E2C379A0A009CAE08 /* HeapModule in Frameworks */,
+				96C514AD2C3998F0009CAE08 /* SwiftUIX in Frameworks */,
+				96C514742C375588009CAE08 /* SwiftProtobuf in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,8 +145,12 @@
 		96C5143D2C375202009CAE08 /* Subways */ = {
 			isa = PBXGroup;
 			children = (
+				96C5149D2C37A618009CAE08 /* static_data */,
+				96C5148F2C379DBD009CAE08 /* view_elements */,
+				96C5146E2C37551A009CAE08 /* proto */,
 				96C5143E2C375202009CAE08 /* SubwaysApp.swift */,
 				96C514402C375202009CAE08 /* ContentView.swift */,
+				96C5147F2C376BF5009CAE08 /* model */,
 				96C514422C375202009CAE08 /* Item.swift */,
 				96C514442C375203009CAE08 /* Assets.xcassets */,
 				96C514462C375203009CAE08 /* Subways.entitlements */,
@@ -132,6 +184,53 @@
 			path = SubwaysUITests;
 			sourceTree = "<group>";
 		};
+		96C5146E2C37551A009CAE08 /* proto */ = {
+			isa = PBXGroup;
+			children = (
+				96C514792C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift */,
+				96C5147A2C375E9E009CAE08 /* gtfs-realtime.pb.swift */,
+			);
+			path = proto;
+			sourceTree = "<group>";
+		};
+		96C5147F2C376BF5009CAE08 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				96C5147D2C376608009CAE08 /* ArrivalDataProcessor.swift */,
+				96C514802C376C1A009CAE08 /* TrainArrival.swift */,
+				96C514822C376C33009CAE08 /* Route.swift */,
+				96C514862C379322009CAE08 /* Direction.swift */,
+				96C514882C3796E6009CAE08 /* StationArrivals.swift */,
+				96C514A92C37B71B009CAE08 /* Station.swift */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		96C5148F2C379DBD009CAE08 /* view_elements */ = {
+			isa = PBXGroup;
+			children = (
+				96C514902C379DE1009CAE08 /* TrainArrivalListItem.swift */,
+				96C514922C379E8A009CAE08 /* RouteSymbol.swift */,
+			);
+			path = view_elements;
+			sourceTree = "<group>";
+		};
+		96C5149D2C37A618009CAE08 /* static_data */ = {
+			isa = PBXGroup;
+			children = (
+				96C514942C37A618009CAE08 /* agency.txt */,
+				96C514952C37A618009CAE08 /* calendar_dates.txt */,
+				96C514962C37A618009CAE08 /* calendar.txt */,
+				96C514972C37A618009CAE08 /* routes.txt */,
+				96C514982C37A618009CAE08 /* shapes.txt */,
+				96C514992C37A618009CAE08 /* stop_times.txt */,
+				96C5149A2C37A618009CAE08 /* stops.txt */,
+				96C5149B2C37A618009CAE08 /* transfers.txt */,
+				96C5149C2C37A618009CAE08 /* trips.txt */,
+			);
+			path = static_data;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -148,6 +247,13 @@
 			dependencies = (
 			);
 			name = Subways;
+			packageProductDependencies = (
+				96C514732C375588009CAE08 /* SwiftProtobuf */,
+				96C514752C375588009CAE08 /* SwiftProtobufPluginLibrary */,
+				96C5148B2C379A0A009CAE08 /* Collections */,
+				96C5148D2C379A0A009CAE08 /* HeapModule */,
+				96C514AC2C3998F0009CAE08 /* SwiftUIX */,
+			);
 			productName = Subways;
 			productReference = 96C5143B2C375202009CAE08 /* Subways.app */;
 			productType = "com.apple.product-type.application";
@@ -220,6 +326,11 @@
 				Base,
 			);
 			mainGroup = 96C514322C375202009CAE08;
+			packageReferences = (
+				96C514722C375588009CAE08 /* XCRemoteSwiftPackageReference "swift-protobuf" */,
+				96C5148A2C379A0A009CAE08 /* XCRemoteSwiftPackageReference "swift-collections" */,
+				96C514AB2C3998F0009CAE08 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
+			);
 			productRefGroup = 96C5143C2C375202009CAE08 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -236,8 +347,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96C514A02C37A618009CAE08 /* calendar.txt in Resources */,
+				96C514A42C37A618009CAE08 /* stops.txt in Resources */,
 				96C514492C375203009CAE08 /* Preview Assets.xcassets in Resources */,
+				96C514A12C37A618009CAE08 /* routes.txt in Resources */,
+				96C514A62C37A618009CAE08 /* trips.txt in Resources */,
+				96C514A32C37A618009CAE08 /* stop_times.txt in Resources */,
 				96C514452C375203009CAE08 /* Assets.xcassets in Resources */,
+				96C5149F2C37A618009CAE08 /* calendar_dates.txt in Resources */,
+				96C514A22C37A618009CAE08 /* shapes.txt in Resources */,
+				96C5149E2C37A618009CAE08 /* agency.txt in Resources */,
+				96C514A52C37A618009CAE08 /* transfers.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,8 +383,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				96C514412C375202009CAE08 /* ContentView.swift in Sources */,
+				96C514932C379E8A009CAE08 /* RouteSymbol.swift in Sources */,
+				96C5147B2C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift in Sources */,
+				96C514892C3796E6009CAE08 /* StationArrivals.swift in Sources */,
+				96C514872C379322009CAE08 /* Direction.swift in Sources */,
+				96C514AA2C37B71B009CAE08 /* Station.swift in Sources */,
+				96C5147E2C376608009CAE08 /* ArrivalDataProcessor.swift in Sources */,
 				96C514432C375202009CAE08 /* Item.swift in Sources */,
 				96C5143F2C375202009CAE08 /* SubwaysApp.swift in Sources */,
+				96C514832C376C33009CAE08 /* Route.swift in Sources */,
+				96C514812C376C1A009CAE08 /* TrainArrival.swift in Sources */,
+				96C5147C2C375E9E009CAE08 /* gtfs-realtime.pb.swift in Sources */,
+				96C514912C379DE1009CAE08 /* TrainArrivalListItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +551,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Subways/Subways.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Subways/Preview Content\"";
@@ -438,7 +569,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -459,6 +590,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Subways/Subways.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Subways/Preview Content\"";
@@ -476,7 +608,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -500,7 +632,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8BTUZ82YVC;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tejas.SubwaysTests;
@@ -523,7 +655,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8BTUZ82YVC;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tejas.SubwaysTests;
@@ -545,7 +677,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8BTUZ82YVC;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tejas.SubwaysUITests;
@@ -567,7 +699,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8BTUZ82YVC;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tejas.SubwaysUITests;
@@ -621,6 +753,61 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		96C514722C375588009CAE08 /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-protobuf.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.26.0;
+			};
+		};
+		96C5148A2C379A0A009CAE08 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.1;
+			};
+		};
+		96C514AB2C3998F0009CAE08 /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		96C514732C375588009CAE08 /* SwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96C514722C375588009CAE08 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
+		};
+		96C514752C375588009CAE08 /* SwiftProtobufPluginLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96C514722C375588009CAE08 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobufPluginLibrary;
+		};
+		96C5148B2C379A0A009CAE08 /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96C5148A2C379A0A009CAE08 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
+		96C5148D2C379A0A009CAE08 /* HeapModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96C5148A2C379A0A009CAE08 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = HeapModule;
+		};
+		96C514AC2C3998F0009CAE08 /* SwiftUIX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96C514AB2C3998F0009CAE08 /* XCRemoteSwiftPackageReference "SwiftUIX" */;
+			productName = SwiftUIX;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 96C514332C375202009CAE08 /* Project object */;
 }
