@@ -9,13 +9,13 @@ import Foundation
 import HeapModule
 
 struct StationArrivals {
-    var arrivals: [Direction: Heap<TrainArrival>] = [Direction.UPTOWN: [], Direction.DOWNTOWN: []]
+    var arrivals: [Direction: [TrainArrival]] = [Direction.UPTOWN: [], Direction.DOWNTOWN: []]
     
     func getUptownArrivals() -> [TrainArrival] {
-        return arrivals[Direction.UPTOWN]!.unordered.sorted()
+        return arrivals[.UPTOWN]!
     }
     
     func getDowntownArrivals() -> [TrainArrival] {
-        return arrivals[Direction.DOWNTOWN]!.unordered.sorted()
+        return arrivals[.DOWNTOWN]!
     }
 }

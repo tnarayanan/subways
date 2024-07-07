@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import HeapModule
 
 class ArrivalDataProcessor {
     private static let dataSources: [String] = ["-ace", "-bdfm", "-g", "-nqrw", "-l", "", "-si"]
@@ -13,6 +14,7 @@ class ArrivalDataProcessor {
     
     private static var messages: [String: TransitRealtime_FeedMessage] = [:]
     
+    private static var stationArrivalHeaps: [String: [Direction: Heap<TrainArrival>]] = [:]
     private static var stationArrivals: [String: StationArrivals] = [:]
     
     private static func queryData() async {
@@ -29,8 +31,14 @@ class ArrivalDataProcessor {
     }
     
     public static func processArrivals() async {
+        stationArrivalHeaps.removeAll(keepingCapacity: true)
         stationArrivals.removeAll(keepingCapacity: true)
-        await queryData()
+        
+        let clock = ContinuousClock()
+        let time = await clock.measure {
+            await queryData()
+        }
+        print("Querying data took \(time)")
         
         for msg in messages.values {
             for ent in msg.entity.filter({$0.hasTripUpdate}) {
@@ -44,8 +52,8 @@ class ArrivalDataProcessor {
                     let direction = stopIDWithDirection.last! == "N" ? Direction.UPTOWN : Direction.DOWNTOWN
                     let stopID = String(stopIDWithDirection.dropLast())
                     
-                    if !stationArrivals.keys.contains(stopID) {
-                        stationArrivals[stopID] = StationArrivals()
+                    if !stationArrivalHeaps.keys.contains(stopID) {
+                        stationArrivalHeaps[stopID] = [.DOWNTOWN: [], .UPTOWN: []]
                     }
                     
                     var timestamp: Int64 = 0
@@ -54,14 +62,20 @@ class ArrivalDataProcessor {
                     } else if stopTimeUpdate.hasDeparture {
                         timestamp = stopTimeUpdate.departure.time
                     }
-                    let trainArrival = TrainArrival(id: tripID, station: stopID, route: Route(rawValue: route) ?? Route.X, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+                    let trainArrival = TrainArrival(station: stopID, route: Route(rawValue: route) ?? Route.X, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
                     
-                    stationArrivals[stopID]!.arrivals[direction]!.insert(trainArrival)
-                    if stationArrivals[stopID]!.arrivals[direction]!.count > 7 {
-                        stationArrivals[stopID]!.arrivals[direction]!.removeMax()
+                    stationArrivalHeaps[stopID]![direction]!.insert(trainArrival)
+                    if stationArrivalHeaps[stopID]![direction]!.count > 7 {
+                        stationArrivalHeaps[stopID]![direction]!.removeMax()
                     }
                 }
             }
+        }
+        
+        for stopID in stationArrivalHeaps.keys {
+            stationArrivals[stopID] = StationArrivals()
+            stationArrivals[stopID]!.arrivals[.DOWNTOWN] = stationArrivalHeaps[stopID]![.DOWNTOWN]!.unordered.sorted()
+            stationArrivals[stopID]!.arrivals[.UPTOWN] = stationArrivalHeaps[stopID]![.UPTOWN]!.unordered.sorted()
         }
     }
     
@@ -75,7 +89,7 @@ class ArrivalDataProcessor {
             let time = await clock.measure {
                 await queryData()
             }
-            print(time)
+            print("Querying data took \(time)")
         }
     }
 }

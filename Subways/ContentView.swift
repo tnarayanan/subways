@@ -11,81 +11,143 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query private var favoriteStations: [FavoriteStation]
     
     @State private var date: Date = Date()
-    @State private var station: Station = Station.get(id: "127")
+    @State private var stationID: String = "631"
     
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var showingFavoritesSheet = false
+    
+    @State private var station: Station = Station.DEFAULT
+    @State private var arrivals: StationArrivals = StationArrivals()
+    
+    private let routeSymbolSize: CGFloat = 20
+    
+    private let everySecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    private let updateDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     
     var body: some View {
         NavigationStack {
-            List {
-//                Section() {
-//                    HStack {
-//                        RouteSymbol(route: .FOUR, size: 16)
-//                        RouteSymbol(route: .FIVE, size: 16)
-//                        RouteSymbol(route: .SIX, size: 16)
-//                        Spacer()
-//                    }
-//                    .listRowBackground(Color.clear)
-//                }
-                
-                Section(Text("Downtown").font(.headline)) {
-                    ForEach(station.arrivals.getDowntownArrivals()) { arrival in
-                        TrainArrivalListItem(trainArrival: arrival, curTime: $date)
+            ScrollView {
+                VStack(alignment: .leading) {
+                    StationRouteSymbols(station: $station, routeSymbolSize: routeSymbolSize)
+                    
+                    Text("Downtown").font(.title3).bold()
+                        .padding(.top)
+                    
+                    GroupBox {
+                        let lastArrival = arrivals.getDowntownArrivals().last
+                        let lastID = lastArrival?.id ?? ""
+                        ForEach(arrivals.getDowntownArrivals()) { arrival in
+                            TrainArrivalListItem(trainArrival: arrival, curTime: $date)
+                                .padding(.vertical, .extraSmall)
+                            if arrival.id != lastID {
+                                Divider()
+                            }
+                        }
                     }
-                }
-                
-                Section(Text("Uptown").font(.headline)) {
-                    ForEach(station.arrivals.getUptownArrivals()) { arrival in
-                        TrainArrivalListItem(trainArrival: arrival, curTime: $date)
+                    .backgroundStyle(Color.white)
+                    
+                    Text("Uptown").font(.title3).bold()
+                        .padding(.top)
+                    
+                    GroupBox {
+                        let lastArrival = arrivals.getUptownArrivals().last
+                        let lastID = lastArrival?.id ?? ""
+                        ForEach(arrivals.getUptownArrivals()) { arrival in
+                            TrainArrivalListItem(trainArrival: arrival, curTime: $date)
+                                .padding(.vertical, .extraSmall)
+                            if arrival.id != lastID {
+                                Divider()
+                            }
+                        }
                     }
+                    .backgroundStyle(Color.white)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
             }
             .navigationTitle(station.name)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    HStack {
-                        RouteSymbol(route: .FOUR, size: 16)
-                        RouteSymbol(route: .FIVE, size: 16)
-                        RouteSymbol(route: .SIX, size: 16)
-                        Spacer()
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(action: onFavoriteTapped) {
+                            Label("Add Station to Favorites", systemImage: isCurrentStationFavorite() ? "star.fill" : "star")
+                        }
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            showingFavoritesSheet.toggle()
+                        }
+                        label: {
+                            Label("Select Favorite Station", systemImage: "tram.fill")
+                        }
+                        .sheet(isPresented: $showingFavoritesSheet, onDismiss: {
+                            print("dismissed sheet")
+                        }) {
+                            FavoriteStationsView(onDismiss: self.onStationSelected)
+                        }
+                            
                     }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                .onReceive(everySecondTimer) { _ in
+                    self.date = Date()
+                }
+                .onReceive(updateDataTimer) { _ in
+                    Task {
+                        await updateRoutes()
                     }
                 }
-            }
-            .onReceive(timer) { _ in
-                self.date = Date()
+            .background(Color.secondarySystemBackground)
+        }
+        .onAppear {
+            Task {
+                await updateRoutes()
             }
         }
+    }
+    
+    private func onStationSelected(id: String) {
+        station = Station.get(id: id)
+        arrivals = ArrivalDataProcessor.getArrivals(for: id)
+    }
+    
+    private func onFavoriteTapped() {
+        if station == Station.DEFAULT {
+            return
+        }
+        if !favoriteStations.contains(FavoriteStation(id: stationID)) {
+            // add to favorites
+            modelContext.insert(FavoriteStation(id: stationID))
+            print("Adding \(station.name) as a favorite station")
+        } else {
+            // unfavorite
+            modelContext.delete(FavoriteStation(id: stationID))
+            print("Removing \(station.name) from favorite stations")
+        }
+    }
+    
+    private func isCurrentStationFavorite() -> Bool {
+        if station == Station.DEFAULT {
+            return false
+        }
+        return favoriteStations.contains(FavoriteStation(id: stationID))
+    }
+    
+    private func updateRoutes() async {
+        await ArrivalDataProcessor.processArrivals()
+        station = Station.get(id: stationID)
+        arrivals = ArrivalDataProcessor.getArrivals(for: stationID)
     }
     
     private func addItem() {
         withAnimation {
-            let newItem = Item(timestamp: Date())
+            let newItem = FavoriteStation(id: "stationId")
             modelContext.insert(newItem)
-        }
-        Task {
-            await ArrivalDataProcessor.processArrivals()
-            station = Station.get(id: "127")
-        }
-    }
-    
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
         }
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: FavoriteStation.self, inMemory: true)
 }

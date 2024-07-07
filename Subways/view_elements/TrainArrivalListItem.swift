@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct TrainArrivalListItem: View {
-    @State var trainArrival: TrainArrival
+    var trainArrival: TrainArrival
     @Binding var curTime: Date
     
     var body: some View {
         let diffs = Calendar.current.dateComponents([.minute, .second], from: curTime, to: trainArrival.time)
-        return HStack {
-            RouteSymbol(route: trainArrival.route, size: 18)
+        HStack {
+            RouteSymbol(route: trainArrival.route, size: 16)
             Text("in \(diffs.minute ?? 0) min \(diffs.second ?? 0) sec")
+            Spacer()
         }
     }
 }

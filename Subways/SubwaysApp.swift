@@ -12,7 +12,7 @@ import SwiftData
 struct SubwaysApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            FavoriteStation.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -22,6 +22,9 @@ struct SubwaysApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    
+    init() {
+    }
 
     var body: some Scene {
         WindowGroup {

@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		96C5143F2C375202009CAE08 /* SubwaysApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5143E2C375202009CAE08 /* SubwaysApp.swift */; };
 		96C514412C375202009CAE08 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514402C375202009CAE08 /* ContentView.swift */; };
-		96C514432C375202009CAE08 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514422C375202009CAE08 /* Item.swift */; };
+		96C514432C375202009CAE08 /* FavoriteStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514422C375202009CAE08 /* FavoriteStation.swift */; };
 		96C514452C375203009CAE08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96C514442C375203009CAE08 /* Assets.xcassets */; };
 		96C514492C375203009CAE08 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96C514482C375203009CAE08 /* Preview Assets.xcassets */; };
 		96C514532C375203009CAE08 /* SubwaysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514522C375203009CAE08 /* SubwaysTests.swift */; };
@@ -39,6 +39,8 @@
 		96C514A62C37A618009CAE08 /* trips.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C5149C2C37A618009CAE08 /* trips.txt */; };
 		96C514AA2C37B71B009CAE08 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514A92C37B71B009CAE08 /* Station.swift */; };
 		96C514AD2C3998F0009CAE08 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 96C514AC2C3998F0009CAE08 /* SwiftUIX */; };
+		96C514B42C3AF1AE009CAE08 /* FavoriteStationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514B32C3AF1AE009CAE08 /* FavoriteStationsView.swift */; };
+		96C514B62C3AF2B4009CAE08 /* StationRouteSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514B52C3AF2B4009CAE08 /* StationRouteSymbols.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,7 +64,7 @@
 		96C5143B2C375202009CAE08 /* Subways.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Subways.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96C5143E2C375202009CAE08 /* SubwaysApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwaysApp.swift; sourceTree = "<group>"; };
 		96C514402C375202009CAE08 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		96C514422C375202009CAE08 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		96C514422C375202009CAE08 /* FavoriteStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStation.swift; sourceTree = "<group>"; };
 		96C514442C375203009CAE08 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		96C514462C375203009CAE08 /* Subways.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Subways.entitlements; sourceTree = "<group>"; };
 		96C514482C375203009CAE08 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -90,6 +92,8 @@
 		96C5149B2C37A618009CAE08 /* transfers.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transfers.txt; sourceTree = "<group>"; };
 		96C5149C2C37A618009CAE08 /* trips.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = trips.txt; sourceTree = "<group>"; };
 		96C514A92C37B71B009CAE08 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
+		96C514B32C3AF1AE009CAE08 /* FavoriteStationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStationsView.swift; sourceTree = "<group>"; };
+		96C514B52C3AF2B4009CAE08 /* StationRouteSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationRouteSymbols.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,8 +154,9 @@
 				96C5146E2C37551A009CAE08 /* proto */,
 				96C5143E2C375202009CAE08 /* SubwaysApp.swift */,
 				96C514402C375202009CAE08 /* ContentView.swift */,
+				96C514B32C3AF1AE009CAE08 /* FavoriteStationsView.swift */,
 				96C5147F2C376BF5009CAE08 /* model */,
-				96C514422C375202009CAE08 /* Item.swift */,
+				96C514B22C39F3F8009CAE08 /* data */,
 				96C514442C375203009CAE08 /* Assets.xcassets */,
 				96C514462C375203009CAE08 /* Subways.entitlements */,
 				96C514472C375203009CAE08 /* Preview Content */,
@@ -196,7 +201,7 @@
 		96C5147F2C376BF5009CAE08 /* model */ = {
 			isa = PBXGroup;
 			children = (
-				96C5147D2C376608009CAE08 /* ArrivalDataProcessor.swift */,
+				96C514422C375202009CAE08 /* FavoriteStation.swift */,
 				96C514802C376C1A009CAE08 /* TrainArrival.swift */,
 				96C514822C376C33009CAE08 /* Route.swift */,
 				96C514862C379322009CAE08 /* Direction.swift */,
@@ -211,6 +216,7 @@
 			children = (
 				96C514902C379DE1009CAE08 /* TrainArrivalListItem.swift */,
 				96C514922C379E8A009CAE08 /* RouteSymbol.swift */,
+				96C514B52C3AF2B4009CAE08 /* StationRouteSymbols.swift */,
 			);
 			path = view_elements;
 			sourceTree = "<group>";
@@ -229,6 +235,14 @@
 				96C5149C2C37A618009CAE08 /* trips.txt */,
 			);
 			path = static_data;
+			sourceTree = "<group>";
+		};
+		96C514B22C39F3F8009CAE08 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				96C5147D2C376608009CAE08 /* ArrivalDataProcessor.swift */,
+			);
+			path = data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -389,10 +403,12 @@
 				96C514872C379322009CAE08 /* Direction.swift in Sources */,
 				96C514AA2C37B71B009CAE08 /* Station.swift in Sources */,
 				96C5147E2C376608009CAE08 /* ArrivalDataProcessor.swift in Sources */,
-				96C514432C375202009CAE08 /* Item.swift in Sources */,
+				96C514432C375202009CAE08 /* FavoriteStation.swift in Sources */,
 				96C5143F2C375202009CAE08 /* SubwaysApp.swift in Sources */,
+				96C514B62C3AF2B4009CAE08 /* StationRouteSymbols.swift in Sources */,
 				96C514832C376C33009CAE08 /* Route.swift in Sources */,
 				96C514812C376C1A009CAE08 /* TrainArrival.swift in Sources */,
+				96C514B42C3AF1AE009CAE08 /* FavoriteStationsView.swift in Sources */,
 				96C5147C2C375E9E009CAE08 /* gtfs-realtime.pb.swift in Sources */,
 				96C514912C379DE1009CAE08 /* TrainArrivalListItem.swift in Sources */,
 			);

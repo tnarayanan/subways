@@ -8,12 +8,16 @@
 import Foundation
 
 struct TrainArrival: Comparable, Identifiable {
-    var id: String
+    
     var station: String
     var route: Route
     var time: Date
     
     static func < (lhs: TrainArrival, rhs: TrainArrival) -> Bool {
         return lhs.time < rhs.time
+    }
+    
+    var id: String {
+        return "\(station).\(route.rawValue).\(time)"
     }
 }
