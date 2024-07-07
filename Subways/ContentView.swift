@@ -11,6 +11,8 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.colorScheme) var colorScheme
+    
     @Query private var favoriteStations: [FavoriteStation]
     
     @State private var date: Date = Date()
@@ -38,6 +40,8 @@ struct ContentView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
+                    let groupBoxColor = colorScheme == .dark ? Color.systemGray6 : Color.white
+                    
                     StationRouteSymbols(station: $station, routeSymbolSize: routeSymbolSize)
                     
                     Text("Downtown").font(.title3).bold()
@@ -54,7 +58,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .backgroundStyle(Color.white)
+                    .backgroundStyle(groupBoxColor)
                     
                     Text("Uptown").font(.title3).bold()
                         .padding(.top)
@@ -70,7 +74,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .backgroundStyle(Color.white)
+                    .backgroundStyle(groupBoxColor)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
@@ -113,7 +117,7 @@ struct ContentView: View {
                     await updateRoutes()
                 }
             }
-            .background(Color.secondarySystemBackground)
+            .background(colorScheme == .dark ? Color.systemBackground : Color.secondarySystemBackground)
         }
         .onAppear {
             Task {
