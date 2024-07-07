@@ -7,9 +7,15 @@
 
 import Foundation
 
-enum Route: String, Identifiable, Comparable {
+enum Route: String, Identifiable, Comparable, Codable {
     static func < (lhs: Route, rhs: Route) -> Bool {
-        return lhs.rawValue < rhs.rawValue
+        let lhsColorHash = RouteSymbol.routeToColor(route: lhs).hashValue
+        let rhsColorHash = RouteSymbol.routeToColor(route: rhs).hashValue
+        
+        if lhsColorHash == rhsColorHash {
+            return lhs.rawValue < rhs.rawValue
+        }
+        return lhsColorHash < rhsColorHash
     }
     
     var id: String {

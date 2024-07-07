@@ -17,24 +17,24 @@ struct RouteSymbol: View {
         ZStack {
             if route.rawValue.last! == "X" {
                 Rectangle()
-                    .fill(routeToColor(route: route))
+                    .fill(RouteSymbol.routeToColor(route: route))
                     .frame(width: size * RouteSymbol.rectScale, height: size * RouteSymbol.rectScale)
                     .rotationEffect(Angle(degrees: 45))
             } else {
-                Circle().fill(routeToColor(route: route)).frame(width: size * RouteSymbol.circleScale, height: size * RouteSymbol.circleScale)
+                Circle().fill(RouteSymbol.routeToColor(route: route)).frame(width: size * RouteSymbol.circleScale, height: size * RouteSymbol.circleScale)
             }
-            
-            Text(String(route.rawValue.first!))
+            let routeStr: String = (route == .S || route == .FS) ? "S" : String(route.rawValue.first!)
+            Text(routeStr)
                 .font(Font.custom("Helvetica", size: size))
                 .bold()
-                .foregroundColor(routeToColor(route: route) == Color("subwayYellow") ? .black : .white)
+                .foregroundColor(RouteSymbol.routeToColor(route: route) == Color("subwayYellow") ? .black : .white)
             
             
             
         }
     }
     
-    private func routeToColor(route: Route) -> Color {
+    public static func routeToColor(route: Route) -> Color {
         return switch route {
         case .A, .C, .E:
             Color("subwayBlue")

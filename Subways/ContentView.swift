@@ -14,17 +14,25 @@ struct ContentView: View {
     @Query private var favoriteStations: [FavoriteStation]
     
     @State private var date: Date = Date()
-    @State private var stationID: String = "631"
     
     @State private var showingFavoritesSheet = false
     
     @State private var station: Station = Station.DEFAULT
     @State private var arrivals: StationArrivals = StationArrivals()
     
+    let userDefaults = UserDefaults.standard
+    
     private let routeSymbolSize: CGFloat = 20
+    private let defaultStation: String = "631" // default to Grand Central-42 St
     
     private let everySecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     private let updateDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
+    
+    init() {
+        if getSelectedStationId() == nil {
+            setSelectedStationId(defaultStation)
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -68,45 +76,63 @@ struct ContentView: View {
                 .padding(.horizontal)
             }
             .navigationTitle(station.name)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: onFavoriteTapped) {
-                            Label("Add Station to Favorites", systemImage: isCurrentStationFavorite() ? "star.fill" : "star")
-                        }
-                    }
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            showingFavoritesSheet.toggle()
-                        }
-                        label: {
-                            Label("Select Favorite Station", systemImage: "tram.fill")
-                        }
-                        .sheet(isPresented: $showingFavoritesSheet, onDismiss: {
-                            print("dismissed sheet")
-                        }) {
-                            FavoriteStationsView(onDismiss: self.onStationSelected)
-                        }
-                            
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: onFavoriteTapped) {
+                        Label("Add Station to Favorites", systemImage: isCurrentStationFavorite() ? "star.fill" : "star")
                     }
                 }
-                .onReceive(everySecondTimer) { _ in
-                    self.date = Date()
-                }
-                .onReceive(updateDataTimer) { _ in
-                    Task {
-                        await updateRoutes()
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingFavoritesSheet.toggle()
+                    }
+                    label: {
+                        Label("Select Favorite Station", systemImage: "tram.fill")
+                    }
+                    .sheet(isPresented: $showingFavoritesSheet, onDismiss: {
+                        print("dismissed sheet")
+                    }) {
+                        FavoriteStationsView(onDismiss: self.onStationSelected)
                     }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        SearchForStationView(onDismiss: self.onStationSelected)
+                    }
+                    label: {
+                        Label("Select Station", systemImage: "magnifyingglass")
+                    }
+                }
+            }
+            .onReceive(everySecondTimer) { _ in
+                self.date = Date()
+            }
+            .onReceive(updateDataTimer) { _ in
+                Task {
+                    await updateRoutes()
+                }
+            }
             .background(Color.secondarySystemBackground)
         }
         .onAppear {
             Task {
+                station = Station.get(id: getSelectedStationId() ?? defaultStation)
                 await updateRoutes()
             }
         }
     }
     
+    private func getSelectedStationId() -> String? {
+        return userDefaults.string(forKey: "selectedStationId")
+    }
+    
+    private func setSelectedStationId(_ id: String) {
+        userDefaults.set(id, forKey: "selectedStationId")
+    }
+    
     private func onStationSelected(id: String) {
+        setSelectedStationId(id)
         station = Station.get(id: id)
         arrivals = ArrivalDataProcessor.getArrivals(for: id)
     }
@@ -115,28 +141,27 @@ struct ContentView: View {
         if station == Station.DEFAULT {
             return
         }
-        if !favoriteStations.contains(FavoriteStation(id: stationID)) {
-            // add to favorites
-            modelContext.insert(FavoriteStation(id: stationID))
-            print("Adding \(station.name) as a favorite station")
-        } else {
-            // unfavorite
-            modelContext.delete(FavoriteStation(id: stationID))
-            print("Removing \(station.name) from favorite stations")
+        for favStation in favoriteStations {
+            if station.id == favStation.id {
+                modelContext.delete(favStation)
+                print("Removing \(station.name) from favorite stations")
+                return
+            }
         }
+        modelContext.insert(FavoriteStation(id: station.id))
+        print("Adding \(station.name) as a favorite station")
     }
     
     private func isCurrentStationFavorite() -> Bool {
         if station == Station.DEFAULT {
             return false
         }
-        return favoriteStations.contains(FavoriteStation(id: stationID))
+        return favoriteStations.contains(FavoriteStation(id: station.id))
     }
     
     private func updateRoutes() async {
         await ArrivalDataProcessor.processArrivals()
-        station = Station.get(id: stationID)
-        arrivals = ArrivalDataProcessor.getArrivals(for: stationID)
+        arrivals = ArrivalDataProcessor.getArrivals(for: station.id)
     }
     
     private func addItem() {

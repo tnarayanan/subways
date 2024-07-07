@@ -21,6 +21,15 @@ struct StationRouteSymbols: View {
     }
 }
 
+struct StationRouteSymbolsNonBinding: View {
+    @State var station: Station
+    var routeSymbolSize: CGFloat
+    
+    var body: some View {
+        StationRouteSymbols(station: $station, routeSymbolSize: routeSymbolSize)
+    }
+}
+
 //#Preview {
 //    StationRouteSymbols(station: Station.get(id: "127"), routeSymbolSize: 18)
 //}

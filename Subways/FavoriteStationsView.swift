@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct FavoriteStationsView: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
     
     @Query private var favoriteStations: [FavoriteStation]
@@ -25,20 +26,21 @@ struct FavoriteStationsView: View {
                             Text(station.name)
                             Spacer()
                         }
-                        HStack {
-                            ForEach(station.routes.filter({ $0.rawValue.last != "X" }).sorted()) { route in
-                                RouteSymbol(route: route, size: 18)
-                            }
-                            Spacer()
-                        }
+                        StationRouteSymbolsNonBinding(station: station, routeSymbolSize: 18)
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        print(station.name)
+                        print("Switching to favorite station '\(station.name)'")
                         onDismiss(favStation.id)
                         dismiss()
                     }
                 }
+                .onDelete(perform: { indexSet in
+                    for offset in indexSet {
+                        let favStation = favoriteStations[offset]
+                        modelContext.delete(favStation)
+                    }
+                })
             }
             .navigationTitle("Favorite Stations")
             .navigationBarTitleDisplayMode(.inline)

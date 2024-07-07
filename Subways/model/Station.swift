@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Station: Equatable {
+struct Station: Equatable, Identifiable {
     var id: String
     var name: String
     var lat: Float
