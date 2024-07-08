@@ -9,7 +9,7 @@ import Foundation
 import HeapModule
 
 class ArrivalDataProcessor {
-    private static let dataSources: [String] = ["-ace", "-bdfm", "-g", "-nqrw", "-l", "", "-si"]
+    private static let dataSources: [String] = ["-ace", "-bdfm", "-g", "-jz", "-nqrw", "-l", "", "-si"]
     private static let baseUrlString = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs"
     
     private static var messages: [String: TransitRealtime_FeedMessage] = [:]

@@ -43,7 +43,9 @@ struct FavoriteStationsView: View {
                 })
             }
             .navigationTitle("Favorite Stations")
-            .navigationBarTitleDisplayMode(.inline)
+            #if os(iOS)
+                .navigationBarTitleDisplayMode(.inline)
+            #endif
         }
     }
 }

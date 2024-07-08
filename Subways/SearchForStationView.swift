@@ -28,12 +28,6 @@ struct SearchForStationView: View {
                         Text(station.name)
                         Spacer()
                     }
-//                    HStack {
-//                        ForEach(station.routes.filter({ $0.rawValue.last != "X" }).sorted()) { route in
-//                            RouteSymbol(route: route, size: 18)
-//                        }
-//                        Spacer()
-//                    }
                     StationRouteSymbolsNonBinding(station: station, routeSymbolSize: 18)
                 }
                 .contentShape(Rectangle())
@@ -46,7 +40,9 @@ struct SearchForStationView: View {
         }
         .searchable(text: $searchText, prompt: "Search for a station")
         .navigationTitle("Search for Station")
-        .navigationBarTitleDisplayMode(.inline)
+        #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
 }
 

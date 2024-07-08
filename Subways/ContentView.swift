@@ -44,45 +44,62 @@ struct ContentView: View {
                     
                     StationRouteSymbols(station: $station, routeSymbolSize: routeSymbolSize)
                     
-                    Text("Downtown").font(.title3).bold()
-                        .padding(.top)
-                    
-                    GroupBox {
-                        let lastArrival = arrivals.getDowntownArrivals().last
-                        let lastID = lastArrival?.id ?? ""
-                        ForEach(arrivals.getDowntownArrivals()) { arrival in
-                            TrainArrivalListItem(trainArrival: arrival, curTime: $date)
-                                .padding(.vertical, .extraSmall)
-                            if arrival.id != lastID {
-                                Divider()
+                    if station == Station.DEFAULT || (arrivals.getDowntownArrivals().count + arrivals.getUptownArrivals().count) == 0 {
+                        VStack {
+                            Spacer()
+                            HStack {
+                                Spacer()
+                                ProgressView("Loading data...")
+                                Spacer()
+                            }
+                            Spacer()
+                        }
+                        .frame(maxHeight: .infinity)
+                    } else {
+                        Text("Downtown").font(.title3).bold()
+                            .padding(.top)
+                        
+                        GroupBox {
+                            let lastArrival = arrivals.getDowntownArrivals().last
+                            let lastID = lastArrival?.id ?? ""
+                            ForEach(arrivals.getDowntownArrivals()) { arrival in
+                                TrainArrivalListItem(trainArrival: arrival, curTime: $date)
+                                    .padding(.vertical, .extraSmall)
+                                if arrival.id != lastID {
+                                    Divider()
+                                }
                             }
                         }
-                    }
-                    .backgroundStyle(groupBoxColor)
-                    
-                    Text("Uptown").font(.title3).bold()
-                        .padding(.top)
-                    
-                    GroupBox {
-                        let lastArrival = arrivals.getUptownArrivals().last
-                        let lastID = lastArrival?.id ?? ""
-                        ForEach(arrivals.getUptownArrivals()) { arrival in
-                            TrainArrivalListItem(trainArrival: arrival, curTime: $date)
-                                .padding(.vertical, .extraSmall)
-                            if arrival.id != lastID {
-                                Divider()
+                        .backgroundStyle(groupBoxColor)
+                        
+                        Text("Uptown").font(.title3).bold()
+                            .padding(.top)
+                        
+                        GroupBox {
+                            let lastArrival = arrivals.getUptownArrivals().last
+                            let lastID = lastArrival?.id ?? ""
+                            ForEach(arrivals.getUptownArrivals()) { arrival in
+                                TrainArrivalListItem(trainArrival: arrival, curTime: $date)
+                                    .padding(.vertical, .extraSmall)
+                                if arrival.id != lastID {
+                                    Divider()
+                                }
                             }
                         }
+                        .backgroundStyle(groupBoxColor)
                     }
-                    .backgroundStyle(groupBoxColor)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
             }
             .navigationTitle(station.name)
-            .navigationBarTitleDisplayMode(.large)
+            #if os(iOS)
+                .navigationBarTitleDisplayMode(.large)
+            #endif
+            
+            #if os(iOS)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .topBarTrailing) {
                     Button(action: onFavoriteTapped) {
                         Label("Add Station to Favorites", systemImage: isCurrentStationFavorite() ? "star.fill" : "star")
                     }
@@ -109,6 +126,7 @@ struct ContentView: View {
                     }
                 }
             }
+            #endif
             .onReceive(everySecondTimer) { _ in
                 self.date = Date()
             }
