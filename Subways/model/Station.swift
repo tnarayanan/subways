@@ -6,13 +6,27 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Station: Equatable, Identifiable {
-    var id: String
+@Model
+final class Station: Equatable, Identifiable {
+    @Attribute(.unique) var id: String
     var name: String
     var lat: Float
     var long: Float
     var routes: [Route]
+    var isFavorite: Bool
+    var isSelected: Bool
+    
+    init(id: String, name: String, lat: Float, long: Float, routes: [Route]) {
+        self.id = id
+        self.name = name
+        self.lat = lat
+        self.long = long
+        self.routes = routes
+        self.isFavorite = false
+        self.isSelected = false
+    }
     
     static var DEFAULT = Station(id: "", name: "", lat: 0, long: 0, routes: [])
     
@@ -22,6 +36,18 @@ struct Station: Equatable, Identifiable {
     
     static func get(id: String) -> Station {
         return allStations[id] ?? Station.DEFAULT
+    }
+    
+    static func addAllStationsTo(modelContext: ModelContext) {
+        do {
+            try modelContext.transaction {
+                for station in allStations.values {
+                    modelContext.insert(station)
+                }
+            }
+        } catch let error {
+            print(error)
+        }
     }
     
     static var allStations: [String: Station] = [

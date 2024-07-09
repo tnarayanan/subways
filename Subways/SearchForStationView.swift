@@ -6,18 +6,23 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SearchForStationView: View {
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.modelContext) var modelContext
+    
+    @Bindable var selectedStation: Station
     
     @State private var searchText: String = ""
-    var onDismiss: (String) -> Void = {_ in}
+    
+    @Query var allStations: [Station]
     
     var filteredStations: [Station] {
         if searchText.isEmpty {
-            return Array(Station.allStations.values)
+            return allStations
         }
-        return Station.allStations.values.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        return allStations.filter { $0.name.lowercased().contains(searchText.lowercased()) }
     }
     
     var body: some View {
@@ -28,12 +33,13 @@ struct SearchForStationView: View {
                         Text(station.name)
                         Spacer()
                     }
-                    StationRouteSymbolsNonBinding(station: station, routeSymbolSize: 18)
+                    StationRouteSymbols(station: station, routeSymbolSize: 18)
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
                     print("Switching to searched station '\(station.name)'")
-                    onDismiss(station.id)
+                    selectedStation.isSelected = false
+                    station.isSelected = true
                     self.presentationMode.wrappedValue.dismiss()
                 }
             }
@@ -43,9 +49,14 @@ struct SearchForStationView: View {
         #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
         #endif
+            .onAppear {
+                if allStations.isEmpty {
+                    Station.addAllStationsTo(modelContext: modelContext)
+                }
+            }
     }
 }
 
-#Preview {
-    SearchForStationView()
-}
+//#Preview {
+//    SearchForStationView()
+//}

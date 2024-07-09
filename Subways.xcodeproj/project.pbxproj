@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		96A94D152C3CC535008CFC18 /* TrainArrivalList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A94D142C3CC535008CFC18 /* TrainArrivalList.swift */; };
 		96C5143F2C375202009CAE08 /* SubwaysApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5143E2C375202009CAE08 /* SubwaysApp.swift */; };
 		96C514412C375202009CAE08 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514402C375202009CAE08 /* ContentView.swift */; };
 		96C514432C375202009CAE08 /* FavoriteStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514422C375202009CAE08 /* FavoriteStation.swift */; };
@@ -62,6 +63,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		96A94D142C3CC535008CFC18 /* TrainArrivalList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainArrivalList.swift; sourceTree = "<group>"; };
 		96C5143B2C375202009CAE08 /* Subways.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Subways.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96C5143E2C375202009CAE08 /* SubwaysApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwaysApp.swift; sourceTree = "<group>"; };
 		96C514402C375202009CAE08 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				96C514902C379DE1009CAE08 /* TrainArrivalListItem.swift */,
 				96C514922C379E8A009CAE08 /* RouteSymbol.swift */,
 				96C514B52C3AF2B4009CAE08 /* StationRouteSymbols.swift */,
+				96A94D142C3CC535008CFC18 /* TrainArrivalList.swift */,
 			);
 			path = view_elements;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 				96C514412C375202009CAE08 /* ContentView.swift in Sources */,
 				96C514932C379E8A009CAE08 /* RouteSymbol.swift in Sources */,
 				96C5147B2C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift in Sources */,
+				96A94D152C3CC535008CFC18 /* TrainArrivalList.swift in Sources */,
 				96C514892C3796E6009CAE08 /* StationArrivals.swift in Sources */,
 				96C514872C379322009CAE08 /* Direction.swift in Sources */,
 				96C514AA2C37B71B009CAE08 /* Station.swift in Sources */,

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StationRouteSymbols: View {
-    @Binding var station: Station
+    var station: Station
     var routeSymbolSize: CGFloat
     
     var body: some View {
@@ -18,15 +18,6 @@ struct StationRouteSymbols: View {
             }
             Spacer()
         }
-    }
-}
-
-struct StationRouteSymbolsNonBinding: View {
-    @State var station: Station
-    var routeSymbolSize: CGFloat
-    
-    var body: some View {
-        StationRouteSymbols(station: $station, routeSymbolSize: routeSymbolSize)
     }
 }
 

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TrainArrivalListItem: View {
     var trainArrival: TrainArrival
-    @Binding var curTime: Date
+    var curTime: Date
     
     var body: some View {
         let diffs = Calendar.current.dateComponents([.minute, .second], from: curTime, to: trainArrival.time)

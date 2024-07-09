@@ -62,7 +62,7 @@ class ArrivalDataProcessor {
                     } else if stopTimeUpdate.hasDeparture {
                         timestamp = stopTimeUpdate.departure.time
                     }
-                    let trainArrival = TrainArrival(station: stopID, route: Route(rawValue: route) ?? Route.X, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+                    let trainArrival = TrainArrival(tripId: tripID, station: stopID, route: Route(rawValue: route) ?? Route.X, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
                     
                     stationArrivalHeaps[stopID]![direction]!.insert(trainArrival)
                     if stationArrivalHeaps[stopID]![direction]!.count > 7 {

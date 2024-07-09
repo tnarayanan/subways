@@ -11,13 +11,11 @@ import SwiftData
 @main
 struct SubwaysApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            FavoriteStation.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let stationConfig = ModelConfiguration(for: Station.self, isStoredInMemoryOnly: false)
+        let trainArrivalConfig = ModelConfiguration(for: TrainArrival.self, isStoredInMemoryOnly: true)
 
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try ModelContainer(for: Station.self, TrainArrival.self, configurations: stationConfig, trainArrivalConfig)
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
