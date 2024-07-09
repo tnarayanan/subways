@@ -120,7 +120,7 @@ struct ContentView: View {
     }
     
     private func updateRoutes() async {
-        await ArrivalDataProcessor.processArrivals()
+        await ArrivalDataProcessor.processArrivals(modelContext: modelContext)
     }
     
     private func addItem() {

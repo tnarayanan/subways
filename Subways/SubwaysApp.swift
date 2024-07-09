@@ -10,16 +10,16 @@ import SwiftData
 
 @main
 struct SubwaysApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let stationConfig = ModelConfiguration(for: Station.self, isStoredInMemoryOnly: false)
-        let trainArrivalConfig = ModelConfiguration(for: TrainArrival.self, isStoredInMemoryOnly: true)
-
-        do {
-            return try ModelContainer(for: Station.self, TrainArrival.self, configurations: stationConfig, trainArrivalConfig)
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+//    var sharedModelContainer: ModelContainer = {
+//        let stationConfig = ModelConfiguration(for: Station.self, isStoredInMemoryOnly: false)
+//        let trainArrivalConfig = ModelConfiguration(for: TrainArrival.self, isStoredInMemoryOnly: true)
+//
+//        do {
+//            return try ModelContainer(for: Station.self, TrainArrival.self, configurations: stationConfig, trainArrivalConfig)
+//        } catch {
+//            fatalError("Could not create ModelContainer: \(error)")
+//        }
+//    }()
     
     init() {
     }
@@ -28,6 +28,6 @@ struct SubwaysApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(for: Station.self)
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import HeapModule
+import SwiftData
 
 class ArrivalDataProcessor {
     private static let dataSources: [String] = ["-ace", "-bdfm", "-g", "-jz", "-nqrw", "-l", "", "-si"]
@@ -30,9 +31,18 @@ class ArrivalDataProcessor {
         }
     }
     
-    public static func processArrivals() async {
+    @MainActor
+    public static func processArrivals(modelContext: ModelContext) async {
         stationArrivalHeaps.removeAll(keepingCapacity: true)
         stationArrivals.removeAll(keepingCapacity: true)
+        
+        var allStations: [Station] = []
+        do {
+            try modelContext.delete(model: TrainArrival.self)
+            allStations = try modelContext.fetch(FetchDescriptor<Station>())
+        } catch let error {
+            print(error)
+        }
         
         let clock = ContinuousClock()
         let time = await clock.measure {
@@ -62,13 +72,20 @@ class ArrivalDataProcessor {
                     } else if stopTimeUpdate.hasDeparture {
                         timestamp = stopTimeUpdate.departure.time
                     }
-                    let trainArrival = TrainArrival(tripId: tripID, station: stopID, route: Route(rawValue: route) ?? Route.X, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+                    let trainArrival = TrainArrival(tripId: tripID, stationId: stopID, route: Route(rawValue: route) ?? Route.X, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
                     
                     stationArrivalHeaps[stopID]![direction]!.insert(trainArrival)
                     if stationArrivalHeaps[stopID]![direction]!.count > 7 {
                         stationArrivalHeaps[stopID]![direction]!.removeMax()
                     }
                 }
+            }
+        }
+        
+        for station in allStations {
+            if stationArrivalHeaps.keys.contains(station.id) {
+                station.downtownArrivals = stationArrivalHeaps[station.id]![.DOWNTOWN]!.unordered.sorted()
+                station.uptownArrivals = stationArrivalHeaps[station.id]![.UPTOWN]!.unordered.sorted()
             }
         }
         
