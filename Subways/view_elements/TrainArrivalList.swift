@@ -10,7 +10,8 @@ import SwiftUI
 struct TrainArrivalList: View {
     @Environment(\.colorScheme) var colorScheme
     
-    var arrivals: StationArrivals
+//    var arrivals: StationArrivals
+    @Bindable var station: Station
     var direction: Direction
     var date: Date
     
@@ -18,7 +19,8 @@ struct TrainArrivalList: View {
         let groupBoxColor = colorScheme == .dark ? Color.systemGray6 : Color.white
         
         GroupBox {
-            let arrivalsList: [TrainArrival] = direction == .DOWNTOWN ? arrivals.getDowntownArrivals() : arrivals.getUptownArrivals()
+//            let arrivalsList: [TrainArrival] = direction == .DOWNTOWN ? arrivals.getDowntownArrivals() : arrivals.getUptownArrivals()
+            let arrivalsList: [TrainArrival] = direction == .DOWNTOWN ? station.downtownArrivals : station.uptownArrivals
             let lastArrivalID: String = arrivalsList.last?.id ?? ""
 
             ForEach(arrivalsList) { arrival in

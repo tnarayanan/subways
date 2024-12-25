@@ -34,11 +34,12 @@ struct ContentView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
-                    let arrivals = ArrivalDataProcessor.getArrivals(for: station.id)
+//                    let arrivals = ArrivalDataProcessor.getArrivals(for: station.id)
                     
                     StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
                     
-                    if station == Station.DEFAULT || (arrivals.getDowntownArrivals().count + arrivals.getUptownArrivals().count) == 0 {
+//                    if station == Station.DEFAULT || (arrivals.getDowntownArrivals().count + arrivals.getUptownArrivals().count) == 0 {
+                    if station == Station.DEFAULT || (station.downtownArrivals.count + station.uptownArrivals.count) == 0 {
                         VStack {
                             Spacer()
                             HStack {
@@ -53,12 +54,12 @@ struct ContentView: View {
                         Text("Downtown").font(.title3).bold()
                             .padding(.top)
                         
-                        TrainArrivalList(arrivals: arrivals, direction: .DOWNTOWN, date: date)
+                        TrainArrivalList(station: station, direction: .DOWNTOWN, date: date)
                         
                         Text("Uptown").font(.title3).bold()
                             .padding(.top)
                         
-                        TrainArrivalList(arrivals: arrivals, direction: .UPTOWN, date: date)
+                        TrainArrivalList(station: station, direction: .UPTOWN, date: date)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
