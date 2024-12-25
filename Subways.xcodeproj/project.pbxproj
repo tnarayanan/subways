@@ -39,7 +39,6 @@
 		96C514A52C37A618009CAE08 /* transfers.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C5149B2C37A618009CAE08 /* transfers.txt */; };
 		96C514A62C37A618009CAE08 /* trips.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C5149C2C37A618009CAE08 /* trips.txt */; };
 		96C514AA2C37B71B009CAE08 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514A92C37B71B009CAE08 /* Station.swift */; };
-		96C514AD2C3998F0009CAE08 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 96C514AC2C3998F0009CAE08 /* SwiftUIX */; };
 		96C514B42C3AF1AE009CAE08 /* FavoriteStationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514B32C3AF1AE009CAE08 /* FavoriteStationsView.swift */; };
 		96C514B62C3AF2B4009CAE08 /* StationRouteSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514B52C3AF2B4009CAE08 /* StationRouteSymbols.swift */; };
 		96C514B82C3B03B6009CAE08 /* SearchForStationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514B72C3B03B6009CAE08 /* SearchForStationView.swift */; };
@@ -108,7 +107,6 @@
 				96C5148C2C379A0A009CAE08 /* Collections in Frameworks */,
 				96C514762C375588009CAE08 /* SwiftProtobufPluginLibrary in Frameworks */,
 				96C5148E2C379A0A009CAE08 /* HeapModule in Frameworks */,
-				96C514AD2C3998F0009CAE08 /* SwiftUIX in Frameworks */,
 				96C514742C375588009CAE08 /* SwiftProtobuf in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -272,7 +270,6 @@
 				96C514752C375588009CAE08 /* SwiftProtobufPluginLibrary */,
 				96C5148B2C379A0A009CAE08 /* Collections */,
 				96C5148D2C379A0A009CAE08 /* HeapModule */,
-				96C514AC2C3998F0009CAE08 /* SwiftUIX */,
 			);
 			productName = Subways;
 			productReference = 96C5143B2C375202009CAE08 /* Subways.app */;
@@ -349,7 +346,6 @@
 			packageReferences = (
 				96C514722C375588009CAE08 /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 				96C5148A2C379A0A009CAE08 /* XCRemoteSwiftPackageReference "swift-collections" */,
-				96C514AB2C3998F0009CAE08 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 			);
 			productRefGroup = 96C5143C2C375202009CAE08 /* Products */;
 			projectDirPath = "";
@@ -601,10 +597,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tejas.Subways;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -640,10 +637,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tejas.Subways;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -795,14 +793,6 @@
 				minimumVersion = 1.1.1;
 			};
 		};
-		96C514AB2C3998F0009CAE08 /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -825,11 +815,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 96C5148A2C379A0A009CAE08 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = HeapModule;
-		};
-		96C514AC2C3998F0009CAE08 /* SwiftUIX */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 96C514AB2C3998F0009CAE08 /* XCRemoteSwiftPackageReference "SwiftUIX" */;
-			productName = SwiftUIX;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

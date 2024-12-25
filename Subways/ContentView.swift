@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUIX
 import SwiftData
 
 struct ContentView: View {
@@ -30,15 +29,12 @@ struct ContentView: View {
     private let updateDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     
     var body: some View {
-        @Bindable var station: Station = selectedStations.first ?? Station.DEFAULT
+        @Bindable var station: Station = selectedStations.first ?? Station.get(id: defaultStation)
+//        @Bindable var station: Station = Station.get(id: defaultStation)
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
-//                    let arrivals = ArrivalDataProcessor.getArrivals(for: station.id)
-                    
                     StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
-                    
-//                    if station == Station.DEFAULT || (arrivals.getDowntownArrivals().count + arrivals.getUptownArrivals().count) == 0 {
                     if station == Station.DEFAULT || (station.downtownArrivals.count + station.uptownArrivals.count) == 0 {
                         VStack {
                             Spacer()
@@ -67,7 +63,7 @@ struct ContentView: View {
             }
             .navigationTitle(station.name)
             #if os(iOS)
-                .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.large)
             #endif
             
             #if os(iOS)
@@ -111,7 +107,7 @@ struct ContentView: View {
                     await updateRoutes()
                 }
             }
-            .background(colorScheme == .dark ? Color.systemBackground : Color.secondarySystemBackground)
+            .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground)) // Color.systemBackground : Color.secondarySystemBackground)
         }
         .onAppear {
             Task {

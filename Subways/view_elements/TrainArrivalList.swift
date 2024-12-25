@@ -16,7 +16,7 @@ struct TrainArrivalList: View {
     var date: Date
     
     var body: some View {
-        let groupBoxColor = colorScheme == .dark ? Color.systemGray6 : Color.white
+        let groupBoxColor = colorScheme == .dark ? Color(UIColor.systemGray6) : Color.white
         
         GroupBox {
 //            let arrivalsList: [TrainArrival] = direction == .DOWNTOWN ? arrivals.getDowntownArrivals() : arrivals.getUptownArrivals()
@@ -25,7 +25,7 @@ struct TrainArrivalList: View {
 
             ForEach(arrivalsList) { arrival in
                 TrainArrivalListItem(trainArrival: arrival, curTime: date)
-                    .padding(.vertical, .extraSmall)
+                    .padding(.vertical, 4)
                 if arrival.id != lastArrivalID {
                     Divider()
                 }
