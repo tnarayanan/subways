@@ -28,6 +28,6 @@ struct SubwaysApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: Station.self)
+        .modelContainer(for: Station.self, isAutosaveEnabled: false, isUndoEnabled: false)
     }
 }

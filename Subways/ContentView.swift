@@ -103,21 +103,20 @@ struct ContentView: View {
                 self.date = Date()
             }
             .onReceive(updateDataTimer) { _ in
-                Task {
-                    await updateRoutes()
-                }
+                updateRoutes()
             }
             .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground)) // Color.systemBackground : Color.secondarySystemBackground)
         }
         .onAppear {
-            Task {
-                await updateRoutes()
-            }
+            updateRoutes()
         }
     }
     
-    private func updateRoutes() async {
-        await ArrivalDataProcessor.processArrivals(modelContext: modelContext)
+    private func updateRoutes() {
+        Task.detached {
+            let actor = await ArrivalDataProcessor(modelContainer: modelContext.container)
+            await actor.processArrivals()
+        }
     }
     
     private func addItem() {
