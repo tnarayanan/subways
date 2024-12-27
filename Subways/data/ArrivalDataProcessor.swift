@@ -44,6 +44,20 @@ extension ArrivalDataProcessor {
         
         let oneMinuteAgo: Date = Date().addingTimeInterval(-60)
         
+        var allStations: [Station] = []
+        var allArrivals: [TrainArrival] = []
+        do {
+            allStations = try modelContext.fetch(FetchDescriptor<Station>())
+            allArrivals = try modelContext.fetch(FetchDescriptor<TrainArrival>())
+        } catch let error {
+            print(error)
+        }
+        
+        var stationMap: [String: Station] = [:]
+        for station in allStations {
+            stationMap[station.stationId] = station
+        }
+        
         for msg in messages.values {
             for ent in msg.entity.filter({$0.hasTripUpdate}) {
                 let tripUpdate = ent.tripUpdate
@@ -66,7 +80,7 @@ extension ArrivalDataProcessor {
                     } else if stopTimeUpdate.hasDeparture {
                         timestamp = stopTimeUpdate.departure.time
                     }
-                    let trainArrival = TrainArrival(tripId: tripID, stationId: stopID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+                    let trainArrival = TrainArrival(tripId: tripID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
                     
                     if trainArrival.time < oneMinuteAgo {
                         continue
@@ -79,48 +93,37 @@ extension ArrivalDataProcessor {
                 }
             }
         }
+            
+        var arrivalByTripId: [String: TrainArrival] = [:]
+        for arrival in allArrivals {
+            if arrival.time < oneMinuteAgo {
+                modelContext.delete(arrival)
+            } else {
+                arrivalByTripId[arrival.tripId] = arrival
+            }
+        }
         
-        try! modelContext.transaction {
-            print("Beginning transaction")
-            var allStations: [Station] = []
-            var allArrivals: [TrainArrival] = []
-            do {
-                allStations = try modelContext.fetch(FetchDescriptor<Station>())
-                allArrivals = try modelContext.fetch(FetchDescriptor<TrainArrival>())
-            } catch let error {
-                print(error)
-            }
+        try! modelContext.save()
             
-            var arrivalByTripId: [String: TrainArrival] = [:]
-            for arrival in allArrivals {
-                if arrival.time < oneMinuteAgo {
-                    modelContext.delete(arrival)
-                } else {
-                    arrivalByTripId[arrival.tripId] = arrival
-                }
-            }
-            
-            for station in allStations {
-                if stationArrivalHeaps.keys.contains(station.stationId) {
-                    for direction in stationArrivalHeaps[station.stationId]!.keys {
-                        if station.stationId == "631" { print("\(station.stationId) -> \(direction): \(stationArrivalHeaps[station.stationId]![direction]!.count)") }
-                        for newArrival in stationArrivalHeaps[station.stationId]![direction]!.unordered {
-                            if station.stationId == "631" { print("\t\(newArrival.tripId)") }
-                            if let existingArrival = arrivalByTripId[newArrival.tripId] {
-                                if station.stationId == "631" { print("\t\tExisting arrival") }
-                                existingArrival.time = newArrival.time
-                            } else {
-                                if station.stationId == "631" { print("\t\tNew arrival") }
-                                let arrivalToAdd = TrainArrival(tripId: newArrival.tripId, stationId: station.stationId, route: newArrival.route, direction: newArrival.direction, time: newArrival.time)
-                            }
+        for station in allStations {
+            if stationArrivalHeaps.keys.contains(station.stationId) {
+                for direction in stationArrivalHeaps[station.stationId]!.keys {
+                    if station.stationId == "631" { print("\(station.stationId) -> \(direction): \(stationArrivalHeaps[station.stationId]![direction]!.count)") }
+                    for newArrival in stationArrivalHeaps[station.stationId]![direction]!.unordered {
+                        if let existingArrival = arrivalByTripId[newArrival.tripId] {
+                            if station.stationId == "631" { print("\t\(newArrival.tripId): Existing arrival \(existingArrival.tripId)") }
+                            existingArrival.time = newArrival.time
+                        } else {
+                            if station.stationId == "631" { print("\t\(newArrival.tripId): New arrival") }
+                            modelContext.insert(newArrival)
+                            newArrival.station = station
                         }
                     }
                 }
             }
-            
-            print("Finishing transaction")
-            try! modelContext.save()
         }
+        
+        try! modelContext.save()
     }
     
     func queryDataTime() {

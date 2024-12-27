@@ -17,16 +17,11 @@ struct TrainArrivalList: View {
     var direction: Direction
     var date: Date
     
-    private var stationArrivals: [TrainArrival] {
-        let fetchDescriptor = FetchDescriptor<TrainArrival>()
-        return (try? modelContext.fetch(fetchDescriptor)) ?? []
-    }
-    
     var body: some View {
         let groupBoxColor = colorScheme == .dark ? Color(UIColor.systemGray6) : Color.white
         
         GroupBox {
-            let arrivalsList: [TrainArrival] = stationArrivals.filter { $0.stationId == station.stationId && $0.direction == direction }
+            let arrivalsList: [TrainArrival] = station.arrivals!.filter { $0.direction == direction }
 
             ForEach(Array(arrivalsList.sorted().enumerated()), id: \.offset) { index, arrival in
                 TrainArrivalListItem(trainArrival: arrival, curTime: date)

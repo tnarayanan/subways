@@ -7,6 +7,6 @@
 
 import Foundation
 
-enum Direction: Int, Codable, CaseIterable {
-    case UPTOWN = 0, DOWNTOWN = 1
+enum Direction: String, CaseIterable, Codable {
+    case UPTOWN = "UPTOWN", DOWNTOWN = "DOWNTOWN"
 }

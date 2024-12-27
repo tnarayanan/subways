@@ -15,7 +15,7 @@ struct SubwaysApp: App {
     @MainActor
     let container: ModelContainer = {
         do {
-            let container: ModelContainer = try ModelContainer(for: Station.self, TrainArrival.self)
+            let container: ModelContainer = try ModelContainer(for: Station.self)
             let modelContext = ModelContext(container)
             
             // Initialize stations if necessary
