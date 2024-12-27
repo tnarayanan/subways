@@ -28,8 +28,6 @@ struct ContentView: View {
     private let everySecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     private let updateDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     
-    
-    @State private var lastUpdate: Date? = nil
     private var arrivalDataProcessor: ArrivalDataProcessor {
         ArrivalDataProcessor(/*modelContainer: modelContext.container*/)
     }
@@ -43,11 +41,11 @@ struct ContentView: View {
                     
                     HStack {
                         StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
-                        if let lastUpdate {
+                        let lastUpdated = $station.lastUpdated.wrappedValue
+                        if let lastUpdated {
                             if !loadingInitialData {
-                                let secsAgo = Calendar.current.dateComponents([.minute, .second], from: lastUpdate, to: date).second ?? 0
-                                let updatedText = secsAgo < 5 ? "just now" : (secsAgo < 10 ? "5 seconds ago" : "10 seconds ago")
-                                Text("• updated \(updatedText)")
+                                let diffs = Calendar.current.dateComponents([.second], from: lastUpdated, to: date)
+                                Text("• updated \(getStringFromSecondsAgo(diffs.second ?? 0))")
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
                             }
@@ -148,6 +146,18 @@ struct ContentView: View {
         }
     }
     
+    private func getStringFromSecondsAgo(_ secondsAgo: Int) -> String {
+        if secondsAgo < 5 {
+            return "just now"
+        } else if secondsAgo < 10 {
+            return "5 seconds ago"
+        } else if secondsAgo < 60 {
+            return "\((secondsAgo / 10) * 10) seconds ago"
+        } else {
+            return "more than a minute ago"
+        }
+    }
+    
     private func fetchArrivals(station: Station) {
         Task {
             let stationArrivalHeap = await arrivalDataProcessor.processArrivals(stationId: station.stationId)
@@ -167,8 +177,6 @@ struct ContentView: View {
             
             print("Removed old arrivals")
             
-//            let stationArrivalHeap = await arrivalDataProcessor.stationArrivalHeaps[station.stationId]! // ?? [.DOWNTOWN: [], .UPTOWN: []]
-            
             print(stationArrivalHeap)
             
             for direction in Direction.allCases {
@@ -182,7 +190,7 @@ struct ContentView: View {
                 }
             }
             
-            lastUpdate = Date()
+            station.lastUpdated = Date()
         }
     }
 }
