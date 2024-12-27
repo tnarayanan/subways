@@ -33,7 +33,7 @@ struct ContentView: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
-                    if station == Station.DEFAULT || (station.arrivals.count) == 0 {
+                    if station == Station.DEFAULT /*|| (station.arrivals.count) == 0*/ {
                         VStack {
                             Spacer()
                             HStack {
@@ -115,7 +115,7 @@ struct ContentView: View {
         Task.detached {
             let actor = await ArrivalDataProcessor(modelContainer: modelContext.container)
             await actor.processArrivals()
-            await print(selectedStations.first!.arrivals)
+//            await print(selectedStations.first!.arrivals)
         }
     }
 }

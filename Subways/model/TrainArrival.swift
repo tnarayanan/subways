@@ -10,19 +10,16 @@ import SwiftData
 
 @Model
 final class TrainArrival: Comparable, Identifiable {
-    var tripId: String
-    var station: Station?
+    @Attribute(.unique) var tripId: String
+    var stationId: String
     var route: Route
     var direction: Direction
     var time: Date
     
-    var uniqueId: String {
-        "\(tripId).\(direction.rawValue).\(route.rawValue)"
-    }
     
-    init(tripId: String, station: Station? = nil, route: Route, direction: Direction, time: Date) {
+    init(tripId: String, stationId: String, route: Route, direction: Direction, time: Date) {
         self.tripId = tripId
-        self.station = station
+        self.stationId = stationId
         self.route = route
         self.direction = direction
         self.time = time

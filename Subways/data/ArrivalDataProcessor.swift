@@ -66,7 +66,7 @@ extension ArrivalDataProcessor {
                     } else if stopTimeUpdate.hasDeparture {
                         timestamp = stopTimeUpdate.departure.time
                     }
-                    let trainArrival = TrainArrival(tripId: tripID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+                    let trainArrival = TrainArrival(tripId: tripID, stationId: stopID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
                     
                     if trainArrival.time < oneMinuteAgo {
                         continue
@@ -91,12 +91,12 @@ extension ArrivalDataProcessor {
                 print(error)
             }
             
-            var arrivalByUniqueId: [String: TrainArrival] = [:]
+            var arrivalByTripId: [String: TrainArrival] = [:]
             for arrival in allArrivals {
                 if arrival.time < oneMinuteAgo {
                     modelContext.delete(arrival)
                 } else {
-                    arrivalByUniqueId[arrival.uniqueId] = arrival
+                    arrivalByTripId[arrival.tripId] = arrival
                 }
             }
             
@@ -105,14 +105,13 @@ extension ArrivalDataProcessor {
                     for direction in stationArrivalHeaps[station.stationId]!.keys {
                         if station.stationId == "631" { print("\(station.stationId) -> \(direction): \(stationArrivalHeaps[station.stationId]![direction]!.count)") }
                         for newArrival in stationArrivalHeaps[station.stationId]![direction]!.unordered {
-                            if station.stationId == "631" { print("\t\(newArrival.uniqueId)") }
-                            if let existingArrival = arrivalByUniqueId[newArrival.uniqueId] {
+                            if station.stationId == "631" { print("\t\(newArrival.tripId)") }
+                            if let existingArrival = arrivalByTripId[newArrival.tripId] {
                                 if station.stationId == "631" { print("\t\tExisting arrival") }
                                 existingArrival.time = newArrival.time
                             } else {
                                 if station.stationId == "631" { print("\t\tNew arrival") }
-                                let arrivalToAdd = TrainArrival(tripId: newArrival.tripId, station: station, route: newArrival.route, direction: newArrival.direction, time: newArrival.time)
-                                station.arrivals.append(arrivalToAdd)
+                                let arrivalToAdd = TrainArrival(tripId: newArrival.tripId, stationId: station.stationId, route: newArrival.route, direction: newArrival.direction, time: newArrival.time)
                             }
                         }
                     }

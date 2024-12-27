@@ -15,7 +15,7 @@ struct SubwaysApp: App {
     @MainActor
     let container: ModelContainer = {
         do {
-            let container: ModelContainer = try ModelContainer(for: Station.self)
+            let container: ModelContainer = try ModelContainer(for: Station.self, TrainArrival.self)
             let modelContext = ModelContext(container)
             
             // Initialize stations if necessary
@@ -31,8 +31,8 @@ struct SubwaysApp: App {
             }
             
             // Delete all existing train arrivals
-//            try modelContext.delete(model: TrainArrival.self)
-//            try modelContext.save()
+            try modelContext.delete(model: TrainArrival.self)
+            try modelContext.save()
             
             return container
         } catch {
