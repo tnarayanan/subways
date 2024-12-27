@@ -60,6 +60,8 @@ extension ArrivalDataProcessor {
             stationMap[station.stationId] = station
         }
         
+        var numTotalArrivals = 0
+        
         for msg in messages.values {
             for ent in msg.entity.filter({$0.hasTripUpdate}) {
                 let tripUpdate = ent.tripUpdate
@@ -82,7 +84,9 @@ extension ArrivalDataProcessor {
                     } else if stopTimeUpdate.hasDeparture {
                         timestamp = stopTimeUpdate.departure.time
                     }
-                    let trainArrival = TrainArrival(tripId: tripID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+                    let trainArrival = TrainArrival(tripId: tripID + "_" + stopID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+                    
+                    numTotalArrivals += 1
                     
                     if trainArrival.time < oneMinuteAgo {
                         continue
@@ -95,49 +99,30 @@ extension ArrivalDataProcessor {
                 }
             }
         }
+        
+        print("total \(numTotalArrivals)")
             
         var arrivalByTripId: [String: TrainArrival] = [:]
         for arrival in allArrivals {
             if arrival.time < oneMinuteAgo {
                 modelContext.delete(arrival)
             } else {
+                if let existingArrival = arrivalByTripId[arrival.tripId] {
+                    print("DUPLICATE TRIP ID: \(existingArrival.tripId)")
+                }
                 arrivalByTripId[arrival.tripId] = arrival
             }
         }
         
-        try! modelContext.save()
-        
-        let priorityStation: Station = stationMap[stationId]!
-        
-//        try! modelContext.delete(model: TrainArrival.self)
-//        if stationArrivalHeaps.keys.contains(priorityStation.stationId) {
-//            for direction in stationArrivalHeaps[priorityStation.stationId]!.keys {
-//                for newArrival in stationArrivalHeaps[priorityStation.stationId]![direction]!.unordered {
-//                    modelContext.insert(newArrival)
-//                    newArrival.station = priorityStation
-//                }
-//            }
-//        }
-//        
-//        try! modelContext.save()
-        
-            
         for station in allStations {
-//            if station.stationId == priorityStation.stationId {
-//                continue
-//            }
             if stationArrivalHeaps.keys.contains(station.stationId) {
                 for direction in stationArrivalHeaps[station.stationId]!.keys {
-                     if station.stationId == "631" { print("\(station.stationId) -> \(direction): \(stationArrivalHeaps[station.stationId]![direction]!.count)") }
                     for newArrival in stationArrivalHeaps[station.stationId]![direction]!.unordered {
                         if let existingArrival = arrivalByTripId[newArrival.tripId] {
-                             if station.stationId == "631" { print("\t\(newArrival.tripId): Existing (\(existingArrival.time) -> \(newArrival.time))") }
-                            existingArrival.time = newArrival.time
-                        } else {
-                             if station.stationId == "631" { print("\t\(newArrival.tripId): New") }
-                            modelContext.insert(newArrival)
-                            newArrival.station = station
+                            modelContext.delete(existingArrival)
                         }
+                        modelContext.insert(newArrival)
+                        newArrival.station = station
                     }
                 }
             }
