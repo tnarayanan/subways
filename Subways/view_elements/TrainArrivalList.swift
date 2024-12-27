@@ -12,7 +12,6 @@ struct TrainArrivalList: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var modelContext
     
-//    var arrivals: StationArrivals
     @Bindable var station: Station
     var direction: Direction
     var date: Date

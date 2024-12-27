@@ -22,7 +22,7 @@ actor ArrivalDataProcessor {
 extension ArrivalDataProcessor {
     func queryData() async {
         for dataSource in dataSources {
-            let url = URL(string: "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs\(dataSource)")!
+            let url = URL(string: "\(baseUrlString)\(dataSource)")!
             do {
                 let (messageData, _) = try await URLSession.shared.data(from: url)
                 let message = try TransitRealtime_FeedMessage.init(contiguousBytes: messageData, extensions: TransitRealtime_Gtfs_u45Realtime_u45Nyct_Extensions)
@@ -108,13 +108,13 @@ extension ArrivalDataProcessor {
         for station in allStations {
             if stationArrivalHeaps.keys.contains(station.stationId) {
                 for direction in stationArrivalHeaps[station.stationId]!.keys {
-                    if station.stationId == "631" { print("\(station.stationId) -> \(direction): \(stationArrivalHeaps[station.stationId]![direction]!.count)") }
+                    // if station.stationId == "631" { print("\(station.stationId) -> \(direction): \(stationArrivalHeaps[station.stationId]![direction]!.count)") }
                     for newArrival in stationArrivalHeaps[station.stationId]![direction]!.unordered {
                         if let existingArrival = arrivalByTripId[newArrival.tripId] {
-                            if station.stationId == "631" { print("\t\(newArrival.tripId): Existing arrival \(existingArrival.tripId)") }
+                            // if station.stationId == "631" { print("\t\(newArrival.tripId): Existing arrival \(existingArrival.tripId)") }
                             existingArrival.time = newArrival.time
                         } else {
-                            if station.stationId == "631" { print("\t\(newArrival.tripId): New arrival") }
+                            // if station.stationId == "631" { print("\t\(newArrival.tripId): New arrival") }
                             modelContext.insert(newArrival)
                             newArrival.station = station
                         }

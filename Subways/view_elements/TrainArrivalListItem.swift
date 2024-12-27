@@ -15,12 +15,17 @@ struct TrainArrivalListItem: View {
         let diffs = Calendar.current.dateComponents([.minute, .second], from: curTime, to: trainArrival.time)
         HStack {
             RouteSymbol(route: trainArrival.route, size: 16)
-            Text("in \(diffs.minute ?? 0) min \(diffs.second ?? 0) sec")
+            if (diffs.second ?? 0) >= 0 {
+                Text("in \(diffs.minute ?? 0) min \(diffs.second ?? 0) sec")
+            } else {
+                Text("\(-(diffs.minute ?? 0)) min \(-(diffs.second ?? 0)) sec ago")
+                    .foregroundStyle(Color.red)
+            }
             Spacer()
         }
     }
 }
 
-//#Preview {
-//    TrainArrivalListItem(trainArrival: TrainArrival(id: "0001", station: "127", route: .FOUR, time: Date()), curTime: Binding<Date>(projectedValue: ))
-//}
+#Preview {
+    TrainArrivalListItem(trainArrival: TrainArrival(tripId: "0001", route: .FOUR, direction: .DOWNTOWN, time: Date()), curTime: Date())
+}
