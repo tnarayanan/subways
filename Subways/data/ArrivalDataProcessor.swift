@@ -9,20 +9,28 @@ import Foundation
 import HeapModule
 import SwiftData
 
-//@ModelActor
-actor ArrivalDataProcessor {
-    private let dataSources: [String] = ["-ace", "-bdfm", "-g", "-jz", "-nqrw", "-l", "", "-si"]
-    private let baseUrlString = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs"
-    
-    private var messages: [String: TransitRealtime_FeedMessage] = [:]
-    
-    private var stationArrivalHeaps: [String: [Direction: Heap<TrainArrivalDTO>]] = [:]
+enum DataSource: String, CaseIterable, Codable {
+    case ACE = "-ace"
+    case BDFM = "-bdfm"
+    case G = "-g"
+    case JZ = "-jz"
+    case NQRW = "-nqrw"
+    case L = "-l"
+    case NUMS = ""
+    case SI = "-si"
 }
 
-extension ArrivalDataProcessor {
+//@ModelActor
+actor ArrivalDataProcessor {
+    private let baseUrlString = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs"
+    
+    private var messages: [DataSource: TransitRealtime_FeedMessage] = [:]
+    
+    private var stationArrivalHeaps: [String: [Direction: Heap<TrainArrivalDTO>]] = [:]
+
     func queryData() async {
-        for dataSource in dataSources {
-            let url = URL(string: "\(baseUrlString)\(dataSource)")!
+        for dataSource in DataSource.allCases {
+            let url = URL(string: "\(baseUrlString)\(dataSource.rawValue)")!
             do {
                 let (messageData, _) = try await URLSession.shared.data(from: url)
                 let message = try TransitRealtime_FeedMessage.init(contiguousBytes: messageData, extensions: TransitRealtime_Gtfs_u45Realtime_u45Nyct_Extensions)
@@ -33,7 +41,11 @@ extension ArrivalDataProcessor {
         }
     }
     
-    func processArrivals(stationId: String) async -> [Direction: Heap<TrainArrivalDTO>] {
+    func getArrivals(for stationId: String) async -> [Direction: Heap<TrainArrivalDTO>] {
+        return stationArrivalHeaps[stationId] ?? [.DOWNTOWN: [], .UPTOWN: []]
+    }
+    
+    func processArrivals(for stationId: String) async {
         stationArrivalHeaps.removeAll(keepingCapacity: true)
         
         let asOfTime: Date = Date()
@@ -87,50 +99,5 @@ extension ArrivalDataProcessor {
         }
         
         print("total \(numTotalArrivals)")
-        
-        return stationArrivalHeaps[stationId] ?? [.DOWNTOWN: [], .UPTOWN: []]
-          
-        
-        /*context.autosaveEnabled = false
-        try! context.transaction {
-            var arrivalByTripId: [String: TrainArrival] = [:]
-            for arrival in allArrivals {
-                if arrival.time < oneMinuteAgo {
-                    context.delete(arrival)
-                } else {
-                    if let existingArrival = arrivalByTripId[arrival.tripId] {
-                        print("DUPLICATE TRIP ID: \(existingArrival.tripId)")
-                    }
-                    arrivalByTripId[arrival.tripId] = arrival
-                }
-            }
-            
-            for station in allStations {
-                if stationArrivalHeaps.keys.contains(station.stationId) {
-                    for direction in stationArrivalHeaps[station.stationId]!.keys {
-                        for newArrival in stationArrivalHeaps[station.stationId]![direction]!.unordered {
-                            if let existingArrival = arrivalByTripId[newArrival.tripId] {
-                                context.delete(existingArrival)
-                            }
-                            context.insert(newArrival)
-                            newArrival.station = station
-                        }
-                    }
-                }
-            }
-            
-            try! context.save()
-        }
-        context.autosaveEnabled = true*/
-    }
-    
-    func queryDataTime() {
-        Task {
-            let clock = ContinuousClock()
-            let time = await clock.measure {
-                await queryData()
-            }
-            print("Querying data took \(time)")
-        }
     }
 }

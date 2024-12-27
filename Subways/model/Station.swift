@@ -18,7 +18,6 @@ final class Station: Equatable, Identifiable {
     @Relationship(deleteRule: .cascade, inverse: \TrainArrival.station) var arrivals: [TrainArrival]? = [TrainArrival]()
     var isFavorite: Bool
     var isSelected: Bool
-    var lastUpdated: Date? = nil
     
     init(stationId: String, name: String, lat: Float, long: Float, routes: [Route]) {
         self.stationId = stationId

@@ -28,9 +28,8 @@ struct ContentView: View {
     private let everySecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     private let updateDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     
-    private var arrivalDataProcessor: ArrivalDataProcessor {
-        ArrivalDataProcessor(/*modelContainer: modelContext.container*/)
-    }
+    @State private var lastUpdated: Date? = nil
+    private var arrivalDataProcessor: ArrivalDataProcessor = ArrivalDataProcessor()
     
     var body: some View {
         @Bindable var station: Station = selectedStations.first ?? Station.DEFAULT
@@ -41,7 +40,7 @@ struct ContentView: View {
                     
                     HStack {
                         StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
-                        let lastUpdated = $station.lastUpdated.wrappedValue
+                        // let lastUpdated = $station.lastUpdated.wrappedValue
                         if let lastUpdated {
                             if !loadingInitialData {
                                 let diffs = Calendar.current.dateComponents([.second], from: lastUpdated, to: date)
@@ -141,8 +140,11 @@ struct ContentView: View {
             }
             .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground)) // Color.systemBackground : Color.secondarySystemBackground)
         }
-        .onChange(of: station, initial: true) {
+        .onAppear {
             fetchArrivals(station: station)
+        }
+        .onChange(of: station, initial: true) {
+            updateArrivals(station: station)
         }
     }
     
@@ -158,11 +160,11 @@ struct ContentView: View {
         }
     }
     
-    private func fetchArrivals(station: Station) {
+    private func updateArrivals(station: Station) {
         Task {
-            let stationArrivalHeap = await arrivalDataProcessor.processArrivals(stationId: station.stationId)
+            let stationArrivalHeap = await arrivalDataProcessor.getArrivals(for: station.stationId)
             
-            print("After getting arrivals")
+            print("After retrieving arrivals")
             
             let oneMinuteAgo: Date = Date().addingTimeInterval(-60)
             var arrivalByTripId: [String: TrainArrival] = [:]
@@ -189,8 +191,15 @@ struct ContentView: View {
                     newArrival.station = station
                 }
             }
-            
-            station.lastUpdated = Date()
+        }
+    }
+    
+    private func fetchArrivals(station: Station) {
+        Task {
+            await arrivalDataProcessor.processArrivals(for: station.stationId)
+            print("Fetched arrivals")
+            lastUpdated = Date()
+            updateArrivals(station: station)
         }
     }
 }
