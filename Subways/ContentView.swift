@@ -23,19 +23,17 @@ struct ContentView: View {
     let userDefaults = UserDefaults.standard
     
     private let routeSymbolSize: CGFloat = 20
-    private let defaultStation: String = "631" // default to Grand Central-42 St
     
     private let everySecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     private let updateDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     
     var body: some View {
-        @Bindable var station: Station = selectedStations.first ?? Station.get(id: defaultStation)
-//        @Bindable var station: Station = Station.get(id: defaultStation)
+        @Bindable var station: Station = selectedStations.first ?? Station.DEFAULT
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
                     StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
-                    if station == Station.DEFAULT || (station.downtownArrivals.count + station.uptownArrivals.count) == 0 {
+                    if station == Station.DEFAULT || (station.arrivals.count) == 0 {
                         VStack {
                             Spacer()
                             HStack {
@@ -108,6 +106,7 @@ struct ContentView: View {
             .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground)) // Color.systemBackground : Color.secondarySystemBackground)
         }
         .onAppear {
+            modelContext.autosaveEnabled = true
             updateRoutes()
         }
     }
@@ -116,18 +115,12 @@ struct ContentView: View {
         Task.detached {
             let actor = await ArrivalDataProcessor(modelContainer: modelContext.container)
             await actor.processArrivals()
-        }
-    }
-    
-    private func addItem() {
-        withAnimation {
-            let newItem = FavoriteStation(id: "stationId")
-            modelContext.insert(newItem)
+            await print(selectedStations.first!.arrivals)
         }
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: FavoriteStation.self, inMemory: true)
+//        .modelContainer(for: FavoriteStation.self, inMemory: true)
 }

@@ -10,7 +10,6 @@
 		96A94D152C3CC535008CFC18 /* TrainArrivalList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A94D142C3CC535008CFC18 /* TrainArrivalList.swift */; };
 		96C5143F2C375202009CAE08 /* SubwaysApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5143E2C375202009CAE08 /* SubwaysApp.swift */; };
 		96C514412C375202009CAE08 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514402C375202009CAE08 /* ContentView.swift */; };
-		96C514432C375202009CAE08 /* FavoriteStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514422C375202009CAE08 /* FavoriteStation.swift */; };
 		96C514452C375203009CAE08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96C514442C375203009CAE08 /* Assets.xcassets */; };
 		96C514492C375203009CAE08 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96C514482C375203009CAE08 /* Preview Assets.xcassets */; };
 		96C514532C375203009CAE08 /* SubwaysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514522C375203009CAE08 /* SubwaysTests.swift */; };
@@ -65,7 +64,6 @@
 		96C5143B2C375202009CAE08 /* Subways.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Subways.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96C5143E2C375202009CAE08 /* SubwaysApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwaysApp.swift; sourceTree = "<group>"; };
 		96C514402C375202009CAE08 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		96C514422C375202009CAE08 /* FavoriteStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStation.swift; sourceTree = "<group>"; };
 		96C514442C375203009CAE08 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		96C514462C375203009CAE08 /* Subways.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Subways.entitlements; sourceTree = "<group>"; };
 		96C514482C375203009CAE08 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -202,7 +200,6 @@
 		96C5147F2C376BF5009CAE08 /* model */ = {
 			isa = PBXGroup;
 			children = (
-				96C514422C375202009CAE08 /* FavoriteStation.swift */,
 				96C514802C376C1A009CAE08 /* TrainArrival.swift */,
 				96C514822C376C33009CAE08 /* Route.swift */,
 				96C514862C379322009CAE08 /* Direction.swift */,
@@ -402,7 +399,6 @@
 				96C514872C379322009CAE08 /* Direction.swift in Sources */,
 				96C514AA2C37B71B009CAE08 /* Station.swift in Sources */,
 				96C5147E2C376608009CAE08 /* ArrivalDataProcessor.swift in Sources */,
-				96C514432C375202009CAE08 /* FavoriteStation.swift in Sources */,
 				96C5143F2C375202009CAE08 /* SubwaysApp.swift in Sources */,
 				96C514B62C3AF2B4009CAE08 /* StationRouteSymbols.swift in Sources */,
 				96C514832C376C33009CAE08 /* Route.swift in Sources */,

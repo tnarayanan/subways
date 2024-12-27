@@ -49,11 +49,11 @@ struct SearchForStationView: View {
         #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
         #endif
-            .onAppear {
-                if allStations.isEmpty {
-                    Station.addAllStationsTo(modelContext: modelContext)
-                }
-            }
+//            .onAppear {
+//                if allStations.isEmpty {
+//                    Station.addAllStationsTo(modelContext: modelContext)
+//                }
+//            }
     }
 }
 

@@ -9,25 +9,43 @@ import SwiftUI
 import SwiftData
 
 @main
+@MainActor
 struct SubwaysApp: App {
-//    var sharedModelContainer: ModelContainer = {
-//        let stationConfig = ModelConfiguration(for: Station.self, isStoredInMemoryOnly: false)
-//        let trainArrivalConfig = ModelConfiguration(for: TrainArrival.self, isStoredInMemoryOnly: true)
-//
-//        do {
-//            return try ModelContainer(for: Station.self, TrainArrival.self, configurations: stationConfig, trainArrivalConfig)
-//        } catch {
-//            fatalError("Could not create ModelContainer: \(error)")
-//        }
-//    }()
     
-    init() {
-    }
+    @MainActor
+    let container: ModelContainer = {
+        do {
+            let container: ModelContainer = try ModelContainer(for: Station.self)
+            let modelContext = ModelContext(container)
+            
+            // Initialize stations if necessary
+            let stationCount = try modelContext.fetchCount(FetchDescriptor<Station>())
+            if stationCount == 0 {
+                print("Initializing station data")
+                
+                for station in Station.allStations.values {
+                    station.isSelected = (station.stationId == "631") // default to Grand Central-42 St
+                    modelContext.insert(station)
+                }
+                try modelContext.save()
+            }
+            
+            // Delete all existing train arrivals
+//            try modelContext.delete(model: TrainArrival.self)
+//            try modelContext.save()
+            
+            return container
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
+    
+    init() {}
 
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: Station.self, isAutosaveEnabled: false, isUndoEnabled: false)
+        .modelContainer(container)
     }
 }

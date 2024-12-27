@@ -42,6 +42,8 @@ extension ArrivalDataProcessor {
         }
         print("Querying data took \(time)")
         
+        let oneMinuteAgo: Date = Date().addingTimeInterval(-60)
+        
         for msg in messages.values {
             for ent in msg.entity.filter({$0.hasTripUpdate}) {
                 let tripUpdate = ent.tripUpdate
@@ -64,7 +66,11 @@ extension ArrivalDataProcessor {
                     } else if stopTimeUpdate.hasDeparture {
                         timestamp = stopTimeUpdate.departure.time
                     }
-                    let trainArrival = TrainArrival(tripId: tripID, stationId: stopID, route: Route(rawValue: route) ?? Route.X, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+                    let trainArrival = TrainArrival(tripId: tripID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+                    
+                    if trainArrival.time < oneMinuteAgo {
+                        continue
+                    }
                     
                     stationArrivalHeaps[stopID]![direction]!.insert(trainArrival)
                     if stationArrivalHeaps[stopID]![direction]!.count > 7 {
@@ -77,16 +83,39 @@ extension ArrivalDataProcessor {
         try! modelContext.transaction {
             print("Beginning transaction")
             var allStations: [Station] = []
+            var allArrivals: [TrainArrival] = []
             do {
                 allStations = try modelContext.fetch(FetchDescriptor<Station>())
-                try modelContext.delete(model: TrainArrival.self)
+                allArrivals = try modelContext.fetch(FetchDescriptor<TrainArrival>())
             } catch let error {
                 print(error)
             }
+            
+            var arrivalByUniqueId: [String: TrainArrival] = [:]
+            for arrival in allArrivals {
+                if arrival.time < oneMinuteAgo {
+                    modelContext.delete(arrival)
+                } else {
+                    arrivalByUniqueId[arrival.uniqueId] = arrival
+                }
+            }
+            
             for station in allStations {
-                if stationArrivalHeaps.keys.contains(station.id) {
-                    station.downtownArrivals = stationArrivalHeaps[station.id]![.DOWNTOWN]!.unordered.sorted()
-                    station.uptownArrivals = stationArrivalHeaps[station.id]![.UPTOWN]!.unordered.sorted()
+                if stationArrivalHeaps.keys.contains(station.stationId) {
+                    for direction in stationArrivalHeaps[station.stationId]!.keys {
+                        if station.stationId == "631" { print("\(station.stationId) -> \(direction): \(stationArrivalHeaps[station.stationId]![direction]!.count)") }
+                        for newArrival in stationArrivalHeaps[station.stationId]![direction]!.unordered {
+                            if station.stationId == "631" { print("\t\(newArrival.uniqueId)") }
+                            if let existingArrival = arrivalByUniqueId[newArrival.uniqueId] {
+                                if station.stationId == "631" { print("\t\tExisting arrival") }
+                                existingArrival.time = newArrival.time
+                            } else {
+                                if station.stationId == "631" { print("\t\tNew arrival") }
+                                let arrivalToAdd = TrainArrival(tripId: newArrival.tripId, station: station, route: newArrival.route, direction: newArrival.direction, time: newArrival.time)
+                                station.arrivals.append(arrivalToAdd)
+                            }
+                        }
+                    }
                 }
             }
             

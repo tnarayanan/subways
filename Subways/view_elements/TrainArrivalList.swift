@@ -19,14 +19,12 @@ struct TrainArrivalList: View {
         let groupBoxColor = colorScheme == .dark ? Color(UIColor.systemGray6) : Color.white
         
         GroupBox {
-//            let arrivalsList: [TrainArrival] = direction == .DOWNTOWN ? arrivals.getDowntownArrivals() : arrivals.getUptownArrivals()
-            let arrivalsList: [TrainArrival] = direction == .DOWNTOWN ? station.downtownArrivals : station.uptownArrivals
-            let lastArrivalID: String = arrivalsList.last?.id ?? ""
+            let arrivalsList: [TrainArrival] = station.arrivals.filter { $0.direction == direction }
 
-            ForEach(arrivalsList) { arrival in
+            ForEach(Array(arrivalsList.sorted().enumerated()), id: \.offset) { index, arrival in
                 TrainArrivalListItem(trainArrival: arrival, curTime: date)
                     .padding(.vertical, 4)
-                if arrival.id != lastArrivalID {
+                if index != arrivalsList.count - 1 {
                     Divider()
                 }
             }
