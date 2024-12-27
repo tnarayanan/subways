@@ -11,6 +11,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @State private var date: Date = Date()
     
@@ -45,15 +46,32 @@ struct ContentView: View {
                         }
                         .frame(maxHeight: .infinity)
                     } else {
-                        Text("Downtown").font(.title3).bold()
-                            .padding(.top)
-                        
-                        TrainArrivalList(station: station, direction: .DOWNTOWN, date: date)
-                        
-                        Text("Uptown").font(.title3).bold()
-                            .padding(.top)
-                        
-                        TrainArrivalList(station: station, direction: .UPTOWN, date: date)
+                        if horizontalSizeClass == .compact {
+                            Text("Downtown").font(.title3).bold()
+                                .padding(.top)
+                            
+                            TrainArrivalList(station: station, direction: .DOWNTOWN, date: date)
+                            
+                            Text("Uptown").font(.title3).bold()
+                                .padding(.top)
+                            
+                            TrainArrivalList(station: station, direction: .UPTOWN, date: date)
+                        } else {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text("Downtown").font(.title3).bold()
+                                        .padding(.top)
+                                    
+                                    TrainArrivalList(station: station, direction: .DOWNTOWN, date: date)
+                                }
+                                VStack(alignment: .leading) {
+                                    Text("Uptown").font(.title3).bold()
+                                        .padding(.top)
+                                    
+                                    TrainArrivalList(station: station, direction: .UPTOWN, date: date)
+                                }
+                            }
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
