@@ -33,7 +33,10 @@ struct SearchForStationView: View {
                         Text(station.name)
                         Spacer()
                     }
-                    StationRouteSymbols(station: station, routeSymbolSize: 18)
+                    HStack {
+                        StationRouteSymbols(station: station, routeSymbolSize: 18)
+                        Spacer()
+                    }
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {

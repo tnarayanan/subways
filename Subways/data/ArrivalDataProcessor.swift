@@ -101,34 +101,37 @@ extension ArrivalDataProcessor {
         }
         
         print("total \(numTotalArrivals)")
-            
-        var arrivalByTripId: [String: TrainArrival] = [:]
-        for arrival in allArrivals {
-            if arrival.time < oneMinuteAgo {
-                modelContext.delete(arrival)
-            } else {
-                if let existingArrival = arrivalByTripId[arrival.tripId] {
-                    print("DUPLICATE TRIP ID: \(existingArrival.tripId)")
-                }
-                arrivalByTripId[arrival.tripId] = arrival
-            }
-        }
+          
         
-        for station in allStations {
-            if stationArrivalHeaps.keys.contains(station.stationId) {
-                for direction in stationArrivalHeaps[station.stationId]!.keys {
-                    for newArrival in stationArrivalHeaps[station.stationId]![direction]!.unordered {
-                        if let existingArrival = arrivalByTripId[newArrival.tripId] {
-                            modelContext.delete(existingArrival)
+        try! modelContext.transaction {
+            var arrivalByTripId: [String: TrainArrival] = [:]
+            for arrival in allArrivals {
+                if arrival.time < oneMinuteAgo {
+                    modelContext.delete(arrival)
+                } else {
+                    if let existingArrival = arrivalByTripId[arrival.tripId] {
+                        print("DUPLICATE TRIP ID: \(existingArrival.tripId)")
+                    }
+                    arrivalByTripId[arrival.tripId] = arrival
+                }
+            }
+            
+            for station in allStations {
+                if stationArrivalHeaps.keys.contains(station.stationId) {
+                    for direction in stationArrivalHeaps[station.stationId]!.keys {
+                        for newArrival in stationArrivalHeaps[station.stationId]![direction]!.unordered {
+                            if let existingArrival = arrivalByTripId[newArrival.tripId] {
+                                modelContext.delete(existingArrival)
+                            }
+                            modelContext.insert(newArrival)
+                            newArrival.station = station
                         }
-                        modelContext.insert(newArrival)
-                        newArrival.station = station
                     }
                 }
             }
+            
+            try! modelContext.save()
         }
-        
-        try! modelContext.save()
     }
     
     func queryDataTime() {

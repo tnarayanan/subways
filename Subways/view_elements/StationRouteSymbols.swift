@@ -16,7 +16,6 @@ struct StationRouteSymbols: View {
             ForEach(station.routes.filter({ $0.rawValue.last != "X" }).sorted()) { route in
                 RouteSymbol(route: route, size: routeSymbolSize)
             }
-            Spacer()
         }
     }
 }

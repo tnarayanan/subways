@@ -39,7 +39,18 @@ struct ContentView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
-                    StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
+                    HStack {
+                        StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
+                        if let lastUpdate {
+                            let secsAgo = Calendar.current.dateComponents([.minute, .second], from: lastUpdate, to: date).second ?? 0
+//                            let updatedText = secsAgo == 0 ? "just now" : "\(secsAgo) second\(secsAgo != 1 ? "s" : "") ago"
+                            let updatedText = secsAgo < 5 ? "just now" : (secsAgo < 10 ? "5 seconds ago" : "10 seconds ago")
+                            Text("• updated \(updatedText)")
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                    }
                     if station == Station.DEFAULT || (station.arrivals!.count) == 0 {
                         VStack {
                             Spacer()
@@ -136,8 +147,9 @@ struct ContentView: View {
     }
     
     private func updateRoutes(stationId: String) {
-        Task.detached {
+        Task {
             await arrivalDataProcessor.processArrivals(stationId: stationId)
+            lastUpdate = Date()
         }
     }
 }
