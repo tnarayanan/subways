@@ -15,7 +15,7 @@ final class Station: Equatable, Identifiable {
     var lat: Float
     var long: Float
     var routes: [Route]
-    @Relationship(deleteRule: .cascade, inverse: \TrainArrival.station) var arrivals: [TrainArrival]?
+    @Relationship(deleteRule: .cascade, inverse: \TrainArrival.station) var arrivals: [TrainArrival]? = [TrainArrival]()
     var isFavorite: Bool
     var isSelected: Bool
     
@@ -25,7 +25,6 @@ final class Station: Equatable, Identifiable {
         self.lat = lat
         self.long = long
         self.routes = routes
-        self.arrivals = []
         self.isFavorite = false
         self.isSelected = false
     }

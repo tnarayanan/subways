@@ -28,6 +28,12 @@ struct ContentView: View {
     private let everySecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     private let updateDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     
+    
+    @State private var lastUpdate: Date? = nil
+    private var arrivalDataProcessor: ArrivalDataProcessor {
+        ArrivalDataProcessor(modelContainer: modelContext.container)
+    }
+    
     var body: some View {
         @Bindable var station: Station = selectedStations.first ?? Station.DEFAULT
         NavigationStack {
@@ -119,20 +125,19 @@ struct ContentView: View {
                 self.date = Date()
             }
             .onReceive(updateDataTimer) { _ in
-                updateRoutes()
+                updateRoutes(stationId: station.stationId)
             }
             .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground)) // Color.systemBackground : Color.secondarySystemBackground)
         }
         .onAppear {
             modelContext.autosaveEnabled = true
-            updateRoutes()
+            updateRoutes(stationId: station.stationId)
         }
     }
     
-    private func updateRoutes() {
+    private func updateRoutes(stationId: String) {
         Task.detached {
-            let actor = await ArrivalDataProcessor(modelContainer: modelContext.container)
-            await actor.processArrivals()
+            await arrivalDataProcessor.processArrivals(stationId: stationId)
         }
     }
 }
