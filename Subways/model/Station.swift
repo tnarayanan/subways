@@ -18,6 +18,7 @@ final class Station: Equatable, Identifiable {
     @Relationship(deleteRule: .cascade, inverse: \TrainArrival.station) var arrivals: [TrainArrival]? = [TrainArrival]()
     var isFavorite: Bool
     var isSelected: Bool
+    var lastUpdated: Date? = nil
     
     init(stationId: String, name: String, lat: Float, long: Float, routes: [Route]) {
         self.stationId = stationId
@@ -29,7 +30,7 @@ final class Station: Equatable, Identifiable {
         self.isSelected = false
     }
     
-    static var DEFAULT = Station(stationId: "", name: "", lat: 0, long: 0, routes: [])
+    static let DEFAULT = Station(stationId: "", name: "", lat: 0, long: 0, routes: [])
     
     static func ==(lhs: Station, rhs: Station) -> Bool {
         return lhs.stationId == rhs.stationId
@@ -39,7 +40,7 @@ final class Station: Equatable, Identifiable {
         return allStations[id] ?? Station.DEFAULT
     }
     
-    static var allStations: [String: Station] = [
+    static let allStations: [String: Station] = [
         "101": Station(stationId: "101", name: "Van Cortlandt Park-242 St", lat: 40.889248, long: -73.898583, routes: [Route(rawValue: "1")!]),
         "103": Station(stationId: "103", name: "238 St", lat: 40.884667, long: -73.90087, routes: [Route(rawValue: "1")!]),
         "104": Station(stationId: "104", name: "231 St", lat: 40.878856, long: -73.904834, routes: [Route(rawValue: "1")!]),

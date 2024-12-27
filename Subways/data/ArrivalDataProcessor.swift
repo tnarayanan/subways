@@ -9,14 +9,14 @@ import Foundation
 import HeapModule
 import SwiftData
 
-@ModelActor
+//@ModelActor
 actor ArrivalDataProcessor {
     private let dataSources: [String] = ["-ace", "-bdfm", "-g", "-jz", "-nqrw", "-l", "", "-si"]
     private let baseUrlString = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs"
     
     private var messages: [String: TransitRealtime_FeedMessage] = [:]
     
-    private var stationArrivalHeaps: [String: [Direction: Heap<TrainArrival>]] = [:]
+    private var stationArrivalHeaps: [String: [Direction: Heap<TrainArrivalDTO>]] = [:]
 }
 
 extension ArrivalDataProcessor {
@@ -33,7 +33,7 @@ extension ArrivalDataProcessor {
         }
     }
     
-    func processArrivals(stationId: String) async {
+    func processArrivals(stationId: String) async -> [Direction: Heap<TrainArrivalDTO>] {
         stationArrivalHeaps.removeAll(keepingCapacity: true)
         
         let asOfTime: Date = Date()
@@ -45,20 +45,6 @@ extension ArrivalDataProcessor {
         print("Querying data took \(time)")
         
         let oneMinuteAgo: Date = asOfTime.addingTimeInterval(-60)
-        
-        var allStations: [Station] = []
-        var allArrivals: [TrainArrival] = []
-        do {
-            allStations = try modelContext.fetch(FetchDescriptor<Station>())
-            allArrivals = try modelContext.fetch(FetchDescriptor<TrainArrival>())
-        } catch let error {
-            print(error)
-        }
-        
-        var stationMap: [String: Station] = [:]
-        for station in allStations {
-            stationMap[station.stationId] = station
-        }
         
         var numTotalArrivals = 0
         
@@ -84,7 +70,7 @@ extension ArrivalDataProcessor {
                     } else if stopTimeUpdate.hasDeparture {
                         timestamp = stopTimeUpdate.departure.time
                     }
-                    let trainArrival = TrainArrival(tripId: tripID + "_" + stopID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+                    let trainArrival = TrainArrivalDTO(tripId: tripID + "_" + stopID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
                     
                     numTotalArrivals += 1
                     
@@ -101,13 +87,16 @@ extension ArrivalDataProcessor {
         }
         
         print("total \(numTotalArrivals)")
+        
+        return stationArrivalHeaps[stationId] ?? [.DOWNTOWN: [], .UPTOWN: []]
           
         
-        try! modelContext.transaction {
+        /*context.autosaveEnabled = false
+        try! context.transaction {
             var arrivalByTripId: [String: TrainArrival] = [:]
             for arrival in allArrivals {
                 if arrival.time < oneMinuteAgo {
-                    modelContext.delete(arrival)
+                    context.delete(arrival)
                 } else {
                     if let existingArrival = arrivalByTripId[arrival.tripId] {
                         print("DUPLICATE TRIP ID: \(existingArrival.tripId)")
@@ -121,17 +110,18 @@ extension ArrivalDataProcessor {
                     for direction in stationArrivalHeaps[station.stationId]!.keys {
                         for newArrival in stationArrivalHeaps[station.stationId]![direction]!.unordered {
                             if let existingArrival = arrivalByTripId[newArrival.tripId] {
-                                modelContext.delete(existingArrival)
+                                context.delete(existingArrival)
                             }
-                            modelContext.insert(newArrival)
+                            context.insert(newArrival)
                             newArrival.station = station
                         }
                     }
                 }
             }
             
-            try! modelContext.save()
+            try! context.save()
         }
+        context.autosaveEnabled = true*/
     }
     
     func queryDataTime() {

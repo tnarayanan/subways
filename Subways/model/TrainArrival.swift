@@ -28,3 +28,26 @@ final class TrainArrival: Comparable, Identifiable {
         return lhs.time < rhs.time
     }
 }
+
+final class TrainArrivalDTO: Sendable, Identifiable, Comparable {
+    
+    let tripId: String
+    let route: Route
+    let direction: Direction
+    let time: Date
+    
+    init(tripId: String, route: Route, direction: Direction, time: Date) {
+        self.tripId = tripId
+        self.route = route
+        self.direction = direction
+        self.time = time
+    }
+    
+    static func < (lhs: TrainArrivalDTO, rhs: TrainArrivalDTO) -> Bool {
+        return lhs.time < rhs.time
+    }
+    
+    static func == (lhs: TrainArrivalDTO, rhs: TrainArrivalDTO) -> Bool {
+        return lhs.tripId == rhs.tripId
+    }
+}
