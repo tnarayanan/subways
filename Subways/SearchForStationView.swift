@@ -27,7 +27,7 @@ struct SearchForStationView: View {
     
     var body: some View {
         List {
-            ForEach(filteredStations.sorted(by: compareStations), id: \.id) { station in
+            ForEach(filteredStations.sorted(), id: \.id) { station in
                 VStack(alignment: .leading) {
                     Text(station.name)
                     StationRouteSymbols(station: station, routeSymbolSize: 18)
@@ -48,19 +48,6 @@ struct SearchForStationView: View {
         #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
         #endif
-    }
-    
-    private func compareStations(_ lhs: Station, _ rhs: Station) -> Bool {
-        if lhs.name != rhs.name {
-            return lhs.name < rhs.name
-        }
-        if lhs.routes.count != rhs.routes.count {
-            return lhs.routes.count < rhs.routes.count
-        }
-        if lhs.routes.count > 0 && rhs.routes.count > 0 {
-            return lhs.routes.first! < rhs.routes.first!
-        }
-        return lhs.lat < rhs.lat
     }
 }
 

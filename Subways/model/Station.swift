@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class Station: Equatable, Identifiable {
+final class Station: Equatable, Identifiable, Comparable {
     @Attribute(.unique) var stationId: String
     var name: String
     var lat: Float
@@ -33,6 +33,19 @@ final class Station: Equatable, Identifiable {
     
     static func ==(lhs: Station, rhs: Station) -> Bool {
         return lhs.stationId == rhs.stationId
+    }
+    
+    static func <(lhs: Station, rhs: Station) -> Bool {
+        if lhs.name != rhs.name {
+            return lhs.name < rhs.name
+        }
+        if lhs.routes.count != rhs.routes.count {
+            return lhs.routes.count < rhs.routes.count
+        }
+        if lhs.routes.count > 0 && rhs.routes.count > 0 {
+            return lhs.routes.first! < rhs.routes.first!
+        }
+        return lhs.lat < rhs.lat
     }
     
     static func get(id: String) -> Station {
