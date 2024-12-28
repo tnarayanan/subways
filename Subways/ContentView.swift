@@ -172,6 +172,8 @@ struct ContentView: View {
             for arrival in station.arrivals! {
                 if arrival.time < oneMinuteAgo {
                     modelContext.delete(arrival)
+                } else if let existingArrival = arrivalByTripId[arrival.tripId] {
+                    modelContext.delete(existingArrival)
                 } else {
                     arrivalByTripId[arrival.tripId] = arrival
                 }
