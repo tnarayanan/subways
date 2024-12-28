@@ -21,16 +21,15 @@ struct RouteSymbol: View {
                     .frame(width: size * RouteSymbol.baseScale, height: size * RouteSymbol.baseScale)
                     .scaleEffect(1 / sqrt(2))
             } else {
-                Circle().fill(RouteSymbol.routeToColor(route: route)).frame(width: size * RouteSymbol.baseScale, height: size * RouteSymbol.baseScale)
+                Circle()
+                    .fill(RouteSymbol.routeToColor(route: route))
+                    .frame(width: size * RouteSymbol.baseScale, height: size * RouteSymbol.baseScale)
             }
             let routeStr: String = (route == .S || route == .FS) ? "S" : String(route.rawValue.first!)
             Text(routeStr)
                 .font(Font.custom("Helvetica", size: size))
                 .bold()
                 .foregroundColor(RouteSymbol.routeToColor(route: route) == Color("subwayYellow") ? .black : .white)
-            
-            
-            
         }
     }
     

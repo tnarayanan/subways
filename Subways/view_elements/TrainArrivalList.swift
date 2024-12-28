@@ -24,7 +24,8 @@ struct TrainArrivalList: View {
 
             ForEach(Array(arrivalsList.sorted().enumerated()), id: \.offset) { index, arrival in
                 TrainArrivalListItem(trainArrival: arrival, curTime: date)
-                    .padding(.vertical, 4)
+                    .padding(.top, index == 0 ? 0 : 4)
+                    .padding(.bottom, index == arrivalsList.count - 1 ? 0 : 4)
                 if index != arrivalsList.count - 1 {
                     Divider()
                 }

@@ -135,13 +135,11 @@ struct ContentView: View {
             .onReceive(updateDataTimer) { _ in
                 fetchArrivals(station: station)
             }
-            .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground)) // Color.systemBackground : Color.secondarySystemBackground)
-        }
-        .onAppear {
-            fetchArrivals(station: station)
+            .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground))
         }
         .onChange(of: station, initial: true) {
             updateArrivals(station: station)
+            fetchArrivals(station: station)
         }
     }
     
@@ -158,33 +156,21 @@ struct ContentView: View {
     }
     
     private func updateArrivals(station: Station) {
-        Task {
+        Task { @MainActor in
             let stationArrivalHeap = await arrivalDataProcessor.getArrivals(for: station.stationId)
             
             print("After retrieving arrivals")
-            
-            let oneMinuteAgo: Date = Date().addingTimeInterval(-60)
-            var arrivalByTripId: [String: TrainArrival] = [:]
+            print("\(station.arrivals!.count) existing arrivals")
             
             for arrival in station.arrivals! {
-                if arrival.time < oneMinuteAgo {
-                    modelContext.delete(arrival)
-                } else if let existingArrival = arrivalByTripId[arrival.tripId] {
-                    modelContext.delete(existingArrival)
-                } else {
-                    arrivalByTripId[arrival.tripId] = arrival
-                }
+                modelContext.delete(arrival)
             }
             
             print("Removed old arrivals")
-            
             print(stationArrivalHeap)
             
             for direction in Direction.allCases {
                 for newArrivalDTO in stationArrivalHeap[direction]!.unordered {
-                    if let existingArrival = arrivalByTripId[newArrivalDTO.tripId] {
-                        modelContext.delete(existingArrival)
-                    }
                     let newArrival = TrainArrival(tripId: newArrivalDTO.tripId, route: newArrivalDTO.route, direction: newArrivalDTO.direction, time: newArrivalDTO.time)
                     modelContext.insert(newArrival)
                     newArrival.station = station
@@ -194,7 +180,7 @@ struct ContentView: View {
     }
     
     private func fetchArrivals(station: Station) {
-        Task {
+        Task { @MainActor in
             await arrivalDataProcessor.processArrivals(for: station.stationId)
             print("Fetched arrivals")
             lastUpdated = Date()

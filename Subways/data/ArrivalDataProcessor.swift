@@ -46,7 +46,7 @@ actor ArrivalDataProcessor {
     }
     
     func processArrivals(for stationId: String) async {
-        stationArrivalHeaps.removeAll(keepingCapacity: true)
+        var tmpStationArrivalHeaps: [String: [Direction: Heap<TrainArrivalDTO>]] = [:]
         
         let asOfTime: Date = Date()
         
@@ -72,8 +72,8 @@ actor ArrivalDataProcessor {
                     let direction = stopIDWithDirection.last! == "N" ? Direction.UPTOWN : Direction.DOWNTOWN
                     let stopID = String(stopIDWithDirection.dropLast())
                     
-                    if !stationArrivalHeaps.keys.contains(stopID) {
-                        stationArrivalHeaps[stopID] = [.DOWNTOWN: [], .UPTOWN: []]
+                    if !tmpStationArrivalHeaps.keys.contains(stopID) {
+                        tmpStationArrivalHeaps[stopID] = [.DOWNTOWN: [], .UPTOWN: []]
                     }
                     
                     var timestamp: Int64 = 0
@@ -90,14 +90,16 @@ actor ArrivalDataProcessor {
                         continue
                     }
                     
-                    stationArrivalHeaps[stopID]![direction]!.insert(trainArrival)
-                    if stationArrivalHeaps[stopID]![direction]!.count > 7 {
-                        stationArrivalHeaps[stopID]![direction]!.removeMax()
+                    tmpStationArrivalHeaps[stopID]![direction]!.insert(trainArrival)
+                    if tmpStationArrivalHeaps[stopID]![direction]!.count > 7 {
+                        tmpStationArrivalHeaps[stopID]![direction]!.removeMax()
                     }
                 }
             }
         }
         
         print("total \(numTotalArrivals)")
+        
+        stationArrivalHeaps = tmpStationArrivalHeaps
     }
 }

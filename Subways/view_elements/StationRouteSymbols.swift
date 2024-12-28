@@ -15,6 +15,7 @@ struct StationRouteSymbols: View {
         HStack {
             ForEach(station.routes.filter({ $0.rawValue.last != "X" }).sorted()) { route in
                 RouteSymbol(route: route, size: routeSymbolSize)
+                    .id(route.rawValue)
             }
         }
     }

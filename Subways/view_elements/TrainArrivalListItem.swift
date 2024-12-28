@@ -22,6 +22,8 @@ struct TrainArrivalListItem: View {
                     .foregroundStyle(Color.red)
             }
             Spacer()
+//            Text(trainArrival.tripId)
+//                .font(.caption)
         }
     }
 }
