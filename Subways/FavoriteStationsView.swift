@@ -23,7 +23,7 @@ struct FavoriteStationsView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(favoriteStations) { station in
+                ForEach(favoriteStations.sorted(by: { $0.name < $1.name }), id: \.id) { station in
                     VStack {
                         HStack {
                             Text(station.name)

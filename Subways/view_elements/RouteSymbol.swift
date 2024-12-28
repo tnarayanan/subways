@@ -10,18 +10,18 @@ import SwiftUI
 struct RouteSymbol: View {
     var route: Route
     var size: CGFloat
-    private static let circleScale: CGFloat = 1.5
-    private static let rectScale: CGFloat = circleScale / sqrt(2)
+    private static let baseScale: CGFloat = 1.5
     
     var body: some View {
         ZStack {
             if route.rawValue.last! == "X" {
                 Rectangle()
                     .fill(RouteSymbol.routeToColor(route: route))
-                    .frame(width: size * RouteSymbol.rectScale, height: size * RouteSymbol.rectScale)
                     .rotationEffect(Angle(degrees: 45))
+                    .frame(width: size * RouteSymbol.baseScale, height: size * RouteSymbol.baseScale)
+                    .scaleEffect(1 / sqrt(2))
             } else {
-                Circle().fill(RouteSymbol.routeToColor(route: route)).frame(width: size * RouteSymbol.circleScale, height: size * RouteSymbol.circleScale)
+                Circle().fill(RouteSymbol.routeToColor(route: route)).frame(width: size * RouteSymbol.baseScale, height: size * RouteSymbol.baseScale)
             }
             let routeStr: String = (route == .S || route == .FS) ? "S" : String(route.rawValue.first!)
             Text(routeStr)
@@ -63,8 +63,8 @@ struct RouteSymbol: View {
 }
 
 #Preview {
-    HStack {
+    VStack(alignment: .leading) {
         RouteSymbol(route: .SIX_EXPRESS, size: 18)
         RouteSymbol(route: .SIX, size: 18)
-    }
+    }.background(.red)
 }

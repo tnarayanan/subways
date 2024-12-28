@@ -38,19 +38,16 @@ struct ContentView: View {
                 VStack(alignment: .leading) {
                     let loadingInitialData = station == Station.DEFAULT || (station.arrivals!.count) == 0
                     
-                    HStack {
-                        StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
-                        // let lastUpdated = $station.lastUpdated.wrappedValue
-                        if let lastUpdated {
-                            if !loadingInitialData {
-                                let diffs = Calendar.current.dateComponents([.second], from: lastUpdated, to: date)
-                                Text("• updated \(getStringFromSecondsAgo(diffs.second ?? 0))")
-                                    .font(.callout)
-                                    .foregroundStyle(.secondary)
-                            }
+                    StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
+                    if let lastUpdated {
+                        if !loadingInitialData {
+                            let diffs = Calendar.current.dateComponents([.second], from: lastUpdated, to: date)
+                            Text("updated \(getStringFromSecondsAgo(diffs.second ?? 0))")
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
                         }
-                        Spacer()
                     }
+                    
                     if loadingInitialData {
                         VStack {
                             Spacer()
