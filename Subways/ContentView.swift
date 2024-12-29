@@ -37,20 +37,30 @@ struct ContentView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
-                    let loadingInitialData = station == Station.DEFAULT || (station.arrivals!.count) == 0
-                    
                     StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
-                    if let lastUpdated {
-                        if !loadingInitialData {
-                            let diffs = Calendar.current.dateComponents([.second], from: lastUpdated, to: date)
-                            Text("updated \(getStringFromSecondsAgo(diffs.second ?? 0))")
-                                .font(.callout)
-                                .foregroundStyle(.secondary)
-                            QueryStatusLabel(queryStatus: $queryStatus)
-                        }
-                    }
                     
-                    if loadingInitialData {
+                    if let lastUpdated {
+                        // has loaded data
+                        
+                        // lastUpdated string and query status
+                        let diffs = Calendar.current.dateComponents([.second], from: lastUpdated, to: date)
+                        Text("updated \(getStringFromSecondsAgo(diffs.second ?? 0))")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                        QueryStatusLabel(queryStatus: $queryStatus)
+                        
+                        // train arrival lists
+                        if horizontalSizeClass == .compact {
+                            TrainArrivalList(station: station, direction: .DOWNTOWN, date: date)
+                            TrainArrivalList(station: station, direction: .UPTOWN, date: date)
+                        } else {
+                            HStack(alignment: .top) {
+                                TrainArrivalList(station: station, direction: .DOWNTOWN, date: date)
+                                TrainArrivalList(station: station, direction: .UPTOWN, date: date)
+                            }
+                        }
+                    } else {
+                        // initially loading data
                         VStack {
                             Spacer()
                             HStack {
@@ -62,33 +72,6 @@ struct ContentView: View {
                             Spacer()
                         }
                         .frame(maxHeight: .infinity)
-                    } else {
-                        if horizontalSizeClass == .compact {
-                            Text("Downtown").font(.title3).bold()
-                                .padding(.top)
-                            
-                            TrainArrivalList(station: station, direction: .DOWNTOWN, date: date)
-                            
-                            Text("Uptown").font(.title3).bold()
-                                .padding(.top)
-                            
-                            TrainArrivalList(station: station, direction: .UPTOWN, date: date)
-                        } else {
-                            HStack(alignment: .top) {
-                                VStack(alignment: .leading) {
-                                    Text("Downtown").font(.title3).bold()
-                                        .padding(.top)
-                                    
-                                    TrainArrivalList(station: station, direction: .DOWNTOWN, date: date)
-                                }
-                                VStack(alignment: .leading) {
-                                    Text("Uptown").font(.title3).bold()
-                                        .padding(.top)
-                                    
-                                    TrainArrivalList(station: station, direction: .UPTOWN, date: date)
-                                }
-                            }
-                        }
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
