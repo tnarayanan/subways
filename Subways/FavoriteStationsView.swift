@@ -22,32 +22,48 @@ struct FavoriteStationsView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                ForEach(favoriteStations.sorted(), id: \.id) { station in
-                    VStack {
-                        HStack {
-                            Text(station.name)
-                            Spacer()
+            VStack {
+                if favoriteStations.isEmpty {
+                    Spacer()
+                    Label("No favorite stations", systemImage: "tram.fill")
+                        .font(.largeTitle)
+                        .labelStyle(.iconOnly)
+                        .foregroundColor(.secondary)
+                        .padding(.all, 4)
+                    Text("No favorite stations")
+                        .font(.title)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                } else {
+                    List {
+                        ForEach(favoriteStations.sorted(), id: \.id) { station in
+                            VStack {
+                                HStack {
+                                    Text(station.name)
+                                    Spacer()
+                                }
+                                HStack {
+                                    StationRouteSymbols(station: station, routeSymbolSize: 18)
+                                    Spacer()
+                                }
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                print("Switching to favorite station '\(station.name)'")
+                                selectedStation.isSelected = false
+                                station.isSelected = true
+                                dismiss()
+                            }
                         }
-                        HStack {
-                            StationRouteSymbols(station: station, routeSymbolSize: 18)
-                            Spacer()
-                        }
+                        .onDelete(perform: { indexSet in
+                            for offset in indexSet {
+                                let favStation = favoriteStations[offset]
+                                favStation.isFavorite = false
+                            }
+                        })
                     }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        print("Switching to favorite station '\(station.name)'")
-                        selectedStation.isSelected = false
-                        station.isSelected = true
-                        dismiss()
-                    }
+                    .contentMargins(.top, 4)
                 }
-                .onDelete(perform: { indexSet in
-                    for offset in indexSet {
-                        let favStation = favoriteStations[offset]
-                        favStation.isFavorite = false
-                    }
-                })
             }
             .navigationTitle("Favorite Stations")
             #if os(iOS)
