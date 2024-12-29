@@ -18,7 +18,6 @@ struct ContentView: View {
         station.isSelected
     })  private var selectedStations: [Station]
     
-    private let fetchArrivalsDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     @State private var lastUpdate: Date? = nil
     
     @State private var queryStatus: ArrivalQueryStatus = .SUCCESS
@@ -48,12 +47,23 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
             }
-            .navigationTitle(station.name)
-            #if os(iOS)
-            .navigationBarTitleDisplayMode(.large)
-            #endif
+            .task {
+                // fetch arrivals every 10 seconds
+                repeat {
+                    fetchArrivals(for: station)
+                    try? await Task.sleep(for: .seconds(10))
+                } while (!Task.isCancelled)
+            }
+            .onChange(of: station) {
+                let oldLastUpdate: Date? = lastUpdate
+                lastUpdate = nil
+                updateArrivalsData(for: station, newLastUpdate: oldLastUpdate)
+                fetchArrivals(for: station)
+            }
             
-            #if os(iOS)
+            // title and toolbar
+            .navigationTitle(station.name)
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -85,19 +95,11 @@ struct ContentView: View {
                     }
                 }
             }
-            #endif
-            .onReceive(fetchArrivalsDataTimer) { _ in
-                fetchArrivals(for: station)
-            }
             .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground))
-        }
-        .onChange(of: station, initial: true) {
-            updateArrivals(for: station)
-            fetchArrivals(for: station)
         }
     }
     
-    private func updateArrivals(for station: Station) {
+    private func updateArrivalsData(for station: Station, newLastUpdate: Date?) {
         Task { @MainActor in
             let stationArrivalHeap = await arrivalDataProcessor.getArrivals(for: station.stationId)
             
@@ -118,6 +120,8 @@ struct ContentView: View {
                     newArrival.station = station
                 }
             }
+            
+            lastUpdate = newLastUpdate
         }
     }
     
@@ -129,9 +133,8 @@ struct ContentView: View {
             }
             print("Fetched arrivals with status \(queryStatus)")
             if queryStatus == .SUCCESS {
-                lastUpdate = Date()
+                updateArrivalsData(for: station, newLastUpdate: Date())
             }
-            updateArrivals(for: station)
         }
     }
 }
