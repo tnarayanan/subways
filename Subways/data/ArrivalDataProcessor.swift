@@ -55,7 +55,7 @@ actor ArrivalDataProcessor {
         return stationArrivalHeaps[stationId] ?? [.DOWNTOWN: [], .UPTOWN: []]
     }
     
-    func processArrivals(for stationId: String) async -> ArrivalQueryStatus {
+    func processArrivals() async -> ArrivalQueryStatus {
         var tmpStationArrivalHeaps: [String: [Direction: Heap<TrainArrivalDTO>]] = [:]
         
         let asOfTime: Date = Date()

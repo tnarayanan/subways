@@ -43,7 +43,7 @@ struct FavoriteStationsView: View {
                                     Spacer()
                                 }
                                 HStack {
-                                    StationRouteSymbols(station: station, routeSymbolSize: 18)
+                                    StationRouteSymbols(station: station, routeSymbolSize: .medium)
                                     Spacer()
                                 }
                             }

@@ -41,6 +41,8 @@
 		96C514B62C3AF2B4009CAE08 /* StationRouteSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514B52C3AF2B4009CAE08 /* StationRouteSymbols.swift */; };
 		96C514B82C3B03B6009CAE08 /* SearchForStationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514B72C3B03B6009CAE08 /* SearchForStationView.swift */; };
 		96E4DD942D21323E00DEA3B3 /* QueryStatusLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E4DD932D21323E00DEA3B3 /* QueryStatusLabel.swift */; };
+		96E4DD982D21F3A000DEA3B3 /* LastUpdateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E4DD972D21F3A000DEA3B3 /* LastUpdateLabel.swift */; };
+		96E4DD9A2D21F43F00DEA3B3 /* StationArrivalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E4DD992D21F43F00DEA3B3 /* StationArrivalsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +97,8 @@
 		96C514B52C3AF2B4009CAE08 /* StationRouteSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationRouteSymbols.swift; sourceTree = "<group>"; };
 		96C514B72C3B03B6009CAE08 /* SearchForStationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForStationView.swift; sourceTree = "<group>"; };
 		96E4DD932D21323E00DEA3B3 /* QueryStatusLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryStatusLabel.swift; sourceTree = "<group>"; };
+		96E4DD972D21F3A000DEA3B3 /* LastUpdateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastUpdateLabel.swift; sourceTree = "<group>"; };
+		96E4DD992D21F43F00DEA3B3 /* StationArrivalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationArrivalsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,11 +217,10 @@
 		96C5148F2C379DBD009CAE08 /* view_elements */ = {
 			isa = PBXGroup;
 			children = (
-				96C514902C379DE1009CAE08 /* TrainArrivalListItem.swift */,
+				96E4DD962D21F37400DEA3B3 /* status */,
+				96E4DD952D21F20400DEA3B3 /* arrival */,
 				96C514922C379E8A009CAE08 /* RouteSymbol.swift */,
 				96C514B52C3AF2B4009CAE08 /* StationRouteSymbols.swift */,
-				96A94D142C3CC535008CFC18 /* TrainArrivalList.swift */,
-				96E4DD932D21323E00DEA3B3 /* QueryStatusLabel.swift */,
 			);
 			path = view_elements;
 			sourceTree = "<group>";
@@ -244,6 +247,25 @@
 				96C5147D2C376608009CAE08 /* ArrivalDataProcessor.swift */,
 			);
 			path = data;
+			sourceTree = "<group>";
+		};
+		96E4DD952D21F20400DEA3B3 /* arrival */ = {
+			isa = PBXGroup;
+			children = (
+				96C514902C379DE1009CAE08 /* TrainArrivalListItem.swift */,
+				96A94D142C3CC535008CFC18 /* TrainArrivalList.swift */,
+				96E4DD992D21F43F00DEA3B3 /* StationArrivalsView.swift */,
+			);
+			path = arrival;
+			sourceTree = "<group>";
+		};
+		96E4DD962D21F37400DEA3B3 /* status */ = {
+			isa = PBXGroup;
+			children = (
+				96E4DD932D21323E00DEA3B3 /* QueryStatusLabel.swift */,
+				96E4DD972D21F3A000DEA3B3 /* LastUpdateLabel.swift */,
+			);
+			path = status;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -397,6 +419,7 @@
 			files = (
 				96C514412C375202009CAE08 /* ContentView.swift in Sources */,
 				96C514932C379E8A009CAE08 /* RouteSymbol.swift in Sources */,
+				96E4DD982D21F3A000DEA3B3 /* LastUpdateLabel.swift in Sources */,
 				96C5147B2C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift in Sources */,
 				96A94D152C3CC535008CFC18 /* TrainArrivalList.swift in Sources */,
 				96C514872C379322009CAE08 /* Direction.swift in Sources */,
@@ -407,6 +430,7 @@
 				96C514832C376C33009CAE08 /* Route.swift in Sources */,
 				96C514812C376C1A009CAE08 /* TrainArrival.swift in Sources */,
 				96E4DD942D21323E00DEA3B3 /* QueryStatusLabel.swift in Sources */,
+				96E4DD9A2D21F43F00DEA3B3 /* StationArrivalsView.swift in Sources */,
 				96C514B42C3AF1AE009CAE08 /* FavoriteStationsView.swift in Sources */,
 				96C5147C2C375E9E009CAE08 /* gtfs-realtime.pb.swift in Sources */,
 				96C514912C379DE1009CAE08 /* TrainArrivalListItem.swift in Sources */,

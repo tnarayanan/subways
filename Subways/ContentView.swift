@@ -11,7 +11,6 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) var colorScheme
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @State private var showingFavoritesSheet = false
     
@@ -19,14 +18,9 @@ struct ContentView: View {
         station.isSelected
     })  private var selectedStations: [Station]
     
-    let userDefaults = UserDefaults.standard
+    private let fetchArrivalsDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
+    @State private var lastUpdate: Date? = nil
     
-    private let routeSymbolSize: CGFloat = 20
-    
-    private let everySecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    private let updateDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
-    
-    @State private var lastUpdated: Date? = nil
     @State private var queryStatus: ArrivalQueryStatus = .SUCCESS
     private var arrivalDataProcessor: ArrivalDataProcessor = ArrivalDataProcessor()
     
@@ -35,44 +29,20 @@ struct ContentView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
-                    StationRouteSymbols(station: station, routeSymbolSize: routeSymbolSize)
+                    StationRouteSymbols(station: station, routeSymbolSize: .large)
                     
-                    if let lastUpdated {
+                    if let lastUpdate {
                         // has loaded data
-                        TimelineView(.periodic(from: .now, by: 1)) { timeline in
-                            VStack(alignment: .leading) {
-                                // lastUpdated string and query status
-                                let diffs = Calendar.current.dateComponents([.second], from: lastUpdated, to: timeline.date)
-                                Text("updated \(getStringFromSecondsAgo(diffs.second ?? 0))")
-                                    .font(.callout)
-                                    .foregroundStyle(.secondary)
-                                QueryStatusLabel(queryStatus: $queryStatus)
-                                
-                                // train arrival lists
-                                if horizontalSizeClass == .compact {
-                                    TrainArrivalList(station: station, direction: .DOWNTOWN, date: timeline.date)
-                                    TrainArrivalList(station: station, direction: .UPTOWN, date: timeline.date)
-                                } else {
-                                    HStack(alignment: .top) {
-                                        TrainArrivalList(station: station, direction: .DOWNTOWN, date: timeline.date)
-                                        TrainArrivalList(station: station, direction: .UPTOWN, date: timeline.date)
-                                    }
-                                }
-                            }
-                        }
+                        StationArrivalsView(station: station, lastUpdate: lastUpdate, queryStatus: $queryStatus)
                     } else {
                         // initially loading data
-                        VStack {
+                        VStack(alignment: .center) {
                             Spacer()
-                            HStack {
-                                Spacer()
-                                ProgressView("Loading data...")
-                                Spacer()
-                            }
+                            ProgressView("Loading data...")
                             QueryStatusLabel(queryStatus: $queryStatus)
                             Spacer()
                         }
-                        .frame(maxHeight: .infinity)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -116,30 +86,18 @@ struct ContentView: View {
                 }
             }
             #endif
-            .onReceive(updateDataTimer) { _ in
-                fetchArrivals(station: station)
+            .onReceive(fetchArrivalsDataTimer) { _ in
+                fetchArrivals(for: station)
             }
             .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground))
         }
         .onChange(of: station, initial: true) {
-            updateArrivals(station: station)
-            fetchArrivals(station: station)
+            updateArrivals(for: station)
+            fetchArrivals(for: station)
         }
     }
     
-    private func getStringFromSecondsAgo(_ secondsAgo: Int) -> String {
-        if secondsAgo < 5 {
-            return "just now"
-        } else if secondsAgo < 10 {
-            return "5 seconds ago"
-        } else if secondsAgo < 60 {
-            return "\((secondsAgo / 10) * 10) seconds ago"
-        } else {
-            return "more than a minute ago"
-        }
-    }
-    
-    private func updateArrivals(station: Station) {
+    private func updateArrivals(for station: Station) {
         Task { @MainActor in
             let stationArrivalHeap = await arrivalDataProcessor.getArrivals(for: station.stationId)
             
@@ -163,22 +121,17 @@ struct ContentView: View {
         }
     }
     
-    private func fetchArrivals(station: Station) {
+    private func fetchArrivals(for station: Station) {
         Task { @MainActor in
-            let tmpQueryStatus = await arrivalDataProcessor.processArrivals(for: station.stationId)
+            let tmpQueryStatus = await arrivalDataProcessor.processArrivals()
             withAnimation(.easeOut(duration: 0.3)) {
                 queryStatus = tmpQueryStatus
             }
             print("Fetched arrivals with status \(queryStatus)")
             if queryStatus == .SUCCESS {
-                lastUpdated = Date()
+                lastUpdate = Date()
             }
-            updateArrivals(station: station)
+            updateArrivals(for: station)
         }
     }
-}
-
-#Preview {
-    ContentView()
-//        .modelContainer(for: FavoriteStation.self, inMemory: true)
 }

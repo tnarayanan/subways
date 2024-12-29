@@ -14,7 +14,7 @@ struct TrainArrivalListItem: View {
     var body: some View {
         let diffs = Calendar.current.dateComponents([.minute, .second], from: curTime, to: trainArrival.time)
         HStack {
-            RouteSymbol(route: trainArrival.route, size: 16)
+            RouteSymbol(route: trainArrival.route, size: .regular)
             if (diffs.second ?? 0) >= 0 && (diffs.minute ?? 0) >= 0 {
                 Text("in \(diffs.minute ?? 0) min \(diffs.second ?? 0) sec")
             } else {

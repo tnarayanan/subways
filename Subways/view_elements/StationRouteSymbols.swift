@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StationRouteSymbols: View {
     var station: Station
-    var routeSymbolSize: CGFloat
+    var routeSymbolSize: RouteSymbolSize
     
     var body: some View {
         HStack {

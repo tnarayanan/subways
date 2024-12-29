@@ -9,8 +9,7 @@ import SwiftUI
 
 struct RouteSymbol: View {
     var route: Route
-    var size: CGFloat
-    private static let baseScale: CGFloat = 1.5
+    var size: RouteSymbolSize
     
     var body: some View {
         ZStack {
@@ -18,16 +17,16 @@ struct RouteSymbol: View {
                 Rectangle()
                     .fill(RouteSymbol.routeToColor(route: route))
                     .rotationEffect(Angle(degrees: 45))
-                    .frame(width: size * RouteSymbol.baseScale, height: size * RouteSymbol.baseScale)
+                    .frame(width: size.rawValue, height: size.rawValue)
                     .scaleEffect(1 / sqrt(2))
             } else {
                 Circle()
                     .fill(RouteSymbol.routeToColor(route: route))
-                    .frame(width: size * RouteSymbol.baseScale, height: size * RouteSymbol.baseScale)
+                    .frame(width: size.rawValue, height: size.rawValue)
             }
             let routeStr: String = (route == .S || route == .FS) ? "S" : String(route.rawValue.first!)
             Text(routeStr)
-                .font(Font.custom("Helvetica", size: size))
+                .font(Font.custom("Helvetica", size: size.rawValue / 1.5))
                 .bold()
                 .foregroundColor(RouteSymbol.routeToColor(route: route) == Color("subwayYellow") ? .black : .white)
         }
@@ -61,9 +60,15 @@ struct RouteSymbol: View {
     }
 }
 
+enum RouteSymbolSize: CGFloat {
+    case regular = 24 // 16 * 1.5
+    case medium = 27 // 18 * 1.5
+    case large = 33 // 20 * 1.5
+}
+
 #Preview {
     VStack(alignment: .leading) {
-        RouteSymbol(route: .SIX_EXPRESS, size: 18)
-        RouteSymbol(route: .SIX, size: 18)
+        RouteSymbol(route: .SIX_EXPRESS, size: .regular)
+        RouteSymbol(route: .SIX, size: .regular)
     }.background(.red)
 }

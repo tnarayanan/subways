@@ -37,7 +37,7 @@ struct SearchForStationView: View {
                     VStack(alignment: .leading) {
                         Text(station.name)
                         HStack {
-                            StationRouteSymbols(station: station, routeSymbolSize: 18)
+                            StationRouteSymbols(station: station, routeSymbolSize: .medium)
                             Spacer()
                         }
                     }
