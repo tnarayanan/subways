@@ -20,6 +20,10 @@ enum DataSource: String, CaseIterable, Codable {
     case SI = "-si"
 }
 
+enum ArrivalQueryStatus {
+    case SUCCESS, FAILURE, NO_INTERNET
+}
+
 //@ModelActor
 actor ArrivalDataProcessor {
     private let baseUrlString = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs"
@@ -28,7 +32,7 @@ actor ArrivalDataProcessor {
     
     private var stationArrivalHeaps: [String: [Direction: Heap<TrainArrivalDTO>]] = [:]
 
-    func queryData() async {
+    func queryData() async -> ArrivalQueryStatus {
         for dataSource in DataSource.allCases {
             let url = URL(string: "\(baseUrlString)\(dataSource.rawValue)")!
             do {
@@ -36,25 +40,35 @@ actor ArrivalDataProcessor {
                 let message = try TransitRealtime_FeedMessage.init(contiguousBytes: messageData, extensions: TransitRealtime_Gtfs_u45Realtime_u45Nyct_Extensions)
                 messages[dataSource] = message
             } catch let error {
-                print(error)
+                if let urlError = error as? URLError {
+                    if urlError.code == .notConnectedToInternet {
+                        return .NO_INTERNET
+                    }
+                }
+                return .FAILURE
             }
         }
+        return .SUCCESS
     }
     
     func getArrivals(for stationId: String) async -> [Direction: Heap<TrainArrivalDTO>] {
         return stationArrivalHeaps[stationId] ?? [.DOWNTOWN: [], .UPTOWN: []]
     }
     
-    func processArrivals(for stationId: String) async {
+    func processArrivals(for stationId: String) async -> ArrivalQueryStatus {
         var tmpStationArrivalHeaps: [String: [Direction: Heap<TrainArrivalDTO>]] = [:]
         
         let asOfTime: Date = Date()
         
         let clock = ContinuousClock()
+        var queryStatus: ArrivalQueryStatus = .FAILURE
         let time = await clock.measure {
-            await queryData()
+            queryStatus = await queryData()
         }
         print("Querying data took \(time)")
+        if queryStatus != .SUCCESS {
+            return queryStatus
+        }
         
         let oneMinuteAgo: Date = asOfTime.addingTimeInterval(-60)
         
@@ -101,5 +115,7 @@ actor ArrivalDataProcessor {
         print("total \(numTotalArrivals)")
         
         stationArrivalHeaps = tmpStationArrivalHeaps
+        
+        return .SUCCESS
     }
 }

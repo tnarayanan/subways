@@ -29,6 +29,7 @@ struct ContentView: View {
     private let updateDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     
     @State private var lastUpdated: Date? = nil
+    @State private var queryStatus: ArrivalQueryStatus = .SUCCESS
     private var arrivalDataProcessor: ArrivalDataProcessor = ArrivalDataProcessor()
     
     var body: some View {
@@ -45,6 +46,7 @@ struct ContentView: View {
                             Text("updated \(getStringFromSecondsAgo(diffs.second ?? 0))")
                                 .font(.callout)
                                 .foregroundStyle(.secondary)
+                            QueryStatusLabel(queryStatus: $queryStatus)
                         }
                     }
                     
@@ -56,6 +58,7 @@ struct ContentView: View {
                                 ProgressView("Loading data...")
                                 Spacer()
                             }
+                            QueryStatusLabel(queryStatus: $queryStatus)
                             Spacer()
                         }
                         .frame(maxHeight: .infinity)
@@ -181,9 +184,14 @@ struct ContentView: View {
     
     private func fetchArrivals(station: Station) {
         Task { @MainActor in
-            await arrivalDataProcessor.processArrivals(for: station.stationId)
-            print("Fetched arrivals")
-            lastUpdated = Date()
+            let tmpQueryStatus = await arrivalDataProcessor.processArrivals(for: station.stationId)
+            withAnimation(.easeOut(duration: 0.3)) {
+                queryStatus = tmpQueryStatus
+            }
+            print("Fetched arrivals with status \(queryStatus)")
+            if queryStatus == .SUCCESS {
+                lastUpdated = Date()
+            }
             updateArrivals(station: station)
         }
     }
