@@ -13,8 +13,6 @@ struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    @State private var date: Date = Date()
-    
     @State private var showingFavoritesSheet = false
     
     @Query(filter: #Predicate<Station> { station in
@@ -41,22 +39,25 @@ struct ContentView: View {
                     
                     if let lastUpdated {
                         // has loaded data
-                        
-                        // lastUpdated string and query status
-                        let diffs = Calendar.current.dateComponents([.second], from: lastUpdated, to: date)
-                        Text("updated \(getStringFromSecondsAgo(diffs.second ?? 0))")
-                            .font(.callout)
-                            .foregroundStyle(.secondary)
-                        QueryStatusLabel(queryStatus: $queryStatus)
-                        
-                        // train arrival lists
-                        if horizontalSizeClass == .compact {
-                            TrainArrivalList(station: station, direction: .DOWNTOWN, date: date)
-                            TrainArrivalList(station: station, direction: .UPTOWN, date: date)
-                        } else {
-                            HStack(alignment: .top) {
-                                TrainArrivalList(station: station, direction: .DOWNTOWN, date: date)
-                                TrainArrivalList(station: station, direction: .UPTOWN, date: date)
+                        TimelineView(.periodic(from: .now, by: 1)) { timeline in
+                            VStack(alignment: .leading) {
+                                // lastUpdated string and query status
+                                let diffs = Calendar.current.dateComponents([.second], from: lastUpdated, to: timeline.date)
+                                Text("updated \(getStringFromSecondsAgo(diffs.second ?? 0))")
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                QueryStatusLabel(queryStatus: $queryStatus)
+                                
+                                // train arrival lists
+                                if horizontalSizeClass == .compact {
+                                    TrainArrivalList(station: station, direction: .DOWNTOWN, date: timeline.date)
+                                    TrainArrivalList(station: station, direction: .UPTOWN, date: timeline.date)
+                                } else {
+                                    HStack(alignment: .top) {
+                                        TrainArrivalList(station: station, direction: .DOWNTOWN, date: timeline.date)
+                                        TrainArrivalList(station: station, direction: .UPTOWN, date: timeline.date)
+                                    }
+                                }
                             }
                         }
                     } else {
@@ -115,9 +116,6 @@ struct ContentView: View {
                 }
             }
             #endif
-            .onReceive(everySecondTimer) { _ in
-                self.date = Date()
-            }
             .onReceive(updateDataTimer) { _ in
                 fetchArrivals(station: station)
             }
