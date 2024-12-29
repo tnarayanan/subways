@@ -28,18 +28,23 @@ struct SearchForStationView: View {
     var body: some View {
         List {
             ForEach(filteredStations.sorted(), id: \.id) { station in
-                VStack(alignment: .leading) {
-                    Text(station.name)
-                    StationRouteSymbols(station: station, routeSymbolSize: 18)
-                }
-                .id(station.id)
-                .contentShape(Rectangle())
-                .onTapGesture {
+                Button(action: {
                     print("Switching to searched station '\(station.name)'")
                     selectedStation.isSelected = false
                     station.isSelected = true
                     self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    VStack(alignment: .leading) {
+                        Text(station.name)
+                        HStack {
+                            StationRouteSymbols(station: station, routeSymbolSize: 18)
+                            Spacer()
+                        }
+                    }
+                    .id(station.id)
+                    .contentShape(Rectangle())
                 }
+                .foregroundStyle(.primary)
             }
         }
         .contentMargins(.top, .zero)
