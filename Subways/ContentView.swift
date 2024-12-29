@@ -71,7 +71,7 @@ struct ContentView: View {
                             
                             TrainArrivalList(station: station, direction: .UPTOWN, date: date)
                         } else {
-                            HStack {
+                            HStack(alignment: .top) {
                                 VStack(alignment: .leading) {
                                     Text("Downtown").font(.title3).bold()
                                         .padding(.top)
