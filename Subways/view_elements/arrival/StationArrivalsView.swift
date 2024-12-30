@@ -18,7 +18,7 @@ struct StationArrivalsView: View {
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1)) { timeline in
             VStack(alignment: .leading) {
-                // lastUpdated string and query status
+                // last update string and query status
                 LastUpdateLabel(curDate: timeline.date, lastUpdate: lastUpdate)
                 QueryStatusLabel(queryStatus: $queryStatus)
                 
@@ -37,3 +37,29 @@ struct StationArrivalsView: View {
     }
 }
 
+#Preview {
+    struct Preview: View {
+        @Environment(\.colorScheme) var colorScheme
+        @State var queryStatus: ArrivalQueryStatus = .SUCCESS
+        var body: some View {
+            VStack {
+                Spacer()
+                StationArrivalsView(
+                    downtownArrivals: [
+                        TrainArrival(tripId: "t1", route: .SEVEN, direction: .DOWNTOWN, time: Date().addingTimeInterval(10)),
+                        TrainArrival(tripId: "t2", route: .N, direction: .DOWNTOWN, time: Date().addingTimeInterval(95)),
+                        TrainArrival(tripId: "t3", route: .SIX_EXPRESS, direction: .DOWNTOWN, time: Date().addingTimeInterval(-32))
+                    ],
+                    uptownArrivals: [],
+                    lastUpdate: Date(),
+                    queryStatus: $queryStatus
+                )
+                .padding(.horizontal)
+                Spacer()
+            }
+            .background(Color(colorScheme == .light ? UIColor.systemGray6 : UIColor.black))
+        }
+    }
+    
+    return Preview()
+}

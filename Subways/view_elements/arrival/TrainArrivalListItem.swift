@@ -15,19 +15,23 @@ struct TrainArrivalListItem: View {
         let diffs = Calendar.current.dateComponents([.minute, .second], from: curTime, to: trainArrival.time)
         HStack {
             RouteSymbol(route: trainArrival.route, size: .regular)
-            if (diffs.second ?? 0) >= 0 && (diffs.minute ?? 0) >= 0 {
-                Text("in \(diffs.minute ?? 0) min \(diffs.second ?? 0) sec")
+            
+            let minutes = diffs.minute ?? 0
+            let seconds = diffs.second ?? 0
+            if (minutes >= 0 && seconds >= 0) {
+                Text("in \(minutes) min \(seconds) sec")
             } else {
-                Text("\(-(diffs.minute ?? 0)) min \(-(diffs.second ?? 0)) sec ago")
+                Text("\(-minutes) min \(-seconds) sec ago")
                     .foregroundStyle(Color.red)
             }
             Spacer()
-//            Text(trainArrival.tripId)
-//                .font(.caption)
         }
     }
 }
 
 #Preview {
-    TrainArrivalListItem(trainArrival: TrainArrival(tripId: "0001", route: .FOUR, direction: .DOWNTOWN, time: Date()), curTime: Date())
+    TrainArrivalListItem(trainArrival: TrainArrival(tripId: "0001", route: .FOUR, direction: .DOWNTOWN, time: Date()), curTime: Date().addingTimeInterval(-168))
+        .padding()
+    TrainArrivalListItem(trainArrival: TrainArrival(tripId: "0001", route: .FOUR, direction: .DOWNTOWN, time: Date()), curTime: Date().addingTimeInterval(62))
+        .padding()
 }
