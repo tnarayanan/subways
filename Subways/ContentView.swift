@@ -11,6 +11,9 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.scenePhase) var scenePhase
+    
+    @StateObject private var viewModel = ViewModel()
     
     @State private var showingFavoritesSheet = false
     
@@ -18,11 +21,7 @@ struct ContentView: View {
         station.isSelected
     })  private var selectedStations: [Station]
     
-    private let fetchArrivalsDataTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
-    @State private var lastUpdate: Date? = nil
-    
-    @State private var queryStatus: ArrivalQueryStatus = .SUCCESS
-    private var arrivalDataProcessor: ArrivalDataProcessor = ArrivalDataProcessor()
+    @State private var fetchTask: Task<Void, Never>?
     
     var body: some View {
         @Bindable var station: Station = selectedStations.first ?? Station.DEFAULT
@@ -31,15 +30,15 @@ struct ContentView: View {
                 VStack(alignment: .leading) {
                     StationRouteSymbols(station: station, routeSymbolSize: .large)
                     
-                    if let lastUpdate {
+                    if let lastUpdate = viewModel.lastUpdate {
                         // has loaded data
-                        StationArrivalsView(station: station, lastUpdate: lastUpdate, queryStatus: $queryStatus)
+                        StationArrivalsView(downtownArrivals: viewModel.downtownArrivals, uptownArrivals: viewModel.uptownArrivals, lastUpdate: lastUpdate, queryStatus: $viewModel.queryStatus)
                     } else {
                         // initially loading data
                         VStack(alignment: .center) {
                             Spacer()
                             ProgressView("Loading data...")
-                            QueryStatusLabel(queryStatus: $queryStatus)
+                            QueryStatusLabel(queryStatus: $viewModel.queryStatus)
                             Spacer()
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -49,11 +48,8 @@ struct ContentView: View {
                 .padding(.horizontal)
             }
             .navigationTitle(station.name)
-            #if os(iOS)
             .navigationBarTitleDisplayMode(.large)
-            #endif
             
-            #if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -85,53 +81,60 @@ struct ContentView: View {
                     }
                 }
             }
-            #endif
-            .onReceive(fetchArrivalsDataTimer) { _ in
-                fetchArrivals(for: station)
+            .onChange(of: station, initial: true) { oldStation, newStation in
+                fetchTask?.cancel()
+                fetchTask = Task {
+                    await startFetchingArrivals(for: newStation)
+                }
+            }
+            .onChange(of: scenePhase) { oldPhase, newPhase in
+                if newPhase == .background {
+                    print("App in background -> cancelling task")
+                    fetchTask?.cancel()
+                } else if oldPhase == .background {
+                    print("App not in background -> starting task")
+                    fetchTask = Task {
+                        await startFetchingArrivals(for: station)
+                    }
+                }
+            }
+            .onDisappear {
+                fetchTask?.cancel()
             }
             .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground))
         }
-        .onChange(of: station, initial: true) {
-            updateArrivals(for: station)
-            fetchArrivals(for: station)
-        }
     }
     
-    private func updateArrivals(for station: Station) {
-        Task { @MainActor in
-            let stationArrivalHeap = await arrivalDataProcessor.getArrivals(for: station.stationId)
-            
-            print("After retrieving arrivals")
-            print("\(station.arrivals!.count) existing arrivals")
-            
-            for arrival in station.arrivals! {
-                modelContext.delete(arrival)
-            }
-            
-            print("Removed old arrivals")
-            print(stationArrivalHeap)
-            
-            for direction in Direction.allCases {
-                for newArrivalDTO in stationArrivalHeap[direction]!.unordered {
-                    let newArrival = TrainArrival(tripId: newArrivalDTO.tripId, route: newArrivalDTO.route, direction: newArrivalDTO.direction, time: newArrivalDTO.time)
-                    modelContext.insert(newArrival)
-                    newArrival.station = station
+    private func startFetchingArrivals(for station: Station) async {
+        print("====== BEGIN FETCH TASK FOR \(station.name)")
+        do {
+            print("@@ Initial update for \(station.name)")
+            viewModel.updateArrivals(for: station)
+            while !Task.isCancelled {
+                print("@@ Fetching arrivals...")
+                await viewModel.fetchArrivals()
+                print("@@ Fetched arrivals")
+                
+                guard !Task.isCancelled else {
+                    print("====== CANCEL FETCH TASK FOR \(station.name)")
+                    break
                 }
+                
+                viewModel.updateArrivals(for: station)
+                print("@@ Updated arrivals for \(station.name)")
+                
+                guard !Task.isCancelled else {
+                    print("====== CANCEL FETCH TASK FOR \(station.name)")
+                    break
+                }
+                
+                print("@@ Sleeping...")
+                try await Task.sleep(for: .seconds(10))
             }
-        }
-    }
-    
-    private func fetchArrivals(for station: Station) {
-        Task { @MainActor in
-            let tmpQueryStatus = await arrivalDataProcessor.processArrivals()
-            withAnimation(.easeOut(duration: 0.3)) {
-                queryStatus = tmpQueryStatus
-            }
-            print("Fetched arrivals with status \(queryStatus)")
-            if queryStatus == .SUCCESS {
-                lastUpdate = Date()
-            }
-            updateArrivals(for: station)
+        } catch is CancellationError {
+            print("====== CANCEL FETCH TASK FOR \(station.name)")
+        } catch let error {
+            print(error)
         }
     }
 }

@@ -12,7 +12,7 @@ struct TrainArrivalList: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var modelContext
     
-    @Bindable var station: Station
+    var arrivals: [TrainArrival]
     var direction: Direction
     var date: Date
     
@@ -24,19 +24,17 @@ struct TrainArrivalList: View {
                 .padding(.top)
             
             GroupBox {
-                let arrivalsList: [TrainArrival] = station.arrivals!.filter { $0.direction == direction }
-                
-                if arrivalsList.count == 0 {
+                if arrivals.count == 0 {
                     HStack {
                         Text("No arrivals found")
                         Spacer()
                     }
                 } else {
-                    ForEach(Array(arrivalsList.sorted().enumerated()), id: \.offset) { index, arrival in
+                    ForEach(Array(arrivals.sorted().enumerated()), id: \.offset) { index, arrival in
                         TrainArrivalListItem(trainArrival: arrival, curTime: date)
                             .padding(.top, index == 0 ? 0 : 4)
-                            .padding(.bottom, index == arrivalsList.count - 1 ? 0 : 4)
-                        if index != arrivalsList.count - 1 {
+                            .padding(.bottom, index == arrivals.count - 1 ? 0 : 4)
+                        if index != arrivals.count - 1 {
                             Divider()
                         }
                     }
