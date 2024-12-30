@@ -9,8 +9,8 @@ import Foundation
 
 enum Route: String, Identifiable, Comparable, Codable {
     static func < (lhs: Route, rhs: Route) -> Bool {
-        let lhsColorHash = RouteSymbol.routeToColor(route: lhs).hashValue
-        let rhsColorHash = RouteSymbol.routeToColor(route: rhs).hashValue
+        let lhsColorHash = RouteSymbol.routeToColor(lhs).hashValue
+        let rhsColorHash = RouteSymbol.routeToColor(rhs).hashValue
         
         if lhsColorHash == rhsColorHash {
             return lhs.rawValue < rhs.rawValue
