@@ -13,7 +13,7 @@ struct QueryStatusLabel: View {
     var body: some View {
         VStack {
             switch(queryStatus) {
-            case .SUCCESS:
+            case .SUCCESS, .CANCELLED:
                 EmptyView()
             case .FAILURE:
                 Label("Issue retrieving data", systemImage: "wifi.exclamationmark")

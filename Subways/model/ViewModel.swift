@@ -21,14 +21,19 @@ class ViewModel: ObservableObject {
     let mtaService: MTAService
     
     init() {
+        print("******* ViewModel being created ******")
         self.mtaService = MTAService()
     }
     
     func fetchArrivals() async {
         let asOfDate: Date = Date()
         let fetchResult = await mtaService.fetchArrivals()
-        queryStatus = fetchResult.status
+        if fetchResult.status == .CANCELLED {
+            // ignore request
+            return
+        }
         
+        queryStatus = fetchResult.status
         if queryStatus == .SUCCESS {
             lastUpdate = asOfDate
             stationArrivals = fetchResult.arrivals
@@ -42,5 +47,8 @@ class ViewModel: ObservableObject {
         downtownArrivals = Array((stationArrivals[station.stationId]?[.DOWNTOWN]?.unordered ?? []))
         uptownArrivals = Array((stationArrivals[station.stationId]?[.UPTOWN]?.unordered ?? []))
         print("Updated displayed arrivals for \(station.name)")
+        
+        // force an update
+        objectWillChange.send()
     }
 }

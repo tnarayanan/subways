@@ -21,7 +21,7 @@ enum DataSource: String, CaseIterable, Codable {
 }
 
 enum ArrivalQueryStatus {
-    case SUCCESS, FAILURE, NO_INTERNET
+    case SUCCESS, FAILURE, CANCELLED, NO_INTERNET
 }
 
 //@ModelActor
@@ -41,8 +41,11 @@ actor MTAService {
                 if let urlError = error as? URLError {
                     if urlError.code == .notConnectedToInternet {
                         return (.NO_INTERNET, [:])
+                    } else if urlError.code == .cancelled {
+                        return (.CANCELLED, [:])
                     }
                 }
+                print(error)
                 return (.FAILURE, [:])
             }
         }

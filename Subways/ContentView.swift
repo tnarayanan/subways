@@ -11,6 +11,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.scenePhase) var scenePhase
     
     @StateObject private var viewModel = ViewModel()
     
@@ -19,6 +20,8 @@ struct ContentView: View {
     @Query(filter: #Predicate<Station> { station in
         station.isSelected
     })  private var selectedStations: [Station]
+    
+    @State private var fetchTask: Task<Void, Never>?
     
     var body: some View {
         @Bindable var station: Station = selectedStations.first ?? Station.DEFAULT
@@ -40,18 +43,6 @@ struct ContentView: View {
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
-                }
-                .task(id: station) {
-                    // fetch arrivals every 10 seconds
-                    repeat {
-                        await viewModel.fetchArrivals()
-                        viewModel.updateArrivals(for: station)
-                        
-                        try? await Task.sleep(for: .seconds(10))
-                    } while !Task.isCancelled
-                }
-                .onChange(of: station, initial: true) {
-                    viewModel.updateArrivals(for: station)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
@@ -90,7 +81,60 @@ struct ContentView: View {
                     }
                 }
             }
+            .onChange(of: station, initial: true) { oldStation, newStation in
+                fetchTask?.cancel()
+                fetchTask = Task {
+                    await startFetchingArrivals(for: newStation)
+                }
+            }
+            .onChange(of: scenePhase) { oldPhase, newPhase in
+                if newPhase == .background {
+                    print("App in background -> cancelling task")
+                    fetchTask?.cancel()
+                } else if oldPhase == .background {
+                    print("App not in background -> starting task")
+                    fetchTask = Task {
+                        await startFetchingArrivals(for: station)
+                    }
+                }
+            }
+            .onDisappear {
+                fetchTask?.cancel()
+            }
             .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground))
+        }
+    }
+    
+    private func startFetchingArrivals(for station: Station) async {
+        print("====== BEGIN FETCH TASK FOR \(station.name)")
+        do {
+            print("@@ Initial update for \(station.name)")
+            viewModel.updateArrivals(for: station)
+            while !Task.isCancelled {
+                print("@@ Fetching arrivals...")
+                await viewModel.fetchArrivals()
+                print("@@ Fetched arrivals")
+                
+                guard !Task.isCancelled else {
+                    print("====== CANCEL FETCH TASK FOR \(station.name)")
+                    break
+                }
+                
+                viewModel.updateArrivals(for: station)
+                print("@@ Updated arrivals for \(station.name)")
+                
+                guard !Task.isCancelled else {
+                    print("====== CANCEL FETCH TASK FOR \(station.name)")
+                    break
+                }
+                
+                print("@@ Sleeping...")
+                try await Task.sleep(for: .seconds(10))
+            }
+        } catch is CancellationError {
+            print("====== CANCEL FETCH TASK FOR \(station.name)")
+        } catch let error {
+            print(error)
         }
     }
 }
