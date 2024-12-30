@@ -33,5 +33,24 @@ struct QueryStatusLabel: View {
 }
 
 #Preview {
-//    QueryStatusLabel(queryStatus: .SUCCESS)
+    struct Preview: View {
+        @State var queryStatus: ArrivalQueryStatus
+        var body: some View {
+                QueryStatusLabel(queryStatus: $queryStatus)
+        }
+    }
+    
+    return VStack {
+        Text("Success")
+        Preview(queryStatus: .SUCCESS)
+        Divider()
+        Text("Cancelled")
+        Preview(queryStatus: .CANCELLED)
+        Divider()
+        Text("No internet")
+        Preview(queryStatus: .NO_INTERNET)
+        Divider()
+        Text("Failure")
+        Preview(queryStatus: .FAILURE)
+    }
 }
