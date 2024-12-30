@@ -25,14 +25,12 @@ enum ArrivalQueryStatus {
 }
 
 //@ModelActor
-actor ArrivalDataProcessor {
+actor MTAService {
     private let baseUrlString = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs"
-    
-    private var messages: [DataSource: TransitRealtime_FeedMessage] = [:]
-    
-    private var stationArrivalHeaps: [String: [Direction: Heap<TrainArrivalDTO>]] = [:]
 
-    func queryData() async -> ArrivalQueryStatus {
+    private func queryData() async -> (status: ArrivalQueryStatus, messages: [DataSource: TransitRealtime_FeedMessage]) {
+        var messages: [DataSource: TransitRealtime_FeedMessage] = [:]
+        
         for dataSource in DataSource.allCases {
             let url = URL(string: "\(baseUrlString)\(dataSource.rawValue)")!
             do {
@@ -42,39 +40,37 @@ actor ArrivalDataProcessor {
             } catch let error {
                 if let urlError = error as? URLError {
                     if urlError.code == .notConnectedToInternet {
-                        return .NO_INTERNET
+                        return (.NO_INTERNET, [:])
                     }
                 }
-                return .FAILURE
+                return (.FAILURE, [:])
             }
         }
-        return .SUCCESS
+        return (.SUCCESS, messages)
     }
     
-    func getArrivals(for stationId: String) async -> [Direction: Heap<TrainArrivalDTO>] {
-        return stationArrivalHeaps[stationId] ?? [.DOWNTOWN: [], .UPTOWN: []]
-    }
-    
-    func processArrivals() async -> ArrivalQueryStatus {
-        var tmpStationArrivalHeaps: [String: [Direction: Heap<TrainArrivalDTO>]] = [:]
+    func fetchArrivals() async -> (status: ArrivalQueryStatus, arrivals: [String: [Direction: Heap<TrainArrival>]]) {
+        var stationArrivalHeaps: [String: [Direction: Heap<TrainArrival>]] = [:]
         
         let asOfTime: Date = Date()
         
         let clock = ContinuousClock()
-        var queryStatus: ArrivalQueryStatus = .FAILURE
+        
+        var queryResult: (status: ArrivalQueryStatus, messages: [DataSource: TransitRealtime_FeedMessage]) = (status: .FAILURE, messages: [:])
+        
         let time = await clock.measure {
-            queryStatus = await queryData()
+            queryResult = await queryData()
         }
         print("Querying data took \(time)")
-        if queryStatus != .SUCCESS {
-            return queryStatus
+        if queryResult.status != .SUCCESS {
+            return (queryResult.status, [:])
         }
         
         let oneMinuteAgo: Date = asOfTime.addingTimeInterval(-60)
         
         var numTotalArrivals = 0
         
-        for msg in messages.values {
+        for msg in queryResult.messages.values {
             for ent in msg.entity.filter({$0.hasTripUpdate}) {
                 let tripUpdate = ent.tripUpdate
                 
@@ -86,8 +82,8 @@ actor ArrivalDataProcessor {
                     let direction = stopIDWithDirection.last! == "N" ? Direction.UPTOWN : Direction.DOWNTOWN
                     let stopID = String(stopIDWithDirection.dropLast())
                     
-                    if !tmpStationArrivalHeaps.keys.contains(stopID) {
-                        tmpStationArrivalHeaps[stopID] = [.DOWNTOWN: [], .UPTOWN: []]
+                    if !stationArrivalHeaps.keys.contains(stopID) {
+                        stationArrivalHeaps[stopID] = [.DOWNTOWN: [], .UPTOWN: []]
                     }
                     
                     var timestamp: Int64 = 0
@@ -96,7 +92,7 @@ actor ArrivalDataProcessor {
                     } else if stopTimeUpdate.hasDeparture {
                         timestamp = stopTimeUpdate.departure.time
                     }
-                    let trainArrival = TrainArrivalDTO(tripId: tripID + "_" + stopID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+                    let trainArrival = TrainArrival(tripId: tripID + "_" + stopID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
                     
                     numTotalArrivals += 1
                     
@@ -104,9 +100,9 @@ actor ArrivalDataProcessor {
                         continue
                     }
                     
-                    tmpStationArrivalHeaps[stopID]![direction]!.insert(trainArrival)
-                    if tmpStationArrivalHeaps[stopID]![direction]!.count > 7 {
-                        tmpStationArrivalHeaps[stopID]![direction]!.removeMax()
+                    stationArrivalHeaps[stopID]![direction]!.insert(trainArrival)
+                    if stationArrivalHeaps[stopID]![direction]!.count > 7 {
+                        stationArrivalHeaps[stopID]![direction]!.removeMax()
                     }
                 }
             }
@@ -114,8 +110,6 @@ actor ArrivalDataProcessor {
         
         print("total \(numTotalArrivals)")
         
-        stationArrivalHeaps = tmpStationArrivalHeaps
-        
-        return .SUCCESS
+        return (.SUCCESS, stationArrivalHeaps)
     }
 }

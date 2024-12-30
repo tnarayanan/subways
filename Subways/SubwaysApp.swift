@@ -30,10 +30,6 @@ struct SubwaysApp: App {
                 try modelContext.save()
             }
             
-            // Delete all existing train arrivals
-            try modelContext.delete(model: TrainArrival.self)
-            try modelContext.save()
-            
             return container
         } catch {
             fatalError("Could not create ModelContainer: \(error)")

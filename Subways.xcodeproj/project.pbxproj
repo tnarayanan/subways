@@ -19,7 +19,7 @@
 		96C514762C375588009CAE08 /* SwiftProtobufPluginLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 96C514752C375588009CAE08 /* SwiftProtobufPluginLibrary */; };
 		96C5147B2C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514792C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift */; };
 		96C5147C2C375E9E009CAE08 /* gtfs-realtime.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5147A2C375E9E009CAE08 /* gtfs-realtime.pb.swift */; };
-		96C5147E2C376608009CAE08 /* ArrivalDataProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5147D2C376608009CAE08 /* ArrivalDataProcessor.swift */; };
+		96C5147E2C376608009CAE08 /* MTAService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5147D2C376608009CAE08 /* MTAService.swift */; };
 		96C514812C376C1A009CAE08 /* TrainArrival.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514802C376C1A009CAE08 /* TrainArrival.swift */; };
 		96C514832C376C33009CAE08 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514822C376C33009CAE08 /* Route.swift */; };
 		96C514872C379322009CAE08 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514862C379322009CAE08 /* Direction.swift */; };
@@ -43,6 +43,7 @@
 		96E4DD942D21323E00DEA3B3 /* QueryStatusLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E4DD932D21323E00DEA3B3 /* QueryStatusLabel.swift */; };
 		96E4DD982D21F3A000DEA3B3 /* LastUpdateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E4DD972D21F3A000DEA3B3 /* LastUpdateLabel.swift */; };
 		96E4DD9A2D21F43F00DEA3B3 /* StationArrivalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E4DD992D21F43F00DEA3B3 /* StationArrivalsView.swift */; };
+		96E4DD9F2D23252500DEA3B3 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E4DD9E2D23252500DEA3B3 /* ViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,7 +78,7 @@
 		96C5145E2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwaysUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		96C514792C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "gtfs-realtime-NYCT.pb.swift"; sourceTree = "<group>"; };
 		96C5147A2C375E9E009CAE08 /* gtfs-realtime.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "gtfs-realtime.pb.swift"; sourceTree = "<group>"; };
-		96C5147D2C376608009CAE08 /* ArrivalDataProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalDataProcessor.swift; sourceTree = "<group>"; };
+		96C5147D2C376608009CAE08 /* MTAService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTAService.swift; sourceTree = "<group>"; };
 		96C514802C376C1A009CAE08 /* TrainArrival.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainArrival.swift; sourceTree = "<group>"; };
 		96C514822C376C33009CAE08 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		96C514862C379322009CAE08 /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
@@ -99,6 +100,7 @@
 		96E4DD932D21323E00DEA3B3 /* QueryStatusLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryStatusLabel.swift; sourceTree = "<group>"; };
 		96E4DD972D21F3A000DEA3B3 /* LastUpdateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastUpdateLabel.swift; sourceTree = "<group>"; };
 		96E4DD992D21F43F00DEA3B3 /* StationArrivalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationArrivalsView.swift; sourceTree = "<group>"; };
+		96E4DD9E2D23252500DEA3B3 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +212,7 @@
 				96C514822C376C33009CAE08 /* Route.swift */,
 				96C514862C379322009CAE08 /* Direction.swift */,
 				96C514A92C37B71B009CAE08 /* Station.swift */,
+				96E4DD9E2D23252500DEA3B3 /* ViewModel.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -244,7 +247,7 @@
 		96C514B22C39F3F8009CAE08 /* data */ = {
 			isa = PBXGroup;
 			children = (
-				96C5147D2C376608009CAE08 /* ArrivalDataProcessor.swift */,
+				96C5147D2C376608009CAE08 /* MTAService.swift */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -424,10 +427,11 @@
 				96A94D152C3CC535008CFC18 /* TrainArrivalList.swift in Sources */,
 				96C514872C379322009CAE08 /* Direction.swift in Sources */,
 				96C514AA2C37B71B009CAE08 /* Station.swift in Sources */,
-				96C5147E2C376608009CAE08 /* ArrivalDataProcessor.swift in Sources */,
+				96C5147E2C376608009CAE08 /* MTAService.swift in Sources */,
 				96C5143F2C375202009CAE08 /* SubwaysApp.swift in Sources */,
 				96C514B62C3AF2B4009CAE08 /* StationRouteSymbols.swift in Sources */,
 				96C514832C376C33009CAE08 /* Route.swift in Sources */,
+				96E4DD9F2D23252500DEA3B3 /* ViewModel.swift in Sources */,
 				96C514812C376C1A009CAE08 /* TrainArrival.swift in Sources */,
 				96E4DD942D21323E00DEA3B3 /* QueryStatusLabel.swift in Sources */,
 				96E4DD9A2D21F43F00DEA3B3 /* StationArrivalsView.swift in Sources */,

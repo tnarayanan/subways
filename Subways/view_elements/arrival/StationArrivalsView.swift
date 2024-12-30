@@ -10,7 +10,8 @@ import SwiftUI
 struct StationArrivalsView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    var station: Station
+    var downtownArrivals: [TrainArrival]
+    var uptownArrivals: [TrainArrival]
     var lastUpdate: Date
     @Binding var queryStatus: ArrivalQueryStatus
     
@@ -23,12 +24,12 @@ struct StationArrivalsView: View {
                 
                 // train arrival lists
                 if horizontalSizeClass == .compact {
-                    TrainArrivalList(station: station, direction: .DOWNTOWN, date: timeline.date)
-                    TrainArrivalList(station: station, direction: .UPTOWN, date: timeline.date)
+                    TrainArrivalList(arrivals: downtownArrivals, direction: .DOWNTOWN, date: timeline.date)
+                    TrainArrivalList(arrivals: uptownArrivals, direction: .UPTOWN, date: timeline.date)
                 } else {
                     HStack(alignment: .top) {
-                        TrainArrivalList(station: station, direction: .DOWNTOWN, date: timeline.date)
-                        TrainArrivalList(station: station, direction: .UPTOWN, date: timeline.date)
+                        TrainArrivalList(arrivals: downtownArrivals, direction: .DOWNTOWN, date: timeline.date)
+                        TrainArrivalList(arrivals: uptownArrivals, direction: .UPTOWN, date: timeline.date)
                     }
                 }
             }
