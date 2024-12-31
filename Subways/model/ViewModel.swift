@@ -7,6 +7,7 @@
 
 import Foundation
 import HeapModule
+import SwiftUI
 
 @MainActor
 class ViewModel: ObservableObject {
@@ -33,7 +34,9 @@ class ViewModel: ObservableObject {
             return
         }
         
-        queryStatus = fetchResult.status
+        withAnimation {
+            queryStatus = fetchResult.status
+        }
         if queryStatus == .SUCCESS {
             lastUpdate = asOfDate
             stationArrivals = fetchResult.arrivals
