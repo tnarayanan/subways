@@ -30,3 +30,15 @@ struct LastUpdateLabel: View {
         }
     }
 }
+
+#Preview {
+    let timeIntervals = [3, 5, 7, 10, 15, 25, 35, 45, 59, 60, 70]
+    ForEach(timeIntervals, id: \.self) { timeInterval in
+        HStack {
+            Text("\(timeInterval)s")
+            Spacer()
+            LastUpdateLabel(curDate: Date(), lastUpdate: Date().addingTimeInterval(-Double(timeInterval)))
+        }
+    }.padding()
+}
+

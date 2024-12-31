@@ -44,6 +44,7 @@
 		96E4DD982D21F3A000DEA3B3 /* LastUpdateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E4DD972D21F3A000DEA3B3 /* LastUpdateLabel.swift */; };
 		96E4DD9A2D21F43F00DEA3B3 /* StationArrivalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E4DD992D21F43F00DEA3B3 /* StationArrivalsView.swift */; };
 		96E4DD9F2D23252500DEA3B3 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E4DD9E2D23252500DEA3B3 /* ViewModel.swift */; };
+		96E4DDA12D23700C00DEA3B3 /* StationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E4DDA02D23700C00DEA3B3 /* StationButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +102,7 @@
 		96E4DD972D21F3A000DEA3B3 /* LastUpdateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastUpdateLabel.swift; sourceTree = "<group>"; };
 		96E4DD992D21F43F00DEA3B3 /* StationArrivalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationArrivalsView.swift; sourceTree = "<group>"; };
 		96E4DD9E2D23252500DEA3B3 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		96E4DDA02D23700C00DEA3B3 /* StationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,6 +226,7 @@
 				96E4DD952D21F20400DEA3B3 /* arrival */,
 				96C514922C379E8A009CAE08 /* RouteSymbol.swift */,
 				96C514B52C3AF2B4009CAE08 /* StationRouteSymbols.swift */,
+				96E4DDA02D23700C00DEA3B3 /* StationButton.swift */,
 			);
 			path = view_elements;
 			sourceTree = "<group>";
@@ -420,6 +423,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96E4DDA12D23700C00DEA3B3 /* StationButton.swift in Sources */,
 				96C514412C375202009CAE08 /* ContentView.swift in Sources */,
 				96C514932C379E8A009CAE08 /* RouteSymbol.swift in Sources */,
 				96E4DD982D21F3A000DEA3B3 /* LastUpdateLabel.swift in Sources */,

@@ -45,6 +45,28 @@ struct TrainArrivalList: View {
     }
 }
 
-//#Preview {
-//    TrainArrivalList()
-//}
+#Preview {
+    @Previewable @Environment(\.colorScheme) var colorScheme
+    
+    VStack {
+        Spacer()
+        TrainArrivalList(
+            arrivals: [
+                TrainArrival(tripId: "t1", route: .SEVEN, direction: .DOWNTOWN, time: Date().addingTimeInterval(10)),
+                TrainArrival(tripId: "t2", route: .N, direction: .DOWNTOWN, time: Date().addingTimeInterval(95)),
+                TrainArrival(tripId: "t3", route: .SIX_EXPRESS, direction: .DOWNTOWN, time: Date().addingTimeInterval(-32))
+            ],
+            direction: .DOWNTOWN,
+            date: Date()
+        )
+        .padding(.horizontal)
+        TrainArrivalList(
+            arrivals: [],
+            direction: .UPTOWN,
+            date: Date()
+        )
+        .padding(.horizontal)
+        Spacer()
+    }
+    .background(Color(colorScheme == .light ? UIColor.systemGray6 : UIColor.black))
+}

@@ -28,34 +28,22 @@ struct SearchForStationView: View {
     var body: some View {
         List {
             ForEach(filteredStations.sorted(), id: \.id) { station in
-                Button(action: {
+                StationButton(station: station, action: {
                     print("Switching to searched station '\(station.name)'")
                     selectedStation.isSelected = false
                     station.isSelected = true
                     self.presentationMode.wrappedValue.dismiss()
-                }) {
-                    VStack(alignment: .leading) {
-                        Text(station.name)
-                        HStack {
-                            StationRouteSymbols(station: station, routeSymbolSize: .medium)
-                            Spacer()
-                        }
-                    }
-                    .id(station.id)
-                    .contentShape(Rectangle())
-                }
-                .foregroundStyle(.primary)
+                })
             }
         }
         .contentMargins(.top, .zero)
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a station")
+        .overlay {
+            if filteredStations.isEmpty {
+                ContentUnavailableView.search
+            }
+        }
         .navigationTitle("All Stations")
-        #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
-        #endif
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-//#Preview {
-//    SearchForStationView()
-//}

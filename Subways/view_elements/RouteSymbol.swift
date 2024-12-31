@@ -13,57 +13,59 @@ struct RouteSymbol: View {
     
     var body: some View {
         ZStack {
+            let routeColor = RouteSymbol.routeToColor(route)
+            let routeStr: String = (route == .S || route == .FS) ? "S" : String(route.rawValue.first!)
+            
             if route.rawValue.last! == "X" {
                 Rectangle()
-                    .fill(RouteSymbol.routeToColor(route: route))
+                    .fill(routeColor)
                     .rotationEffect(Angle(degrees: 45))
                     .frame(width: size.rawValue, height: size.rawValue)
                     .scaleEffect(1 / sqrt(2))
             } else {
                 Circle()
-                    .fill(RouteSymbol.routeToColor(route: route))
+                    .fill(routeColor)
                     .frame(width: size.rawValue, height: size.rawValue)
             }
-            let routeStr: String = (route == .S || route == .FS) ? "S" : String(route.rawValue.first!)
             Text(routeStr)
                 .font(Font.custom("Helvetica", size: size.rawValue / 1.5))
                 .bold()
-                .foregroundColor(RouteSymbol.routeToColor(route: route) == Color("subwayYellow") ? .black : .white)
+                .foregroundColor(routeColor == .subwayYellow ? .black : .white)
         }
     }
     
-    public static func routeToColor(route: Route) -> Color {
+    public static func routeToColor(_ route: Route) -> Color {
         return switch route {
         case .A, .C, .E:
-            Color("subwayBlue")
+                .subwayBlue
         case .B, .D, .F, .F_EXPRESS, .M:
-            Color("subwayOrange")
+                .subwayOrange
         case .G:
-            Color("subwayLime")
+                .subwayLime
         case .L:
-            Color("subwayLightGray")
+                .subwayLightGray
         case .J, .Z:
-            Color("subwayBrown")
+                .subwayBrown
         case .N, .Q, .R, .W:
-            Color("subwayYellow")
+                .subwayYellow
         case .ONE, .TWO, .THREE, .SI:
-            Color("subwayRed")
+                .subwayRed
         case .FOUR, .FIVE, .SIX, .SIX_EXPRESS:
-            Color("subwayGreen")
+                .subwayGreen
         case .SEVEN, .SEVEN_EXPRESS:
-            Color("subwayMagenta")
+                .subwayMagenta
         case .T:
-            Color("subwayTurquoise")
+                .subwayTurquoise
         case .S, .FS, .H, .X:
-            Color("subwayGray")
+                .subwayGray
         }
     }
 }
 
 enum RouteSymbolSize: CGFloat {
-    case regular = 24 // 16 * 1.5
-    case medium = 27 // 18 * 1.5
-    case large = 33 // 20 * 1.5
+    case regular = 24
+    case medium = 27
+    case large = 33
 }
 
 #Preview {
@@ -71,4 +73,15 @@ enum RouteSymbolSize: CGFloat {
         RouteSymbol(route: .SIX_EXPRESS, size: .regular)
         RouteSymbol(route: .SIX, size: .regular)
     }.background(.red)
+    
+    VStack {
+        let routes: [Route] = [.ONE, .B, .N, .G, .FOUR, .SIX_EXPRESS, .T, .A, .SEVEN, .SEVEN_EXPRESS, .J, .S, .L]
+        ForEach(routes) { route in
+            HStack {
+                RouteSymbol(route: route, size: .regular)
+                RouteSymbol(route: route, size: .medium)
+                RouteSymbol(route: route, size: .large)
+            }
+        }
+    }
 }
