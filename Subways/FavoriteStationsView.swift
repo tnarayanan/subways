@@ -18,47 +18,32 @@ struct FavoriteStationsView: View {
         station.isFavorite
     }) private var favoriteStations: [Station]
     
+    var sortedStations: [Station] {
+        favoriteStations.sorted()
+    }
+    
     var onDismiss: (String) -> Void = {_ in}
     
     var body: some View {
         NavigationView {
             VStack {
                 if favoriteStations.isEmpty {
-                    Spacer()
-                    Label("No favorite stations", systemImage: "tram.fill")
-                        .font(.largeTitle)
-                        .labelStyle(.iconOnly)
-                        .foregroundColor(.secondary)
-                        .padding(.all, 4)
-                    Text("No favorite stations")
-                        .font(.title)
-                        .foregroundColor(.secondary)
-                    Spacer()
+                    ContentUnavailableView("No favorite stations", systemImage: "star.fill", description: Text("Add stations to your favorites for quick access"))
                 } else {
                     List {
-                        ForEach(favoriteStations.sorted(), id: \.id) { station in
-                            VStack {
-                                HStack {
-                                    Text(station.name)
-                                    Spacer()
-                                }
-                                HStack {
-                                    StationRouteSymbols(station: station, routeSymbolSize: .medium)
-                                    Spacer()
-                                }
-                            }
-                            .contentShape(Rectangle())
-                            .onTapGesture {
+                        ForEach(sortedStations, id: \.id) { station in
+                            StationButton(station: station, action: {
                                 print("Switching to favorite station '\(station.name)'")
                                 selectedStation.isSelected = false
                                 station.isSelected = true
                                 dismiss()
-                            }
+                            })
                         }
                         .onDelete(perform: { indexSet in
                             for offset in indexSet {
-                                let favStation = favoriteStations[offset]
+                                let favStation = sortedStations[offset]
                                 favStation.isFavorite = false
+                                print("removed \(favStation.name) from favorites")
                             }
                         })
                     }
@@ -66,13 +51,7 @@ struct FavoriteStationsView: View {
                 }
             }
             .navigationTitle("Favorite Stations")
-            #if os(iOS)
-                .navigationBarTitleDisplayMode(.inline)
-            #endif
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
-
-//#Preview {
-//    FavoriteStationsView()
-//}

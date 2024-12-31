@@ -52,23 +52,15 @@ struct ContentView: View {
             
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        station.isFavorite.toggle()
-                    }
-                    label: {
+                    Button(action: { station.isFavorite.toggle() }) {
                         Label("Add Station to Favorites", systemImage: station.isFavorite ? "star.fill" : "star")
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingFavoritesSheet.toggle()
-                    }
-                    label: {
+                    Button(action: { showingFavoritesSheet.toggle() }) {
                         Label("Select Favorite Station", systemImage: "tram.fill")
                     }
-                    .sheet(isPresented: $showingFavoritesSheet, onDismiss: {
-                        print("dismissed sheet")
-                    }) {
+                    .sheet(isPresented: $showingFavoritesSheet) {
                         FavoriteStationsView(selectedStation: station)
                     }
                 }
@@ -137,4 +129,8 @@ struct ContentView: View {
             print(error)
         }
     }
+}
+
+#Preview {
+    ContentView()
 }

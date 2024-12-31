@@ -36,7 +36,7 @@ struct QueryStatusLabel: View {
     struct Preview: View {
         @State var queryStatus: ArrivalQueryStatus
         var body: some View {
-                QueryStatusLabel(queryStatus: $queryStatus)
+            QueryStatusLabel(queryStatus: $queryStatus)
         }
     }
     
