@@ -25,6 +25,8 @@ struct TrainArrivalListItem: View {
                     .foregroundStyle(Color.red)
             }
             Spacer()
+            Text(trainArrival.time, style: .time)
+                .foregroundStyle(.secondary)
         }
     }
 }

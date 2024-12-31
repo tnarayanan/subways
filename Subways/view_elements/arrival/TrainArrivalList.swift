@@ -26,7 +26,7 @@ struct TrainArrivalList: View {
             GroupBox {
                 if arrivals.count == 0 {
                     HStack {
-                        Text("No arrivals found")
+                        Text("No scheduled arrivals")
                         Spacer()
                     }
                 } else {
