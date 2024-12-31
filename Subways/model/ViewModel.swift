@@ -17,6 +17,8 @@ class ViewModel: ObservableObject {
     @Published var queryStatus: ArrivalQueryStatus = .SUCCESS
     @Published var lastUpdate: Date? = nil
     
+    @Published var numOngoingFetches = 0
+    
     private var stationArrivals: [String: [Direction: Heap<TrainArrival>]] = [:]
     
     let mtaService: MTAService
@@ -28,7 +30,9 @@ class ViewModel: ObservableObject {
     
     func fetchArrivals() async {
         let asOfDate: Date = Date()
+        numOngoingFetches += 1
         let fetchResult = await mtaService.fetchArrivals()
+        numOngoingFetches -= 1
         if fetchResult.status == .CANCELLED {
             // ignore request
             return

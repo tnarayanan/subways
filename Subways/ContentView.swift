@@ -32,7 +32,7 @@ struct ContentView: View {
                     
                     if let lastUpdate = viewModel.lastUpdate {
                         // has loaded data
-                        StationArrivalsView(downtownArrivals: viewModel.downtownArrivals, uptownArrivals: viewModel.uptownArrivals, lastUpdate: lastUpdate, queryStatus: $viewModel.queryStatus)
+                        StationArrivalsView(downtownArrivals: viewModel.downtownArrivals, uptownArrivals: viewModel.uptownArrivals, lastUpdate: lastUpdate, queryStatus: $viewModel.queryStatus, isFetching: viewModel.numOngoingFetches > 0)
                     } else {
                         // initially loading data
                         VStack(alignment: .center) {

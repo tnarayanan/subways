@@ -14,12 +14,20 @@ struct StationArrivalsView: View {
     var uptownArrivals: [TrainArrival]
     var lastUpdate: Date
     @Binding var queryStatus: ArrivalQueryStatus
+    var isFetching: Bool
     
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1)) { timeline in
             VStack(alignment: .leading) {
                 // last update string and query status
-                LastUpdateLabel(curDate: timeline.date, lastUpdate: lastUpdate)
+                HStack {
+                    LastUpdateLabel(curDate: timeline.date, lastUpdate: lastUpdate)
+                    if isFetching {
+                        ProgressView()
+                    } else {
+                        ProgressView().hidden()
+                    }
+                }
                 QueryStatusLabel(queryStatus: $queryStatus)
                 
                 // train arrival lists
@@ -52,7 +60,8 @@ struct StationArrivalsView: View {
                     ],
                     uptownArrivals: [],
                     lastUpdate: Date(),
-                    queryStatus: $queryStatus
+                    queryStatus: $queryStatus,
+                    isFetching: true
                 )
                 .padding(.horizontal)
                 Spacer()
