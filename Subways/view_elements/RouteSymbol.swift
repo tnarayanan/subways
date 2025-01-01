@@ -13,7 +13,7 @@ struct RouteSymbol: View {
     
     var body: some View {
         ZStack {
-            let routeColor = RouteSymbol.routeToColor(route)
+            let routeColor = route.toColor()
             let routeStr: String = (route == .S || route == .FS) ? "S" : String(route.rawValue.first!)
             
             if route.rawValue.last! == "X" {
@@ -31,33 +31,6 @@ struct RouteSymbol: View {
                 .font(Font.custom("Helvetica", size: size.rawValue / 1.5))
                 .bold()
                 .foregroundColor(routeColor == .subwayYellow ? .black : .white)
-        }
-    }
-    
-    public static func routeToColor(_ route: Route) -> Color {
-        return switch route {
-        case .A, .C, .E:
-                .subwayBlue
-        case .B, .D, .F, .F_EXPRESS, .M:
-                .subwayOrange
-        case .G:
-                .subwayLime
-        case .L:
-                .subwayLightGray
-        case .J, .Z:
-                .subwayBrown
-        case .N, .Q, .R, .W:
-                .subwayYellow
-        case .ONE, .TWO, .THREE, .SI:
-                .subwayRed
-        case .FOUR, .FIVE, .SIX, .SIX_EXPRESS:
-                .subwayGreen
-        case .SEVEN, .SEVEN_EXPRESS:
-                .subwayMagenta
-        case .T:
-                .subwayTurquoise
-        case .S, .FS, .H, .X:
-                .subwayGray
         }
     }
 }

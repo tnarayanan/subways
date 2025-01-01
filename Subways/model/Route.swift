@@ -6,16 +6,63 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum Route: String, Identifiable, Comparable, Codable {
     static func < (lhs: Route, rhs: Route) -> Bool {
-        let lhsColorHash = RouteSymbol.routeToColor(lhs).hashValue
-        let rhsColorHash = RouteSymbol.routeToColor(rhs).hashValue
-        
-        if lhsColorHash == rhsColorHash {
-            return lhs.rawValue < rhs.rawValue
+        return lhs.toGroup() < rhs.toGroup() || lhs.rawValue < rhs.rawValue
+    }
+    
+    func toGroup() -> String {
+        return switch self {
+        case .A, .C, .E:
+            "ACE"
+        case .B, .D, .F, .F_EXPRESS, .M:
+            "BDFM"
+        case .G:
+            "G"
+        case .J, .Z:
+            "JZ"
+        case .N, .Q, .R, .W:
+            "NQRW"
+        case .ONE, .TWO, .THREE:
+            "123"
+        case .FOUR, .FIVE, .SIX, .SIX_EXPRESS:
+            "456"
+        case .SEVEN, .SEVEN_EXPRESS:
+            "7"
+        case .T:
+            "T"
+        default:
+            "other"
         }
-        return lhsColorHash < rhsColorHash
+    }
+    
+    func toColor() -> Color {
+        return switch self {
+        case .A, .C, .E:
+                .subwayBlue
+        case .B, .D, .F, .F_EXPRESS, .M:
+                .subwayOrange
+        case .G:
+                .subwayLime
+        case .L:
+                .subwayLightGray
+        case .J, .Z:
+                .subwayBrown
+        case .N, .Q, .R, .W:
+                .subwayYellow
+        case .ONE, .TWO, .THREE, .SI:
+                .subwayRed
+        case .FOUR, .FIVE, .SIX, .SIX_EXPRESS:
+                .subwayGreen
+        case .SEVEN, .SEVEN_EXPRESS:
+                .subwayMagenta
+        case .T:
+                .subwayTurquoise
+        case .S, .FS, .H, .X:
+                .subwayGray
+        }
     }
     
     var id: String {
