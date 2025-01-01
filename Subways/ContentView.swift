@@ -28,7 +28,7 @@ struct ContentView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
-                    StationRouteSymbols(station: station, routeSymbolSize: .large)
+                    StationRouteSymbols(station: station, routeSymbolSize: .stationHeader)
                     
                     if let lastUpdate = viewModel.lastUpdate {
                         // has loaded data

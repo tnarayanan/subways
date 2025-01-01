@@ -21,7 +21,7 @@ struct StationButton: View {
             VStack(alignment: .leading) {
                 Text(station.name)
                 HStack {
-                    StationRouteSymbols(station: station, routeSymbolSize: .medium)
+                    StationRouteSymbols(station: station, routeSymbolSize: .stationList)
                     Spacer()
                 }
             }

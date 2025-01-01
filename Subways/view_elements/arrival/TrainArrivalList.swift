@@ -16,6 +16,11 @@ struct TrainArrivalList: View {
     var direction: Direction
     var date: Date
     
+    var shouldShowLimitedOptions: Bool
+    
+    let limitedOptionsCount: Int = 3
+    @State var limitedElementsShown: Bool = true
+    
     var body: some View {
         let groupBoxColor = colorScheme == .dark ? Color(UIColor.systemGray6) : Color.white
         
@@ -29,18 +34,40 @@ struct TrainArrivalList: View {
                         Text("No scheduled arrivals")
                         Spacer()
                     }
-                } else {
+                } else if !shouldShowLimitedOptions || arrivals.count <= limitedOptionsCount {
                     ForEach(Array(arrivals.sorted().enumerated()), id: \.offset) { index, arrival in
-                        TrainArrivalListItem(trainArrival: arrival, curTime: date)
+                        TrainArrivalListItem(trainArrival: arrival, curTime: date, showDivider: index != arrivals.count - 1)
                             .padding(.top, index == 0 ? 0 : 4)
-                            .padding(.bottom, index == arrivals.count - 1 ? 0 : 4)
-                        if index != arrivals.count - 1 {
-                            Divider()
-                        }
+                            .padding(.bottom, index != arrivals.count - 1 ? 4 : 0)
                     }
+                } else {
+                    let numElementsShown: Int = limitedElementsShown ? limitedOptionsCount : arrivals.count
+                    ForEach(Array(arrivals.sorted().prefix(numElementsShown).enumerated()), id: \.offset) { index, arrival in
+                        TrainArrivalListItem(trainArrival: arrival, curTime: date, showDivider: true)
+                            .padding(.top, index == 0 ? 0 : 4)
+                            .padding(.bottom, 4)
+                            .animation(nil, value: limitedElementsShown)
+                    }
+                    Button {
+                        withAnimation {
+                            limitedElementsShown.toggle()
+                        }
+                    } label: {
+                        HStack {
+                            Label(limitedElementsShown ? "Show more arrivals" : "Show fewer arrivals",
+                                  systemImage: "chevron.\(limitedElementsShown ? "right" : "up")")
+                            Spacer()
+                        }
+                        .padding(.top, 4)
+                        .padding(.bottom, 0)
+                    }
+                    .contentTransition(.symbolEffect(.replace))
+                    .foregroundStyle(.primary)
+                    .buttonStyle(BorderlessButtonStyle())
                 }
             }
         }
+        .clipped()
         .backgroundStyle(groupBoxColor)
     }
 }
@@ -57,13 +84,15 @@ struct TrainArrivalList: View {
                 TrainArrival(tripId: "t3", route: .SIX_EXPRESS, direction: .DOWNTOWN, time: Date().addingTimeInterval(-32))
             ],
             direction: .DOWNTOWN,
-            date: Date()
+            date: Date(),
+            shouldShowLimitedOptions: true
         )
         .padding(.horizontal)
         TrainArrivalList(
             arrivals: [],
             direction: .UPTOWN,
-            date: Date()
+            date: Date(),
+            shouldShowLimitedOptions: true
         )
         .padding(.horizontal)
         Spacer()

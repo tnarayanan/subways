@@ -32,14 +32,15 @@ struct StationArrivalsView: View {
                 
                 // train arrival lists
                 if horizontalSizeClass == .compact {
-                    TrainArrivalList(arrivals: downtownArrivals, direction: .DOWNTOWN, date: timeline.date)
-                    TrainArrivalList(arrivals: uptownArrivals, direction: .UPTOWN, date: timeline.date)
+                    TrainArrivalList(arrivals: downtownArrivals, direction: .DOWNTOWN, date: timeline.date, shouldShowLimitedOptions: true)
+                    TrainArrivalList(arrivals: uptownArrivals, direction: .UPTOWN, date: timeline.date, shouldShowLimitedOptions: true)
                 } else {
                     HStack(alignment: .top) {
-                        TrainArrivalList(arrivals: downtownArrivals, direction: .DOWNTOWN, date: timeline.date)
-                        TrainArrivalList(arrivals: uptownArrivals, direction: .UPTOWN, date: timeline.date)
+                        TrainArrivalList(arrivals: downtownArrivals, direction: .DOWNTOWN, date: timeline.date, shouldShowLimitedOptions: false)
+                        TrainArrivalList(arrivals: uptownArrivals, direction: .UPTOWN, date: timeline.date, shouldShowLimitedOptions: false)
                     }
                 }
+                Spacer()
             }
         }
     }

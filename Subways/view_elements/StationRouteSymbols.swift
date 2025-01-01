@@ -22,5 +22,5 @@ struct StationRouteSymbols: View {
 }
 
 #Preview {
-    StationRouteSymbols(station: Station.get(id: "R30"), routeSymbolSize: .large)
+    StationRouteSymbols(station: Station.get(id: "R30"), routeSymbolSize: .stationHeader)
 }

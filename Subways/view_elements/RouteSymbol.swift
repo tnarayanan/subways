@@ -63,24 +63,24 @@ struct RouteSymbol: View {
 }
 
 enum RouteSymbolSize: CGFloat {
-    case regular = 24
-    case medium = 27
-    case large = 33
+    case arrival = 30
+    case stationList = 27
+    case stationHeader = 39
 }
 
 #Preview {
     VStack(alignment: .leading) {
-        RouteSymbol(route: .SIX_EXPRESS, size: .regular)
-        RouteSymbol(route: .SIX, size: .regular)
+        RouteSymbol(route: .SIX_EXPRESS, size: .arrival)
+        RouteSymbol(route: .SIX, size: .arrival)
     }.background(.red)
     
     VStack {
         let routes: [Route] = [.ONE, .B, .N, .G, .FOUR, .SIX_EXPRESS, .T, .A, .SEVEN, .SEVEN_EXPRESS, .J, .S, .L]
         ForEach(routes) { route in
             HStack {
-                RouteSymbol(route: route, size: .regular)
-                RouteSymbol(route: route, size: .medium)
-                RouteSymbol(route: route, size: .large)
+                RouteSymbol(route: route, size: .arrival)
+                RouteSymbol(route: route, size: .stationList)
+                RouteSymbol(route: route, size: .stationHeader)
             }
         }
     }
