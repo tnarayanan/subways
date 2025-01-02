@@ -21,7 +21,7 @@ struct TrainArrivalListItem: View {
                 VStack(alignment: .leading) {
                     let minutes = diffs.minute ?? 0
                     let seconds = diffs.second ?? 0
-                    let timeStr = "\(abs(minutes)) min \(abs(seconds)) sec"
+                    let timeStr = minutes == 0 ? "\(abs(seconds)) sec" : "\(abs(minutes)) min \(abs(seconds)) sec"
                     
                     if (minutes >= 0 && seconds >= 0) {
                         Text("in \(timeStr)")
