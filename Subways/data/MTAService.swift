@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseAppCheck
 
 enum ArrivalQueryStatus {
     case SUCCESS, FAILURE, CANCELLED, NO_INTERNET
@@ -30,8 +31,19 @@ actor MTAService {
 
     private func queryData(for station: Station) async -> (status: ArrivalQueryStatus, response: Response?) {
         if let url = URL(string: "\(baseUrlString)\(station.stationId)") {
+            var tokenString: String
             do {
-                let (responseData, _) = try await URLSession.shared.data(from: url)
+                tokenString = try await AppCheck.appCheck().token(forcingRefresh: false).token
+            } catch let error {
+                print("Firebase App Check error: \(error)")
+                return (.FAILURE, nil)
+            }
+            do {
+                var request = URLRequest(url: url)
+                
+                request.addValue(tokenString, forHTTPHeaderField: "X-Firebase-App-Check")
+                
+                let (responseData, _) = try await URLSession.shared.data(for: request)
                 let response = try JSONDecoder().decode(Response.self, from: responseData)
                 return (.SUCCESS, response)
             } catch let error {

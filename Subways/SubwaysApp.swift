@@ -7,10 +7,30 @@
 
 import SwiftUI
 import SwiftData
+import FirebaseCore
+import FirebaseAppCheck
+
+class SubwaysAppCheckProviderFactory: NSObject, AppCheckProviderFactory {
+  func createProvider(with app: FirebaseApp) -> AppCheckProvider? {
+    return AppAttestProvider(app: app)
+  }
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication,
+                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        let providerFactory = SubwaysAppCheckProviderFactory()
+        AppCheck.setAppCheckProviderFactory(providerFactory)
+
+        FirebaseApp.configure()
+        return true
+    }
+}
 
 @main
 @MainActor
 struct SubwaysApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     @MainActor
     let container: ModelContainer = {
