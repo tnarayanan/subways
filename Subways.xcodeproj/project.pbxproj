@@ -15,16 +15,10 @@
 		96C514532C375203009CAE08 /* SubwaysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514522C375203009CAE08 /* SubwaysTests.swift */; };
 		96C5145D2C375203009CAE08 /* SubwaysUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5145C2C375203009CAE08 /* SubwaysUITests.swift */; };
 		96C5145F2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5145E2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift */; };
-		96C514742C375588009CAE08 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 96C514732C375588009CAE08 /* SwiftProtobuf */; };
-		96C514762C375588009CAE08 /* SwiftProtobufPluginLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 96C514752C375588009CAE08 /* SwiftProtobufPluginLibrary */; };
-		96C5147B2C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514792C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift */; };
-		96C5147C2C375E9E009CAE08 /* gtfs-realtime.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5147A2C375E9E009CAE08 /* gtfs-realtime.pb.swift */; };
 		96C5147E2C376608009CAE08 /* MTAService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5147D2C376608009CAE08 /* MTAService.swift */; };
 		96C514812C376C1A009CAE08 /* TrainArrival.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514802C376C1A009CAE08 /* TrainArrival.swift */; };
 		96C514832C376C33009CAE08 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514822C376C33009CAE08 /* Route.swift */; };
 		96C514872C379322009CAE08 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514862C379322009CAE08 /* Direction.swift */; };
-		96C5148C2C379A0A009CAE08 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 96C5148B2C379A0A009CAE08 /* Collections */; };
-		96C5148E2C379A0A009CAE08 /* HeapModule in Frameworks */ = {isa = PBXBuildFile; productRef = 96C5148D2C379A0A009CAE08 /* HeapModule */; };
 		96C514912C379DE1009CAE08 /* TrainArrivalListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514902C379DE1009CAE08 /* TrainArrivalListItem.swift */; };
 		96C514932C379E8A009CAE08 /* RouteSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514922C379E8A009CAE08 /* RouteSymbol.swift */; };
 		96C5149E2C37A618009CAE08 /* agency.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96C514942C37A618009CAE08 /* agency.txt */; };
@@ -77,8 +71,6 @@
 		96C514582C375203009CAE08 /* SubwaysUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SubwaysUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		96C5145C2C375203009CAE08 /* SubwaysUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwaysUITests.swift; sourceTree = "<group>"; };
 		96C5145E2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwaysUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		96C514792C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "gtfs-realtime-NYCT.pb.swift"; sourceTree = "<group>"; };
-		96C5147A2C375E9E009CAE08 /* gtfs-realtime.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "gtfs-realtime.pb.swift"; sourceTree = "<group>"; };
 		96C5147D2C376608009CAE08 /* MTAService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTAService.swift; sourceTree = "<group>"; };
 		96C514802C376C1A009CAE08 /* TrainArrival.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainArrival.swift; sourceTree = "<group>"; };
 		96C514822C376C33009CAE08 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
@@ -110,10 +102,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96C5148C2C379A0A009CAE08 /* Collections in Frameworks */,
-				96C514762C375588009CAE08 /* SwiftProtobufPluginLibrary in Frameworks */,
-				96C5148E2C379A0A009CAE08 /* HeapModule in Frameworks */,
-				96C514742C375588009CAE08 /* SwiftProtobuf in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,7 +147,6 @@
 			children = (
 				96C5149D2C37A618009CAE08 /* static_data */,
 				96C5148F2C379DBD009CAE08 /* view_elements */,
-				96C5146E2C37551A009CAE08 /* proto */,
 				96C5143E2C375202009CAE08 /* SubwaysApp.swift */,
 				96C514402C375202009CAE08 /* ContentView.swift */,
 				96C514B72C3B03B6009CAE08 /* SearchForStationView.swift */,
@@ -196,15 +183,6 @@
 				96C5145E2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift */,
 			);
 			path = SubwaysUITests;
-			sourceTree = "<group>";
-		};
-		96C5146E2C37551A009CAE08 /* proto */ = {
-			isa = PBXGroup;
-			children = (
-				96C514792C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift */,
-				96C5147A2C375E9E009CAE08 /* gtfs-realtime.pb.swift */,
-			);
-			path = proto;
 			sourceTree = "<group>";
 		};
 		96C5147F2C376BF5009CAE08 /* model */ = {
@@ -291,10 +269,6 @@
 			);
 			name = Subways;
 			packageProductDependencies = (
-				96C514732C375588009CAE08 /* SwiftProtobuf */,
-				96C514752C375588009CAE08 /* SwiftProtobufPluginLibrary */,
-				96C5148B2C379A0A009CAE08 /* Collections */,
-				96C5148D2C379A0A009CAE08 /* HeapModule */,
 			);
 			productName = Subways;
 			productReference = 96C5143B2C375202009CAE08 /* Subways.app */;
@@ -369,8 +343,6 @@
 			);
 			mainGroup = 96C514322C375202009CAE08;
 			packageReferences = (
-				96C514722C375588009CAE08 /* XCRemoteSwiftPackageReference "swift-protobuf" */,
-				96C5148A2C379A0A009CAE08 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 96C5143C2C375202009CAE08 /* Products */;
 			projectDirPath = "";
@@ -427,7 +399,6 @@
 				96C514412C375202009CAE08 /* ContentView.swift in Sources */,
 				96C514932C379E8A009CAE08 /* RouteSymbol.swift in Sources */,
 				96E4DD982D21F3A000DEA3B3 /* LastUpdateLabel.swift in Sources */,
-				96C5147B2C375E9E009CAE08 /* gtfs-realtime-NYCT.pb.swift in Sources */,
 				96A94D152C3CC535008CFC18 /* TrainArrivalList.swift in Sources */,
 				96C514872C379322009CAE08 /* Direction.swift in Sources */,
 				96C514AA2C37B71B009CAE08 /* Station.swift in Sources */,
@@ -440,7 +411,6 @@
 				96E4DD942D21323E00DEA3B3 /* QueryStatusLabel.swift in Sources */,
 				96E4DD9A2D21F43F00DEA3B3 /* StationArrivalsView.swift in Sources */,
 				96C514B42C3AF1AE009CAE08 /* FavoriteStationsView.swift in Sources */,
-				96C5147C2C375E9E009CAE08 /* gtfs-realtime.pb.swift in Sources */,
 				96C514912C379DE1009CAE08 /* TrainArrivalListItem.swift in Sources */,
 				96C514B82C3B03B6009CAE08 /* SearchForStationView.swift in Sources */,
 			);
@@ -815,48 +785,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		96C514722C375588009CAE08 /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-protobuf.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.26.0;
-			};
-		};
-		96C5148A2C379A0A009CAE08 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-collections.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		96C514732C375588009CAE08 /* SwiftProtobuf */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 96C514722C375588009CAE08 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
-			productName = SwiftProtobuf;
-		};
-		96C514752C375588009CAE08 /* SwiftProtobufPluginLibrary */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 96C514722C375588009CAE08 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
-			productName = SwiftProtobufPluginLibrary;
-		};
-		96C5148B2C379A0A009CAE08 /* Collections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 96C5148A2C379A0A009CAE08 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = Collections;
-		};
-		96C5148D2C379A0A009CAE08 /* HeapModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 96C5148A2C379A0A009CAE08 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = HeapModule;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 96C514332C375202009CAE08 /* Project object */;
 }

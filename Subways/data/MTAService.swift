@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import HeapModule
-import SwiftData
 
 enum ArrivalQueryStatus {
     case SUCCESS, FAILURE, CANCELLED, NO_INTERNET
