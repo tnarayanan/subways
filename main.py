@@ -1,13 +1,11 @@
-import os
-from datetime import datetime
-import time
-import random
-
-from flask import Flask, request
+import asyncio
+from datetime import datetime, timedelta
 
 from mta_service import MTAService
 
-app = Flask(__name__)
+from fastapi import FastAPI, HTTPException
+
+app = FastAPI()
 
 
 station_jsons = None
@@ -15,18 +13,21 @@ last_update = None
 
 mta_service = MTAService()
 
-@app.route("/arrivals/<station_id>")
-def get_station_arrivals(station_id):
-    global station_jsons, last_update
+DATA_REFRESH_INTERVAL = timedelta(seconds=10)
+data_fetch_lock = asyncio.Lock()
 
-    if last_update is None or (datetime.now() - last_update).total_seconds() > 10:
-        last_update, station_jsons = mta_service.fetch_arrivals()
+async def refresh_cache_if_needed():
+    global station_jsons, last_update, data_fetch_lock
+    async with data_fetch_lock:
+        if not last_update or datetime.now() - last_update > DATA_REFRESH_INTERVAL:
+            last_update, station_jsons = await mta_service.fetch_arrivals()
+
+
+@app.get("/arrivals/{station_id}")
+async def get_station_arrivals(station_id: str):
+    global station_jsons, last_update
+    await refresh_cache_if_needed()
 
     if station_id in station_jsons:
         return station_jsons[station_id]
-    return mta_service.DEFAULT_JSON
-
-
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
-
+    return HTTPException(status_code=404, detail="Station not found")

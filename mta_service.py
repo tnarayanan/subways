@@ -1,9 +1,7 @@
 import heapq
-import requests
+import httpx
 
 from datetime import datetime, timedelta
-
-import orjson
 
 from proto.gtfs_realtime_pb2 import FeedMessage
 from train_arrival import TrainArrival
@@ -15,21 +13,25 @@ class MTAService:
     BASE_URL = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs"
     ENDPOINTS = ["-ace", "-bdfm", "-g", "-jz", "-nqrw", "-l", "", "-si"]
 
-    DEFAULT_JSON = orjson.dumps({DOWNTOWN: [], UPTOWN: []})
+    async def _make_mta_request(self) -> list[FeedMessage]:
+        messages = []
+        async with httpx.AsyncClient() as client:
+            for endpoint in self.ENDPOINTS:
+                raw_bytes = await client.get(f"{self.BASE_URL}{endpoint}")
+                message = FeedMessage()
+                message.ParseFromString(raw_bytes.read())
+                messages.append(message)
 
-    def _make_mta_request(self, endpoint: str) -> FeedMessage:
-        raw_bytes = requests.get(f"{self.BASE_URL}{endpoint}").content
-        message = FeedMessage()
-        message.ParseFromString(raw_bytes)
-        return message
+        return messages
     
-    def fetch_arrivals(self) -> tuple[datetime, dict[str: dict[str: TrainArrival]]]:
+    async def fetch_arrivals(self) -> tuple[datetime, dict[str: dict[str: TrainArrival]]]:
         start = datetime.now()
         one_minute_ago = start - timedelta(minutes=1)
 
         station_arrival_heaps = {}
-        for endpoint in self.ENDPOINTS:
-            message = self._make_mta_request(endpoint)
+        messages = await self._make_mta_request()
+
+        for message in messages:
             for entity in message.entity:
                 if not entity.HasField("trip_update"):
                     continue
@@ -61,11 +63,8 @@ class MTAService:
                     else:
                         heapq.heappush(station_arrival_heaps[stop_id][direction], train_arrival)
         print(datetime.now() - start)
-
-        json_values = {stop_id: orjson.dumps(station_arrival_heaps[stop_id]) for stop_id in station_arrival_heaps}
-        print(len(json_values["631"]))
-
-        return start, json_values
+        
+        return start, station_arrival_heaps
 
 if __name__ == '__main__':
     MTAService().fetch_arrivals()
