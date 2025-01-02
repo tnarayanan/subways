@@ -100,20 +100,10 @@ struct ContentView: View {
     private func startFetchingArrivals(for station: Station) async {
         print("====== BEGIN FETCH TASK FOR \(station.name)")
         do {
-            print("@@ Initial update for \(station.name)")
-            viewModel.updateArrivals(for: station)
             while !Task.isCancelled {
                 print("@@ Fetching arrivals...")
-                await viewModel.fetchArrivals()
+                await viewModel.fetchArrivals(for: station)
                 print("@@ Fetched arrivals")
-                
-                guard !Task.isCancelled else {
-                    print("====== CANCEL FETCH TASK FOR \(station.name)")
-                    break
-                }
-                
-                viewModel.updateArrivals(for: station)
-                print("@@ Updated arrivals for \(station.name)")
                 
                 guard !Task.isCancelled else {
                     print("====== CANCEL FETCH TASK FOR \(station.name)")

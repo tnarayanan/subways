@@ -9,110 +9,75 @@ import Foundation
 import HeapModule
 import SwiftData
 
-enum DataSource: String, CaseIterable, Codable {
-    case ACE = "-ace"
-    case BDFM = "-bdfm"
-    case G = "-g"
-    case JZ = "-jz"
-    case NQRW = "-nqrw"
-    case L = "-l"
-    case NUMS = ""
-    case SI = "-si"
-}
-
 enum ArrivalQueryStatus {
     case SUCCESS, FAILURE, CANCELLED, NO_INTERNET
 }
 
+struct Response: Codable {
+    let D: [TrainArrivalResponse]
+    let U: [TrainArrivalResponse]
+    let asOf: Int
+}
+
+struct TrainArrivalResponse: Codable {
+    let id: String
+    let rt: String
+    let dir: String
+    let time: Int
+}
+
 //@ModelActor
 actor MTAService {
-    private let baseUrlString = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs"
+    private let baseUrlString = "https://subways-api.tejasnarayanan.com/arrivals/"
 
-    private func queryData() async -> (status: ArrivalQueryStatus, messages: [DataSource: TransitRealtime_FeedMessage]) {
-        var messages: [DataSource: TransitRealtime_FeedMessage] = [:]
-        
-        for dataSource in DataSource.allCases {
-            let url = URL(string: "\(baseUrlString)\(dataSource.rawValue)")!
+    private func queryData(for station: Station) async -> (status: ArrivalQueryStatus, response: Response?) {
+        if let url = URL(string: "\(baseUrlString)\(station.stationId)") {
             do {
-                let (messageData, _) = try await URLSession.shared.data(from: url)
-                let message = try TransitRealtime_FeedMessage.init(contiguousBytes: messageData, extensions: TransitRealtime_Gtfs_u45Realtime_u45Nyct_Extensions)
-                messages[dataSource] = message
+                let (responseData, _) = try await URLSession.shared.data(from: url)
+                let response = try JSONDecoder().decode(Response.self, from: responseData)
+                return (.SUCCESS, response)
             } catch let error {
                 if let urlError = error as? URLError {
                     if urlError.code == .notConnectedToInternet {
-                        return (.NO_INTERNET, [:])
+                        return (.NO_INTERNET, nil)
                     } else if urlError.code == .cancelled {
-                        return (.CANCELLED, [:])
+                        return (.CANCELLED, nil)
                     }
                 }
                 print(error)
-                return (.FAILURE, [:])
+                return (.FAILURE, nil)
             }
         }
-        return (.SUCCESS, messages)
+        return (.FAILURE, nil)
     }
     
-    func fetchArrivals() async -> (status: ArrivalQueryStatus, arrivals: [String: [Direction: Heap<TrainArrival>]]) {
-        var stationArrivalHeaps: [String: [Direction: Heap<TrainArrival>]] = [:]
-        
-        let asOfTime: Date = Date()
-        
+    func fetchArrivals(for station: Station) async -> (status: ArrivalQueryStatus, arrivals: [Direction: [TrainArrival]], asOf: Date?) {
         let clock = ContinuousClock()
         
-        var queryResult: (status: ArrivalQueryStatus, messages: [DataSource: TransitRealtime_FeedMessage]) = (status: .FAILURE, messages: [:])
+        var queryResult: (status: ArrivalQueryStatus, response: Response?) = (status: .FAILURE, response: nil)
         
         let time = await clock.measure {
-            queryResult = await queryData()
+            queryResult = await queryData(for: station)
         }
         print("Querying data took \(time)")
-        if queryResult.status != .SUCCESS {
-            return (queryResult.status, [:])
+        if queryResult.status != .SUCCESS || queryResult.response == nil {
+            return (queryResult.status, [:], nil)
         }
         
-        let oneMinuteAgo: Date = asOfTime.addingTimeInterval(-60)
+        let arrivals: [Direction: [TrainArrival]] = [
+            .DOWNTOWN: queryResult.response!.D.map(trainArrivalResponseToTrainArrival),
+            .UPTOWN: queryResult.response!.U.map(trainArrivalResponseToTrainArrival)
+        ]
         
-        var numTotalArrivals = 0
-        
-        for msg in queryResult.messages.values {
-            for ent in msg.entity.filter({$0.hasTripUpdate}) {
-                let tripUpdate = ent.tripUpdate
-                
-                let tripID = tripUpdate.trip.tripID
-                let route = tripUpdate.trip.hasRouteID ? tripUpdate.trip.routeID : "X"
-                
-                for stopTimeUpdate in tripUpdate.stopTimeUpdate {
-                    let stopIDWithDirection = stopTimeUpdate.hasStopID ? stopTimeUpdate.stopID : "X"
-                    let direction = stopIDWithDirection.last! == "N" ? Direction.UPTOWN : Direction.DOWNTOWN
-                    let stopID = String(stopIDWithDirection.dropLast())
-                    
-                    if !stationArrivalHeaps.keys.contains(stopID) {
-                        stationArrivalHeaps[stopID] = [.DOWNTOWN: [], .UPTOWN: []]
-                    }
-                    
-                    var timestamp: Int64 = 0
-                    if stopTimeUpdate.hasArrival {
-                        timestamp = stopTimeUpdate.arrival.time
-                    } else if stopTimeUpdate.hasDeparture {
-                        timestamp = stopTimeUpdate.departure.time
-                    }
-                    let trainArrival = TrainArrival(tripId: tripID + "_" + stopID, route: Route(rawValue: route) ?? Route.X, direction: direction, time: Date(timeIntervalSince1970: TimeInterval(timestamp)))
-                    
-                    numTotalArrivals += 1
-                    
-                    if trainArrival.time < oneMinuteAgo {
-                        continue
-                    }
-                    
-                    stationArrivalHeaps[stopID]![direction]!.insert(trainArrival)
-                    if stationArrivalHeaps[stopID]![direction]!.count > 7 {
-                        stationArrivalHeaps[stopID]![direction]!.removeMax()
-                    }
-                }
-            }
-        }
-        
-        print("total \(numTotalArrivals)")
-        
-        return (.SUCCESS, stationArrivalHeaps)
+        return (.SUCCESS, arrivals, Date(timeIntervalSince1970: TimeInterval(queryResult.response!.asOf)))
+    }
+    
+    private func trainArrivalResponseToTrainArrival(_ resp: TrainArrivalResponse) -> TrainArrival {
+        return TrainArrival(
+            tripId: resp.id,
+            route: Route(rawValue: resp.rt) ?? Route.X,
+            direction: resp.dir == "D" ? .DOWNTOWN : .UPTOWN,
+            time: Date(timeIntervalSince1970: TimeInterval(resp.time))
+        )
     }
 }

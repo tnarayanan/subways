@@ -16,10 +16,9 @@ class ViewModel: ObservableObject {
     
     @Published var queryStatus: ArrivalQueryStatus = .SUCCESS
     @Published var lastUpdate: Date? = nil
+    private var lastUpdateStationId: String? = nil
     
-    @Published var numOngoingFetches = 0
-    
-    private var stationArrivals: [String: [Direction: Heap<TrainArrival>]] = [:]
+    @Published var numOngoingFetches: Int = 0
     
     let mtaService: MTAService
     
@@ -28,10 +27,17 @@ class ViewModel: ObservableObject {
         self.mtaService = MTAService()
     }
     
-    func fetchArrivals() async {
-        let asOfDate: Date = Date()
+    func fetchArrivals(for station: Station) async {
+        if (lastUpdateStationId != station.stationId) {
+            // the last station to be updated is not the current one, so
+            // we should show the full-screen loading while we load
+            lastUpdate = nil
+            lastUpdateStationId = station.stationId
+            objectWillChange.send()
+        }
+        
         numOngoingFetches += 1
-        let fetchResult = await mtaService.fetchArrivals()
+        let fetchResult = await mtaService.fetchArrivals(for: station)
         numOngoingFetches -= 1
         if fetchResult.status == .CANCELLED {
             // ignore request
@@ -42,20 +48,15 @@ class ViewModel: ObservableObject {
             queryStatus = fetchResult.status
         }
         if queryStatus == .SUCCESS {
-            lastUpdate = asOfDate
-            stationArrivals = fetchResult.arrivals
+            lastUpdate = fetchResult.asOf
+            downtownArrivals = fetchResult.arrivals[.DOWNTOWN] ?? []
+            uptownArrivals = fetchResult.arrivals[.UPTOWN] ?? []
             print("Query SUCCESS: arrivals backing updated at \(lastUpdate!)")
+            print("Updated displayed arrivals for \(station.name)")
+            // force an update
+            objectWillChange.send()
         } else {
             print("Query resulted in error: \(queryStatus)")
         }
-    }
-    
-    func updateArrivals(for station: Station) {
-        downtownArrivals = Array((stationArrivals[station.stationId]?[.DOWNTOWN]?.unordered ?? []))
-        uptownArrivals = Array((stationArrivals[station.stationId]?[.UPTOWN]?.unordered ?? []))
-        print("Updated displayed arrivals for \(station.name)")
-        
-        // force an update
-        objectWillChange.send()
     }
 }
