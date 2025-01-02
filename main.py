@@ -3,9 +3,36 @@ from datetime import datetime, timedelta
 
 from mta_service import MTAService
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi import status
 
+import firebase_admin
+from firebase_admin import app_check
+
+firebase_admin.initialize_app()
 app = FastAPI()
+
+
+@app.middleware("http")
+async def verify_app_check_token(request: Request, call_next):
+    app_check_token = request.headers.get("X-Firebase-App-Check")
+    if not app_check_token:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={"detail": "App Check token missing"}
+        )
+    
+    try:
+        app_check.verify_token(app_check_token)
+    except Exception as e:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={"detail": f"App Check token verification unsuccessful", "error_string": str(e)}
+        )
+
+    response = await call_next(request)
+    return response
 
 
 station_jsons = None
@@ -30,4 +57,7 @@ async def get_station_arrivals(station_id: str):
 
     if station_id in station_jsons:
         return station_jsons[station_id]
-    return HTTPException(status_code=404, detail="Station not found")
+    return JSONResponse(
+        status_code=status.HTTP_404_NOT_FOUND,
+        content={"detail": "Station not found"}
+    )

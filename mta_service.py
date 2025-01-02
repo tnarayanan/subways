@@ -3,7 +3,7 @@ import httpx
 
 from datetime import datetime, timedelta
 
-from proto.gtfs_realtime_pb2 import FeedMessage
+from mta_proto.gtfs_realtime_pb2 import FeedMessage
 from train_arrival import TrainArrival
 
 DOWNTOWN = "D"
@@ -63,7 +63,7 @@ class MTAService:
                     else:
                         heapq.heappush(station_arrival_heaps[stop_id][direction], train_arrival)
         print(datetime.now() - start)
-        
+
         return start, station_arrival_heaps
 
 if __name__ == '__main__':

@@ -3,3 +3,4 @@ fastapi-cli==0.0.7
 httpx==0.28.1
 protobuf==5.29.2
 uvicorn==0.34.0
+firebase-admin==6.6.0
