@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ActivityKit
 
 struct TrainArrivalListItem: View {
     var trainArrival: TrainArrival
@@ -37,12 +38,25 @@ struct TrainArrivalListItem: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Button(action: {}, label: {
+                Button(action: addLiveActivity, label: {
                     Label("Add to live activity", systemImage: "clock.badge").labelStyle(.iconOnly)
-                }).foregroundStyle(.secondary).hidden()
+                }).foregroundStyle(.secondary)
             }
             if showDivider {
                 Divider()
+            }
+        }
+    }
+    
+    func addLiveActivity() {
+        if ActivityAuthorizationInfo().areActivitiesEnabled {
+            do {
+                let arrival = ArrivalStatusAttributes(stationName: "Test", direction: trainArrival.direction, route: trainArrival.route)
+                let initialState = ArrivalStatusAttributes.ContentState(arrivalTime: trainArrival.time)
+                
+                let _ = try Activity.request(attributes: arrival, content: .init(state: initialState, staleDate: nil), pushType: .none)
+            } catch let error {
+                fatalError(error.localizedDescription)
             }
         }
     }
