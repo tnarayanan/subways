@@ -13,6 +13,8 @@ struct TrainArrivalListItem: View {
     var curTime: Date
     var showDivider: Bool
     
+    @EnvironmentObject var viewModel: ViewModel
+    
     var body: some View {
         let diffs = Calendar.current.dateComponents([.minute, .second], from: curTime, to: trainArrival.time)
         VStack {
@@ -38,25 +40,12 @@ struct TrainArrivalListItem: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Button(action: addLiveActivity, label: {
+                Button(action: { viewModel.addLiveActivity(for: trainArrival) }, label: {
                     Label("Add to live activity", systemImage: "clock.badge").labelStyle(.iconOnly)
                 }).foregroundStyle(.secondary)
             }
             if showDivider {
                 Divider()
-            }
-        }
-    }
-    
-    func addLiveActivity() {
-        if ActivityAuthorizationInfo().areActivitiesEnabled {
-            do {
-                let arrival = ArrivalStatusAttributes(stationName: "Test", direction: trainArrival.direction, route: trainArrival.route)
-                let initialState = ArrivalStatusAttributes.ContentState(arrivalTime: trainArrival.time)
-                
-                let _ = try Activity.request(attributes: arrival, content: .init(state: initialState, staleDate: nil), pushType: .none)
-            } catch let error {
-                fatalError(error.localizedDescription)
             }
         }
     }

@@ -28,23 +28,24 @@ struct ArrivalStatusLiveActivityView: View {
                 .foregroundStyle(.secondary)
             HStack {
                 RouteSymbol(route: route, size: .stationHeader)
-                Text(" in")
-                    .font(.title2)
-                    .padding(.trailing, 0)
-            
-//                    Text(TimeDataSource<Date>.durationOffset(to: arrivalTime), format: .units(allowed: [.minutes, .seconds], width: .abbreviated, fractionalPart: .hide(rounded: .down)))
-//                    Text(TimeDataSource<Date>.currentDate, format: .offset(to: arrivalTime, allowedFields: [.minute, .second], sign: .never))
-//                    Text(TimeDataSource<Date>.currentDate, format: .reference(to: arrivalTime, allowedFields: [.minute, .second]))
-                Text(TimeDataSource<Date>.currentDate, format: .timer(countingDownIn:Date.now..<arrivalTime)) // ****
-//                    Text(TimeDataSource<Date>.currentDate, format: .timer(countingDownIn: Date.now..<arrivalTime, showHours: false))
-//                    Text(TimeDataSource<Date>.durationOffset(to: arrivalTime), format: .units(allowed: [.minutes, .seconds], width: .abbreviated, fractionalPart: .hide(rounded: .down)))
-//                        .font(.title2)
-//                        .monospacedDigit()
-//                    timeRemainingText(curTime: TimeDataSource.currentDate, arrivalTime: arrivalTime)
-//                    Text(timerInterval: TimeDataSource<Date>.dateRange(endingAt: arrivalTime), pauseTime: arrivalTime, showsHours: false)
-                    .font(.title2)
-                    .monospacedDigit()
-                
+                if Date() > arrivalTime {
+                    Text(TimeDataSource<Date>.currentDate, format: .timer(countingUpIn:arrivalTime..<arrivalTime.addingTimeInterval(60)))
+                        .font(.title2)
+                        .monospacedDigit()
+                        .foregroundStyle(.red)
+                    Text(" ago")
+                        .font(.title2)
+                        .padding(.trailing, 0)
+                        .foregroundStyle(.red)
+                } else {
+                    Text(" in")
+                        .font(.title2)
+                        .padding(.trailing, 0)
+                    Text(TimeDataSource<Date>.currentDate, format: .timer(countingDownIn:Date.now..<arrivalTime))
+                        .font(.title2)
+                        .monospacedDigit()
+                }
+
                 let arrivalTimeStr = arrivalTime.formatted(date: .omitted, time: .shortened)
                 Text("  \(arrivalTimeStr)")
                     .font(.title2)
@@ -54,25 +55,6 @@ struct ArrivalStatusLiveActivityView: View {
             }
         }
     }
-    
-//    func timeRemainingText(curTime: Date, arrivalTime: Date) -> Text {
-//        let diffs = Calendar.current.dateComponents([.minute, .second], from: curTime, to: arrivalTime)
-//        
-//        let minutes = diffs.minute ?? 0
-//        let seconds = diffs.second ?? 0
-//        let timeStr = minutes == 0 ? "\(abs(seconds)) sec" : "\(abs(minutes)) min \(abs(seconds)) sec"
-//    
-//        if (minutes >= 0 && seconds >= 0) {
-//            return Text(" in \(timeStr)")
-//                .font(.title2)
-//                .monospacedDigit()
-//        } else {
-//            return Text(" \(timeStr) ago")
-//                .monospacedDigit()
-//                .font(.title2)
-//                .foregroundStyle(Color.red)
-//        }
-//    }
 }
 
 //#Preview {

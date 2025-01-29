@@ -16,6 +16,7 @@ struct ArrivalStatusAttributes: ActivityAttributes {
     }
 
     // Fixed non-changing properties about your activity go here!
+    var tripId: String
     var stationName: String
     var direction: Direction
     var route: Route
@@ -39,25 +40,16 @@ struct ArrivalStatusLiveActivity: Widget {
                 RouteSymbol(route: context.attributes.route, size: .stationList)
             } compactTrailing: {
                 let arrivalTime: Date = context.state.arrivalTime
-                
-                /*let diffs = Calendar.current.dateComponents([.minute, .second], from: Date(), to: arrivalTime)
-                
-                let minutes = diffs.minute ?? 0
-                let seconds = diffs.second ?? 0
-                let timeStr = minutes == 0 ? "\(abs(seconds))s" : "\(abs(minutes))m\(abs(seconds))s"
-                Text(" \(timeStr)")
-                    .monospacedDigit()
-                    .foregroundStyle(minutes >= 0 && seconds >= 0 ? .primary : Color.red)
-                    .onReceive(timer) { newTime in
-                        curTime = newTime
-                    }*/
-                Text("11:11").monospacedDigit()
-                    .hidden()
-                    .overlay(alignment: .leading) {
-                        Text(TimeDataSource<Date>.currentDate, format: .timer(countingDownIn:Date.now..<arrivalTime))
-                            .monospacedDigit()
-                    }
-//                    .foregroundStyle(minutes >= 0 && seconds >= 0 ? .primary : Color.red)
+                if Date() > arrivalTime.addingTimeInterval(-10) {
+                    Text("now")
+                } else {
+                    Text("11:11").monospacedDigit()
+                        .hidden()
+                        .overlay(alignment: .leading) {
+                            Text(TimeDataSource<Date>.currentDate, format: .timer(countingDownIn:Date.now..<arrivalTime))
+                                .monospacedDigit()
+                        }
+                }
             } minimal: {
                 RouteSymbol(route: context.attributes.route, size: .stationList)
             }
@@ -67,7 +59,7 @@ struct ArrivalStatusLiveActivity: Widget {
 
 extension ArrivalStatusAttributes {
     fileprivate static var preview: ArrivalStatusAttributes {
-        ArrivalStatusAttributes(stationName: "Grand Central - 42 St", direction: .DOWNTOWN, route: .SIX)
+        ArrivalStatusAttributes(tripId: "tmpTripId", stationName: "Grand Central - 42 St", direction: .DOWNTOWN, route: .SIX)
     }
 }
 

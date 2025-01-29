@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import ActivityKit
 
 @MainActor
 class ViewModel: ObservableObject {
@@ -18,6 +19,8 @@ class ViewModel: ObservableObject {
     private var lastUpdateStationId: String? = nil
     
     @Published var numOngoingFetches: Int = 0
+    
+    private var liveActivities: [String: Activity<ArrivalStatusAttributes>] = [:]
     
     let mtaService: MTAService
     
@@ -54,8 +57,50 @@ class ViewModel: ObservableObject {
             print("Updated displayed arrivals for \(station.name)")
             // force an update
             objectWillChange.send()
+            
+            await updateLiveActivities()
         } else {
             print("Query resulted in error: \(queryStatus)")
+        }
+    }
+    
+    func addLiveActivity(for trainArrival: TrainArrival) {
+        if ActivityAuthorizationInfo().areActivitiesEnabled {
+            do {
+                let arrivalAttrs = ArrivalStatusAttributes(tripId: trainArrival.tripId, stationName: "Test", direction: trainArrival.direction, route: trainArrival.route)
+                let initialState = ArrivalStatusAttributes.ContentState(arrivalTime: trainArrival.time)
+                
+                let activity = try Activity.request(attributes: arrivalAttrs, content: .init(state: initialState, staleDate: nil), pushType: .none)
+                print("Created live activity")
+            } catch let error {
+                fatalError(error.localizedDescription)
+            }
+        }
+    }
+    
+    func updateLiveActivities() async {
+        for activity in Activity<ArrivalStatusAttributes>.activities {
+            let currentActivityArrivalTime = activity.content.state.arrivalTime
+            // default to existing time
+            var newArrivalTime: Date = currentActivityArrivalTime;
+            for lst in [uptownArrivals, downtownArrivals] {
+                for arrival in lst {
+                    if arrival.tripId == activity.attributes.tripId {
+                        newArrivalTime = arrival.time
+                    }
+                }
+            }
+            let newContent = ActivityContent<ArrivalStatusAttributes.ContentState>(
+                state: ArrivalStatusAttributes.ContentState(arrivalTime: newArrivalTime),
+                staleDate: Date().addingTimeInterval(60))
+            
+            if Date() > newArrivalTime.addingTimeInterval(60) {
+                await activity.end(newContent, dismissalPolicy: .immediate)
+                print("Ended live activity")
+            } else {
+                await activity.update(newContent)
+                print("Updated live activity")
+            }
         }
     }
 }
