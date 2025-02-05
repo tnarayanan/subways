@@ -62,6 +62,8 @@ struct TrainArrivalListItem: View {
             }
         }.onAppear {
             hasActiveLiveActivity = viewModel.getTrainArrivalTripIdsWithLiveActivities().contains(trainArrival.tripId)
+        }.onChange(of: trainArrival) {
+            hasActiveLiveActivity = viewModel.getTrainArrivalTripIdsWithLiveActivities().contains(trainArrival.tripId)
         }
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 
-struct TrainArrival: Identifiable, Comparable {
+struct TrainArrival: Identifiable, Comparable, Equatable {
     let tripId: String
     let route: Route
     let direction: Direction
