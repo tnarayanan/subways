@@ -19,9 +19,6 @@
 		96C514412C375202009CAE08 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514402C375202009CAE08 /* ContentView.swift */; };
 		96C514452C375203009CAE08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96C514442C375203009CAE08 /* Assets.xcassets */; };
 		96C514492C375203009CAE08 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96C514482C375203009CAE08 /* Preview Assets.xcassets */; };
-		96C514532C375203009CAE08 /* SubwaysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514522C375203009CAE08 /* SubwaysTests.swift */; };
-		96C5145D2C375203009CAE08 /* SubwaysUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5145C2C375203009CAE08 /* SubwaysUITests.swift */; };
-		96C5145F2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5145E2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift */; };
 		96C5147E2C376608009CAE08 /* MTAService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5147D2C376608009CAE08 /* MTAService.swift */; };
 		96C514812C376C1A009CAE08 /* TrainArrival.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514802C376C1A009CAE08 /* TrainArrival.swift */; };
 		96C514912C379DE1009CAE08 /* TrainArrivalListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C514902C379DE1009CAE08 /* TrainArrivalListItem.swift */; };
@@ -68,20 +65,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 96B2F2212D3752AE0060F18E;
 			remoteInfo = SubwaysSharedFramework;
-		};
-		96C5144F2C375203009CAE08 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 96C514332C375202009CAE08 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 96C5143A2C375202009CAE08;
-			remoteInfo = Subways;
-		};
-		96C514592C375203009CAE08 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 96C514332C375202009CAE08 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 96C5143A2C375202009CAE08;
-			remoteInfo = Subways;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -134,11 +117,6 @@
 		96C514442C375203009CAE08 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		96C514462C375203009CAE08 /* Subways.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Subways.entitlements; sourceTree = "<group>"; };
 		96C514482C375203009CAE08 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		96C5144E2C375203009CAE08 /* SubwaysTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SubwaysTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		96C514522C375203009CAE08 /* SubwaysTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwaysTests.swift; sourceTree = "<group>"; };
-		96C514582C375203009CAE08 /* SubwaysUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SubwaysUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		96C5145C2C375203009CAE08 /* SubwaysUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwaysUITests.swift; sourceTree = "<group>"; };
-		96C5145E2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwaysUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		96C5147D2C376608009CAE08 /* MTAService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTAService.swift; sourceTree = "<group>"; };
 		96C514802C376C1A009CAE08 /* TrainArrival.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainArrival.swift; sourceTree = "<group>"; };
 		96C514902C379DE1009CAE08 /* TrainArrivalListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainArrivalListItem.swift; sourceTree = "<group>"; };
@@ -245,20 +223,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		96C5144B2C375203009CAE08 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		96C514552C375203009CAE08 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -275,8 +239,6 @@
 			isa = PBXGroup;
 			children = (
 				96C5143D2C375202009CAE08 /* Subways */,
-				96C514512C375203009CAE08 /* SubwaysTests */,
-				96C5145B2C375203009CAE08 /* SubwaysUITests */,
 				96B2F2082D37490C0060F18E /* ArrivalStatus */,
 				96B2F2232D3752AE0060F18E /* SubwaysSharedFramework */,
 				96B2F2032D37490C0060F18E /* Frameworks */,
@@ -288,8 +250,6 @@
 			isa = PBXGroup;
 			children = (
 				96C5143B2C375202009CAE08 /* Subways.app */,
-				96C5144E2C375203009CAE08 /* SubwaysTests.xctest */,
-				96C514582C375203009CAE08 /* SubwaysUITests.xctest */,
 				96B2F2022D37490C0060F18E /* ArrivalStatusExtension.appex */,
 				96B2F2222D3752AE0060F18E /* SubwaysSharedFramework.framework */,
 			);
@@ -322,23 +282,6 @@
 				96C514482C375203009CAE08 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		96C514512C375203009CAE08 /* SubwaysTests */ = {
-			isa = PBXGroup;
-			children = (
-				96C514522C375203009CAE08 /* SubwaysTests.swift */,
-			);
-			path = SubwaysTests;
-			sourceTree = "<group>";
-		};
-		96C5145B2C375203009CAE08 /* SubwaysUITests */ = {
-			isa = PBXGroup;
-			children = (
-				96C5145C2C375203009CAE08 /* SubwaysUITests.swift */,
-				96C5145E2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift */,
-			);
-			path = SubwaysUITests;
 			sourceTree = "<group>";
 		};
 		96C5147F2C376BF5009CAE08 /* model */ = {
@@ -489,42 +432,6 @@
 			productReference = 96C5143B2C375202009CAE08 /* Subways.app */;
 			productType = "com.apple.product-type.application";
 		};
-		96C5144D2C375203009CAE08 /* SubwaysTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 96C514652C375203009CAE08 /* Build configuration list for PBXNativeTarget "SubwaysTests" */;
-			buildPhases = (
-				96C5144A2C375203009CAE08 /* Sources */,
-				96C5144B2C375203009CAE08 /* Frameworks */,
-				96C5144C2C375203009CAE08 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				96C514502C375203009CAE08 /* PBXTargetDependency */,
-			);
-			name = SubwaysTests;
-			productName = SubwaysTests;
-			productReference = 96C5144E2C375203009CAE08 /* SubwaysTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		96C514572C375203009CAE08 /* SubwaysUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 96C514682C375203009CAE08 /* Build configuration list for PBXNativeTarget "SubwaysUITests" */;
-			buildPhases = (
-				96C514542C375203009CAE08 /* Sources */,
-				96C514552C375203009CAE08 /* Frameworks */,
-				96C514562C375203009CAE08 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				96C5145A2C375203009CAE08 /* PBXTargetDependency */,
-			);
-			name = SubwaysUITests;
-			productName = SubwaysUITests;
-			productReference = 96C514582C375203009CAE08 /* SubwaysUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -543,14 +450,6 @@
 					};
 					96C5143A2C375202009CAE08 = {
 						CreatedOnToolsVersion = 15.4;
-					};
-					96C5144D2C375203009CAE08 = {
-						CreatedOnToolsVersion = 15.4;
-						TestTargetID = 96C5143A2C375202009CAE08;
-					};
-					96C514572C375203009CAE08 = {
-						CreatedOnToolsVersion = 15.4;
-						TestTargetID = 96C5143A2C375202009CAE08;
 					};
 				};
 			};
@@ -571,8 +470,6 @@
 			projectRoot = "";
 			targets = (
 				96C5143A2C375202009CAE08 /* Subways */,
-				96C5144D2C375203009CAE08 /* SubwaysTests */,
-				96C514572C375203009CAE08 /* SubwaysUITests */,
 				96B2F2012D37490C0060F18E /* ArrivalStatusExtension */,
 				96B2F2212D3752AE0060F18E /* SubwaysSharedFramework */,
 			);
@@ -610,20 +507,6 @@
 				96C514A22C37A618009CAE08 /* shapes.txt in Resources */,
 				96C5149E2C37A618009CAE08 /* agency.txt in Resources */,
 				96C514A52C37A618009CAE08 /* transfers.txt in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		96C5144C2C375203009CAE08 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		96C514562C375203009CAE08 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -666,23 +549,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		96C5144A2C375203009CAE08 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				96C514532C375203009CAE08 /* SubwaysTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		96C514542C375203009CAE08 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				96C5145D2C375203009CAE08 /* SubwaysUITests.swift in Sources */,
-				96C5145F2C375203009CAE08 /* SubwaysUITestsLaunchTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -701,16 +567,6 @@
 			target = 96B2F2212D3752AE0060F18E /* SubwaysSharedFramework */;
 			targetProxy = 96B2F2372D3753F90060F18E /* PBXContainerItemProxy */;
 		};
-		96C514502C375203009CAE08 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 96C5143A2C375202009CAE08 /* Subways */;
-			targetProxy = 96C5144F2C375203009CAE08 /* PBXContainerItemProxy */;
-		};
-		96C5145A2C375203009CAE08 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 96C5143A2C375202009CAE08 /* Subways */;
-			targetProxy = 96C514592C375203009CAE08 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -720,11 +576,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 8BTUZ82YVC;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ArrivalStatus/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ArrivalStatus;
+				INFOPLIST_KEY_CFBundleDisplayName = TrakArrivalStatus;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -737,6 +593,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -749,11 +609,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 8BTUZ82YVC;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ArrivalStatus/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ArrivalStatus;
+				INFOPLIST_KEY_CFBundleDisplayName = TrakArrivalStatus;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -766,6 +626,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -801,6 +665,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -838,6 +706,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -977,7 +849,7 @@
 				CODE_SIGN_ENTITLEMENTS = Subways/Subways.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Subways/Preview Content\"";
 				DEVELOPMENT_TEAM = 8BTUZ82YVC;
@@ -985,7 +857,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Subways/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Subways;
+				INFOPLIST_KEY_CFBundleDisplayName = Trak;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_NSSupportsLiveActivitiesFrequentUpdates = YES;
@@ -1025,7 +897,7 @@
 				CODE_SIGN_ENTITLEMENTS = Subways/Subways.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Subways/Preview Content\"";
 				DEVELOPMENT_TEAM = 8BTUZ82YVC;
@@ -1033,7 +905,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Subways/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Subways;
+				INFOPLIST_KEY_CFBundleDisplayName = Trak;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_NSSupportsLiveActivitiesFrequentUpdates = YES;
@@ -1061,96 +933,6 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		96C514662C375203009CAE08 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 8BTUZ82YVC;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tejas.SubwaysTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Subways.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Subways";
-			};
-			name = Debug;
-		};
-		96C514672C375203009CAE08 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 8BTUZ82YVC;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tejas.SubwaysTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Subways.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Subways";
-			};
-			name = Release;
-		};
-		96C514692C375203009CAE08 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 8BTUZ82YVC;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tejas.SubwaysUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Subways;
-			};
-			name = Debug;
-		};
-		96C5146A2C375203009CAE08 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 8BTUZ82YVC;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tejas.SubwaysUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Subways;
 			};
 			name = Release;
 		};
@@ -1189,24 +971,6 @@
 			buildConfigurations = (
 				96C514632C375203009CAE08 /* Debug */,
 				96C514642C375203009CAE08 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		96C514652C375203009CAE08 /* Build configuration list for PBXNativeTarget "SubwaysTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				96C514662C375203009CAE08 /* Debug */,
-				96C514672C375203009CAE08 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		96C514682C375203009CAE08 /* Build configuration list for PBXNativeTarget "SubwaysUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				96C514692C375203009CAE08 /* Debug */,
-				96C5146A2C375203009CAE08 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

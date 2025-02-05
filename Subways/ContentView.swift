@@ -80,19 +80,6 @@ struct ContentView: View {
                     await startFetchingArrivals(for: newStation)
                 }
             }
-            .onChange(of: scenePhase) { oldPhase, newPhase in
-                let hasLiveActivities = Activity<ArrivalStatusAttributes>.activities.count > 0
-                
-                if newPhase == .background && !hasLiveActivities {
-                    print("App in background + no live activities -> cancelling task")
-                    fetchTask?.cancel()
-                } else if oldPhase == .background {
-                    print("App not in background -> starting task")
-                    fetchTask = Task {
-                        await startFetchingArrivals(for: station)
-                    }
-                }
-            }
             .onDisappear {
                 fetchTask?.cancel()
             }
