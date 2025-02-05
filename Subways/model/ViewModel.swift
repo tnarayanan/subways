@@ -67,13 +67,24 @@ class ViewModel: ObservableObject {
     func addLiveActivity(for trainArrival: TrainArrival) {
         if ActivityAuthorizationInfo().areActivitiesEnabled {
             do {
-                let arrivalAttrs = ArrivalStatusAttributes(tripId: trainArrival.tripId, stationName: "Test", direction: trainArrival.direction, route: trainArrival.route)
+                let arrivalAttrs = ArrivalStatusAttributes(tripId: trainArrival.tripId, stationName: trainArrival.stationName, direction: trainArrival.direction, route: trainArrival.route)
                 let initialState = ArrivalStatusAttributes.ContentState(arrivalTime: trainArrival.time)
                 
-                let activity = try Activity.request(attributes: arrivalAttrs, content: .init(state: initialState, staleDate: nil), pushType: .none)
+                _ = try Activity.request(attributes: arrivalAttrs, content: .init(state: initialState, staleDate: nil), pushType: .none)
                 print("Created live activity")
             } catch let error {
                 fatalError(error.localizedDescription)
+            }
+        }
+    }
+    
+    func removeLiveActivity(for trainArrival: TrainArrival) {
+        for activity in Activity<ArrivalStatusAttributes>.activities {
+            if activity.attributes.tripId == trainArrival.tripId {
+                // cancel live activity
+                Task {
+                    await activity.end(nil, dismissalPolicy: .immediate)
+                }
             }
         }
     }
@@ -102,5 +113,13 @@ class ViewModel: ObservableObject {
                 print("Updated live activity")
             }
         }
+    }
+    
+    func getTrainArrivalTripIdsWithLiveActivities() -> Set<String> {
+        var tripIds: Set<String> = []
+        for activity in Activity<ArrivalStatusAttributes>.activities {
+            tripIds.insert(activity.attributes.tripId)
+        }
+        return tripIds
     }
 }

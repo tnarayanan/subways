@@ -15,6 +15,8 @@ struct TrainArrivalListItem: View {
     
     @EnvironmentObject var viewModel: ViewModel
     
+    @State private var hasActiveLiveActivity: Bool = false
+    
     var body: some View {
         let diffs = Calendar.current.dateComponents([.minute, .second], from: curTime, to: trainArrival.time)
         VStack {
@@ -40,13 +42,26 @@ struct TrainArrivalListItem: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Button(action: { viewModel.addLiveActivity(for: trainArrival) }, label: {
-                    Label("Add to live activity", systemImage: "clock.badge").labelStyle(.iconOnly)
+                Button(action: {
+                    if hasActiveLiveActivity {
+                        viewModel.removeLiveActivity(for: trainArrival)
+                    } else {
+                        viewModel.addLiveActivity(for: trainArrival)
+                    }
+                    hasActiveLiveActivity.toggle()
+                }, label: {
+                    if hasActiveLiveActivity {
+                        Label("Remove live activity", systemImage: "clock.badge.fill").labelStyle(.iconOnly)
+                    } else {
+                        Label("Add live activity", systemImage: "clock.badge").labelStyle(.iconOnly)
+                    }
                 }).foregroundStyle(.secondary)
             }
             if showDivider {
                 Divider()
             }
+        }.onAppear {
+            hasActiveLiveActivity = viewModel.getTrainArrivalTripIdsWithLiveActivities().contains(trainArrival.tripId)
         }
     }
 }
