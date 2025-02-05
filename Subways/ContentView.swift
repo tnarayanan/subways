@@ -80,9 +80,6 @@ struct ContentView: View {
                     await startFetchingArrivals(for: newStation)
                 }
             }
-            .onDisappear {
-                fetchTask?.cancel()
-            }
             .background(colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.secondarySystemBackground))
         }
     }
