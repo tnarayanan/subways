@@ -7,13 +7,14 @@
 
 import SwiftUI
 import SwiftData
+import ActivityKit
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.scenePhase) var scenePhase
     
-    @StateObject private var viewModel = ViewModel()
+    @EnvironmentObject var viewModel: ViewModel
     
     @State private var showingFavoritesSheet = false
     
@@ -80,8 +81,10 @@ struct ContentView: View {
                 }
             }
             .onChange(of: scenePhase) { oldPhase, newPhase in
-                if newPhase == .background {
-                    print("App in background -> cancelling task")
+                let hasLiveActivities = Activity<ArrivalStatusAttributes>.activities.count > 0
+                
+                if newPhase == .background && !hasLiveActivities {
+                    print("App in background + no live activities -> cancelling task")
                     fetchTask?.cancel()
                 } else if oldPhase == .background {
                     print("App not in background -> starting task")

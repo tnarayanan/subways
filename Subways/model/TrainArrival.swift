@@ -9,11 +9,12 @@ import Foundation
 import SwiftData
 
 
-struct TrainArrival: Sendable, Identifiable, Comparable {
+struct TrainArrival: Identifiable, Comparable {
     let tripId: String
     let route: Route
     let direction: Direction
     let time: Date
+    let stationName: String
     
     var id: String { tripId }
     
@@ -22,6 +23,9 @@ struct TrainArrival: Sendable, Identifiable, Comparable {
         self.route = route
         self.direction = direction
         self.time = time
+        
+        let underscoreIdx = tripId.lastIndex(of: "_")!
+        self.stationName = Station.get(id: String(tripId[tripId.index(after: underscoreIdx)...])).name
     }
     
     static func < (lhs: TrainArrival, rhs: TrainArrival) -> Bool {

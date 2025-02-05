@@ -6,11 +6,16 @@
 //
 
 import SwiftUI
+import ActivityKit
 
 struct TrainArrivalListItem: View {
     var trainArrival: TrainArrival
     var curTime: Date
     var showDivider: Bool
+    
+    @EnvironmentObject var viewModel: ViewModel
+    
+    @State private var hasActiveLiveActivity: Bool = false
     
     var body: some View {
         let diffs = Calendar.current.dateComponents([.minute, .second], from: curTime, to: trainArrival.time)
@@ -37,13 +42,26 @@ struct TrainArrivalListItem: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Button(action: {}, label: {
-                    Label("Add to live activity", systemImage: "clock.badge").labelStyle(.iconOnly)
-                }).foregroundStyle(.secondary).hidden()
+                Button(action: {
+                    if hasActiveLiveActivity {
+                        viewModel.removeLiveActivity(for: trainArrival)
+                    } else {
+                        viewModel.addLiveActivity(for: trainArrival)
+                    }
+                    hasActiveLiveActivity.toggle()
+                }, label: {
+                    if hasActiveLiveActivity {
+                        Label("Remove live activity", systemImage: "clock.badge.fill").labelStyle(.iconOnly)
+                    } else {
+                        Label("Add live activity", systemImage: "clock.badge").labelStyle(.iconOnly)
+                    }
+                }).foregroundStyle(.secondary)
             }
             if showDivider {
                 Divider()
             }
+        }.onAppear {
+            hasActiveLiveActivity = viewModel.getTrainArrivalTripIdsWithLiveActivities().contains(trainArrival.tripId)
         }
     }
 }
